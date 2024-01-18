@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="flex flex-col  mt-5">
-          <p className="text-center text-sm">© 2024 MERN Store</p>
+          <p className="text-center text-sm">© 2024 MERN Storeasd </p>
 
           <div className="flex flex-row justify-center items-center mt-2 gap-x-1">
             <BsFacebook size={"2rem"} className="text-sky-700" />
