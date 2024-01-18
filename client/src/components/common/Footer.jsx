@@ -51,16 +51,17 @@ const Footer = () => {
                 <p className="text-gray-800 text-sm">
                   Sign Up for Our Newsletter
                 </p>
-                <div className="flex flex-row">
-                <div className="border-[1px] border-gray-200 py-1 px-2 rounded-sm mt-2 ">
+                <div className="flex flex-row ">
+                <div className="border-[1px] border-gray-200 rounded-sm mt-2 ">
                   <input
                     
                     type="text"
                     placeholder="Please Enter Your Email"
-                    className="border-none outline-none placeholder:text-sm"
+                    className="border-none outline-none placeholder:text-sm px-2"
                   />
+                                    <button className="py-1.5 px-5 border-[1px] border-gray-200 text-sm font-semibold hover:bg-blue-500 hover:text-white text-center">Subscribe</button>
                 </div>
-                  <button className="py-0 px-5 border-[1px] border-gray-200 text-sm font-semibold hover:bg-blue-500 hover:text-white text-center">Subscribe</button>
+              
                 </div>
 
               </div>
