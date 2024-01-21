@@ -6,8 +6,7 @@ import { BsPinterest } from "react-icons/bs";
 const Footer = () => {
   return (
     <>
-    
-    <hr />
+      <hr />
       <footer className="w-[80%] mx-auto  flex flex-col mt-10 mb-5 font-Poppins">
         <div className="flex flex-row justify-between items-center ">
           <div>
@@ -52,18 +51,17 @@ const Footer = () => {
                   Sign Up for Our Newsletter
                 </p>
                 <div className="flex flex-row ">
-                <div className="border-[1px] border-gray-200 rounded-sm mt-2 ">
-                  <input
-                    
-                    type="text"
-                    placeholder="Please Enter Your Email"
-                    className="border-none outline-none placeholder:text-sm px-2"
-                  />
-                                    <button className="py-1.5 px-5 border-[1px] border-gray-200 text-sm font-semibold hover:bg-blue-500 hover:text-white text-center">Subscribe</button>
+                  <div className="border-[1px] border-gray-200 rounded-sm mt-2 ">
+                    <input
+                      type="text"
+                      placeholder="Please Enter Your Email"
+                      className="border-none outline-none placeholder:text-sm px-2"
+                    />
+                    <button className="py-1.5 px-5 border-[1px] border-gray-200 text-sm font-semibold hover:bg-blue-500 hover:text-white text-center">
+                      Subscribe
+                    </button>
+                  </div>
                 </div>
-              
-                </div>
-
               </div>
             </div>
           </div>
