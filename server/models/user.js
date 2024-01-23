@@ -5,38 +5,32 @@ const UserSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: [true, "Please Enter Your Name"],
-      maxLength: [30, "Name cannot exceed 30 characters"],
-      minLength: [4, "Name should have more than 4 characters"],
+      required:true
     },
     lastName: {
       type: String,
-      required: [true, "Please Enter Your Name"],
-      maxLength: [30, "Name cannot exceed 30 characters"],
-      minLength: [4, "Name should have more than 4 characters"],
+      required: true
     },
     email: {
       type: String,
-      required: [true, "Please enter your email"],
+      required: true,
       unique: true,
-      validate: [validator.isEmail, "Please Enter a valid Email"],
     },
     password: {
       type: String,
-      required: [true, "Please Enter Your Password"],
-      minLength: [8, "Password should be greater than 8 characters"],
-      select: false,
+      required: true
     },
     image: {
       type: String,
     },
     role: {
       type: String,
-      default: ROLES.User,
-      enum: [ROLES.Admin, ROLES.User],
+      enum: ["Admin", "User"],
+      required:true
     },
-    profile: {
+    additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
+      required:true,
       ref: "Profile",
     },
   },
