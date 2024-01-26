@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import validator from "validator";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -30,7 +29,6 @@ const UserSchema = new mongoose.Schema(
     },
     additionalDetails: {
       type: mongoose.Schema.Types.ObjectId,
-      required:true,
       ref: "Profile",
     },
   },
