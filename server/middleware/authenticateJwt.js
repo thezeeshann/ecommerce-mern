@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import UserModel from "../models/user.js";
 
-const authenticateJwt = async (req, res, next) => {
+export  const authenticateJwt = async (req, res, next) => {
   try {
     const token =
       req.cookies.token || req.header("Authorization").replace("Bearer ", "");
@@ -28,4 +29,23 @@ const authenticateJwt = async (req, res, next) => {
   }
 };
 
-export default authenticateJwt;
+
+
+
+
+export const isAdmin =  async(req,res,next)=>{
+  try {
+    const userDetails = await UserModel.findOne({email:req.existUser.email})
+    if(userDetails.role !== "Admin"){
+      return res.status(404).json({
+        success:false,
+        message:"This is a Protected Route for Admin"
+      })
+    }
+    next()
+  } catch (error) {
+    return res
+			.status(500)
+			.json({ success: false, message: `User Role Can't be Verified` });
+  }
+}

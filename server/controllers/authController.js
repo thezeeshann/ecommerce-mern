@@ -3,13 +3,15 @@ import validator from "validator";
 import ProfileModel from "../models/profile.js";
 import UserModel from "../models/user.js";
 import jwt from "jsonwebtoken";
+import OTP from "../models/otp.js";
+import otpGenerator from "otp-generator";
 import dotenv from "dotenv";
 dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
-    if (!firstName || !lastName || !email || !password) {
+    const { firstName, lastName, email, password, role, otp } = req.body;
+    if (!firstName || !lastName || !email || !password || !otp) {
       return res.status(404).json({
         success: false,
         message: "ALl fields are required",
@@ -27,6 +29,23 @@ export const register = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "User alredy exist",
+      });
+    }
+
+    const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
+    console.log("OTP response", response);
+
+    if (response.length === 0) {
+      // OTP not found for the email
+      return res.status(400).json({
+        success: false,
+        message: "The OTP is not valid",
+      });
+    } else if (otp !== response[0].otp) {
+      // Invalid OTP
+      return res.status(400).json({
+        success: false,
+        message: "The OTP is not valid",
       });
     }
 
@@ -48,6 +67,7 @@ export const register = async (req, res) => {
       role: role,
       password: hashPassword,
       additionalDetails: profileInfo._id,
+      image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`,
     });
 
     return res.status(201).json({
@@ -72,7 +92,7 @@ export const login = async (req, res) => {
         message: "All fields are required",
       });
     }
-    const existUser = await UserModel.findOne({ email });
+    const existUser = await UserModel.findOne({ email }).populate("additionalDetails");
     if (!existUser) {
       return res.status(404).json({
         success: false,
@@ -100,6 +120,9 @@ export const login = async (req, res) => {
       return res.cookie("token", token, option).status(200).json({
         success: true,
         message: "Login successfull",
+        existUser,
+        token
+        
       });
     } else {
       return res.status(404).json({
@@ -114,3 +137,42 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const checkUserExist = await UserModel.findOne({ email });
+
+    if (checkUserExist) {
+      return res.status(404).josn({  success: false,
+        message: `Login Failure Please Try Again`, });
+    }
+
+    const otp = await otpGenerator.generate(6, {
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false,
+      specialChars: false,
+    });
+
+    const result = await OTP.findOne({ otp: otp });
+
+    while (result) {
+      otp = otpGenerator.generate(6, {
+        upperCaseAlphabets: false,
+      });
+    }
+
+    const otpPayload = { email, otp };
+    const otpBody = await OTP.create(otpPayload);
+    // console.log("OTP Body", otpBody);
+    res.status(200).json({
+      success: true,
+      message: `OTP Sent Successfully`,
+      otp,
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: errror.message });
+  }
+};
+
+

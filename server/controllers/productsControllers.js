@@ -1,5 +1,6 @@
 import ProductModel from "../models/product.js";
-import uploadImage from "../utils/uploadImage.js";
+import uploadImage from "../utils/uploadImage.js"
+
 
 export const createProducts = async(req, res) => {
   try {
