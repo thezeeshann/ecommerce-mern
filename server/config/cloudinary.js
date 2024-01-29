@@ -9,6 +9,7 @@ const cloudinaryConnect = async () => {
         api_key:process.env.API_KEY,
         api_secret:process.env.API_SECRET
     })
+    console.log("cloudinary connected")
   } catch (error) {
     console.log(error);
   }

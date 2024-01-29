@@ -39,7 +39,7 @@ export const isAdmin =  async(req,res,next)=>{
     if(userDetails.role !== "Admin"){
       return res.status(404).json({
         success:false,
-        message:"This is a Protected Route for Admin"
+        message:"You are not authorized to create products"
       })
     }
     next()

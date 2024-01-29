@@ -1,8 +1,13 @@
 import express from "express"
-import { createProducts } from "../controllers/productsControllers.js"
+import { createProducts,updateProducts,getAllProducts,getSingleProduct,deleteProducts} from "../controllers/productsControllers.js"
+import {isAdmin,authenticateJwt} from "../middleware/authenticateJwt.js"
 
 const router = express.Router()
-router.post("/create",createProducts)
 
+router.get("/",getAllProducts)
+router.get("/:id",getSingleProduct)
+router.post("/create",authenticateJwt,isAdmin,createProducts)
+router.put("/update/:id",authenticateJwt,isAdmin,updateProducts)
+router.delete("/:id",authenticateJwt,isAdmin,deleteProducts)
 
 export default router
