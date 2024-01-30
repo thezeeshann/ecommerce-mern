@@ -7,6 +7,18 @@
     "server": "cd server && npm run dev",
     "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm run client\" \"npm run server\""
   },
+  "keywords": [
+    "node",
+    "express",
+    "mongoose",
+    "react",
+    "redux"
+  ],
+  "author": "Mohammad Zeeshan (https://github.com/thezeeshann)",
+  "license":"MIT",
+  "bugs": {
+    "url": "https://github.com/thezeeshann/ecommerce-mern/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thezeeshann/ecommerce-mern"
