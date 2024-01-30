@@ -1,4 +1,16 @@
 {
+  "main": "mern ecommerce",
+  "version": "1.0.0",
+  "description": "MERN ecommerce",
+  "scripts": {
+    "client": "cd client && npm run dev",
+    "server": "cd server && npm run dev",
+    "dev": "concurrently -n \"client,server\" -c \"bgBlue,bgYellow\" \"npm run client\" \"npm run server\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thezeeshann/ecommerce-mern"
+  },
   "dependencies": {
     "concurrently": "^8.2.2"
   }
