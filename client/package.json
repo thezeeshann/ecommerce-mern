@@ -11,9 +11,12 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.18",
-    "react-hook-form": "^7.47.0",
+    "@reduxjs/toolkit": "^2.1.0",
+    "axios": "^1.6.7",
+    "react-hot-toast": "^2.4.1",
     "react-icons": "^4.11.0",
     "react-rating-stars-component": "^2.2.0",
+    "react-redux": "^9.1.0",
     "react-router-dom": "^6.17.0",
     "swiper": "^11.0.5"
   },
