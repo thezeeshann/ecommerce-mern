@@ -4,6 +4,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import authReducer from "./features/authSlice";
 import productsReducer from "./features/productSlice";
 import profileReducer from "./features/profileSlice";
+import cartReducer from "./features/cartSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     auth: authReducer,
     product: productsReducer,
     user: profileReducer,
+    cart: cartReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

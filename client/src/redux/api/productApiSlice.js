@@ -1,4 +1,4 @@
-import { PRODUCT_URL } from "../constant";
+import { PRODUCT_URL,GET_SINGLE_PRODUCT_API } from "../constant";
 import { apiSlice } from "./apiSlice";
 
 export const productApiSlice = apiSlice.injectEndpoints({
@@ -8,7 +8,14 @@ export const productApiSlice = apiSlice.injectEndpoints({
         url: `${PRODUCT_URL}`,
       }),
     }),
+
+    getSingleProduct:builder.query({
+      query:(productId)=>({
+        url:`${GET_SINGLE_PRODUCT_API}/${productId}`
+      })
+    })
+
   }),
 });
 
-export const { useGetProductsQuery } = productApiSlice;
+export const { useGetProductsQuery,useGetSingleProductQuery } = productApiSlice;
