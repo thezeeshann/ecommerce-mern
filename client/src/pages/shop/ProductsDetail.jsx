@@ -9,24 +9,24 @@ const ProductsDetail = () => {
   return (
     <section>
       {isLoading === true ? (
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
 
           <Spinner />
         </div>
       ) : (
         <div className="bg-white">
-          <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
+          <div className="max-w-2xl px-4 py-16 mx-auto sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
             <h2 className="sr-only">Products</h2>
 
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 ">
-              {data.products.map((product) => (
+              {data?.products?.map((product) => (
                 <div key={product._id} className="group">
-                  <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                    <Link to="/single-product">
+                  <div className="w-full overflow-hidden bg-gray-200 rounded-lg aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7">
+                    <Link to={`/shop/single-product/${product._id}`}>
                       <img
                         src={product.image}
                         alt={product.productName}
-                        className="h-full w-full object-cover object-center group-hover:opacity-75"
+                        className="object-cover object-center w-full h-full group-hover:opacity-75"
                       />
                     </Link>
                   </div>

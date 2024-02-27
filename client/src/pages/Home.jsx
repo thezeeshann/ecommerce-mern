@@ -13,12 +13,12 @@ const Home = () => {
   return (
     <>
       <section className="w-[80%] mx-auto mt-7 mb-10">
-        <div className=" flex flex-row items-center justify-center gap-5 w-full ">
-          <div className="flex flex-col gap-8 w-[25%] ">
+        <div className="flex flex-row items-center justify-center w-full gap-5 ">
+          <div className="flex flex-col gap-8 w-[26%] ">
             <img src={bgOne} alt="" />
             <img src={bgTwo} alt="" />
           </div>
-          <div className="w-[50%]">
+          <div className="w-[48%]">
             <Swiper
               spaceBetween={50}
               slidesPerView={1}
@@ -40,11 +40,12 @@ const Home = () => {
               </SwiperSlide>
             </Swiper>
           </div>
-          <div className="flex flex-col gap-7 w-[25%]">
+          <div className="flex flex-col gap-7 w-[26%]">
             <img src={bgOne} alt="" />
             <img src={bgFour} alt="" />
           </div>
         </div>
+
       </section>
     </>
   );
