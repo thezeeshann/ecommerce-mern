@@ -1,6 +1,7 @@
 import loginImg from "../../assets/login_register/undraw_secure_login_pdn4.svg";
 import { useLoginMutation } from "../../redux/api/authApiSlice";
 import { useDispatch } from "react-redux";
+import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { setLoading, setToken } from "../../redux/features/authSlice";
 import { setUser } from "../../redux/features/profileSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,7 +18,8 @@ const Login = () => {
 
   const dispath = useDispatch();
   const navigate = useNavigate();
-  const [login] = useLoginMutation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [login, { isLoading }] = useLoginMutation();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -70,18 +72,28 @@ const Login = () => {
                 className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
               />
             </div>
-            <div className="flex flex-col gap-y-1">
+            <div className="relative flex flex-col gap-y-1">
               <label htmlFor="email" className="text-xs">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={password}
                 onChange={handleChange}
                 placeholder="Please Enter your email"
                 className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
               />
+              <span
+                className="absolute right-4 top-[28px] z-[10] cursor-pointer"
+                onClick={() => setShowPassword((value) => !value)}
+              >
+                {showPassword ? (
+                  <IoMdEye size={"1.5rem"} className="cursor-pointer" />
+                ) : (
+                  <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
+                )}
+              </span>
             </div>
           </div>
           <div className="flex items-center justify-center w-3/6 ">
@@ -90,21 +102,22 @@ const Login = () => {
         </div>
         <hr className="mt-6" />
         <div className="flex flex-row w-full">
-          <div className="flex flex-row items-center w-3/6 mt-3 gap-x-5">
+          <div className="flex flex-row items-center w-3/6 mt-3">
             <button
+              disabled={isLoading}
               type="submit"
               className="text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
             >
-              Login
+              {isLoading ? "Login...." : "Login"}
             </button>
-            <Link to="/register" className="text-xs text-center cursor-pointer">
-              Create An Account
-            </Link>
           </div>
           <div className="w-3/6 mt-3">
-            <p className="text-sm cursor-pointer text-sky-500 text-end">
-              Forgot Password?
-            </p>
+            <Link to="/register" className="text-xs text-center cursor-pointer">
+              <p className="text-sm cursor-pointer text-sky-500 text-end">
+                {" "}
+                Create An Account
+              </p>
+            </Link>
           </div>
         </div>
       </form>
