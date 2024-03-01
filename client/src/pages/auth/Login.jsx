@@ -89,9 +89,9 @@ const Login = () => {
                 onClick={() => setShowPassword((value) => !value)}
               >
                 {showPassword ? (
-                  <IoMdEye size={"1.5rem"} className="cursor-pointer" />
-                ) : (
                   <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
+                  ) : (
+                  <IoMdEye size={"1.5rem"} className="cursor-pointer" />
                 )}
               </span>
             </div>

@@ -39,7 +39,7 @@ const SignUp = () => {
     try {
       const response = await register({ firstName, lastName, email, password });
       if (response.error) {
-        toast.error(response.error.error);
+        toast.error(response.error.data.message);
       } else {
         const signupData = {
           ...response,
