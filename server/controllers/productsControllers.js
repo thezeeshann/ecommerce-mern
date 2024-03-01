@@ -71,7 +71,7 @@ export const getSingleProduct = async (req, res) => {
   } catch (error) {
     return res.status(404).json({
       success: false,
-      message: message.error,
+      message: "Unable to fetch single product",
     });
   }
 };
