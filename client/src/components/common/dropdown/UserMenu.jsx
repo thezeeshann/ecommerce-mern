@@ -1,50 +1,50 @@
-import {
-  Avatar,
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-} from "@material-tailwind/react";
-import { useState } from "react";
+import { DropdownMenu, Text, Avatar } from "@radix-ui/themes";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../../redux/api/apiSlice";
+import { logout } from "../../../redux/api/authApi";
 
 const UserMenu = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
+  console.log(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   return (
-    <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
-      <MenuHandler className="cursor-pointer">
-        <Avatar
-          variant="circular"
-          size="sm"
-          alt="tania andrew"
-          className="border border-gray-900 p-0.5"
-          src={user?.image}
-        />
-      </MenuHandler>
-      <MenuList>
-        <MenuItem>
-          <p className="block w-full text-sm text-left text-gray-900 hover:text-sky-500">
+    <DropdownMenu.Root align="center">
+      <DropdownMenu.Trigger>
+        <div>
+          <Avatar
+            size="2"
+            src={user.image}
+            radius="full"
+            className="cursor-pointer"
+          />
+        </div>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content>
+        <DropdownMenu.Item color="gray">
+          <Text as="p" weight="medium">
+            {" "}
             My Profile
-          </p>
-        </MenuItem>
-        <MenuItem>
-          <p className="block w-full text-sm text-left text-gray-900 hover:text-sky-500">
+          </Text>
+        </DropdownMenu.Item>
+        <DropdownMenu.Item color="gray">
+          <Text as="p" weight="medium">
+            {" "}
             Edit Profle
-          </p>
-        </MenuItem>
-        <MenuItem onClick={()=>dispatch(logout(navigate))}>
-          <p className="block w-full text-sm text-left text-red-500 hover:text-sky-500">
+          </Text>{" "}
+        </DropdownMenu.Item>
+        <DropdownMenu.Item
+          color="red"
+          onClick={() => dispatch(logout(navigate))}
+        >
+          <Text as="p" weight="medium">
+            {" "}
             Logout
-          </p>
-        </MenuItem>
-      </MenuList>
-    </Menu>
+          </Text>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 };
 

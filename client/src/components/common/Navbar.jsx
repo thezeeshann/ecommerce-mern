@@ -71,7 +71,7 @@ const Navbar = () => {
           <div className="relative">
             {
               cart.length > 0 && (
-                <span className="bg-light-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">{cart.length}</span>
+                <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">{cart.length}</span>
               )
             }
             <RiShoppingBagLine
