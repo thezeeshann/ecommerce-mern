@@ -8,7 +8,6 @@ import { addToCart, removeToCart } from "../../redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const SingleProduct = () => {
-  
   const dispatch = useDispatch();
   const { productId } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(productId);
@@ -60,7 +59,7 @@ const SingleProduct = () => {
                 />
               </div>
               <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                {cart.length > 0 ? (
+                {cart.length > 0 && cart.includes(data?.singleProduct?._id) ? (
                   <>
                     <button
                       onClick={() => dispatch(removeToCart(productId))}
