@@ -40,6 +40,11 @@ const ShoppinhCard = ({ open, setOpen }) => {
     fetchProducts();
   }, [cart]);
 
+  let totalPrice = 0;
+  products.forEach((product) => {
+    totalPrice += product?.singleProduct.price || 0;
+  });
+
   return (
     <>
       <Transition.Root show={open} as={Fragment}>
@@ -155,7 +160,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                               </div>
                               <div className="flex flex-row items-center justify-between">
                                 <p className="text-sm">Total</p>
-                                <p className="text-sm">$30</p>
+                                <p className="text-sm">${totalPrice}</p>
                               </div>
                             </div>
                             <div className="flex flex-row items-center justify-center px-5 gap-x-3">
