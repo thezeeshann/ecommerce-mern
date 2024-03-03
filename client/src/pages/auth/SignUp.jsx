@@ -14,15 +14,17 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [accountType, setAccountType] = useState(ACCOUNT_TYPE.USER);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [role, setRole] = useState(ACCOUNT_TYPE.USER);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
-  const { firstName, lastName, email, password } = formData;
+  const { firstName, lastName, email, password, confirmPassword } = formData;
   const [register, { isLoading }] = useRegisterMutation();
 
   const handleChange = (e) => {
@@ -37,16 +39,18 @@ const SignUp = () => {
     const toastId = toast.loading("Loading...");
     dispatch(setLoading(true));
     try {
-      const response = await register({ firstName, lastName, email, password });
+      const response = await register({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        role,
+      });
       if (response.error) {
         toast.error(response.error.data.message);
       } else {
-        const signupData = {
-          ...response,
-          accountType,
-        };
-
-        dispatch(setSignUpData(signupData));
+        dispatch(setSignUpData(response));
         console.log("SIGN API RESPONSE...", response);
         toast.success("Singup successfull");
         setFormData({
@@ -54,6 +58,7 @@ const SignUp = () => {
           lastName: "",
           email: "",
           password: "",
+          confirmPassword: "",
         });
       }
     } catch (error) {
@@ -124,35 +129,59 @@ const SignUp = () => {
                 className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
               />
             </div>
-            <div className="relative flex flex-col gap-y-1">
-              <label htmlFor="email" className="text-xs ">
-                Password
-              </label>
-              <input
-                type={showPassword === true ? "text" : "password"}
-                name="password"
-                value={password}
-                onChange={handleChange}
-                placeholder="Please Enter your Password"
-                className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-              />
-              <span
-                className="absolute right-4 top-[28px] z-[10] cursor-pointer"
-                onClick={() => setShowPassword((value) => !value)}
-              >
-                {showPassword ? (
-                  <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
-                ) : (
-                  <IoMdEye size={"1.5rem"} className="cursor-pointer" />
-                )}
-              </span>
+
+            <div className="w-full flex flex-row items-center justify-between gap-x-1">
+              <div className="relative flex flex-col gap-y-1 w-1/2">
+                <label htmlFor="email" className="text-xs ">
+                  Password
+                </label>
+                <input
+                  type={showPassword === true ? "text" : "password"}
+                  name="password"
+                  value={password}
+                  onChange={handleChange}
+                  placeholder="Enter Password"
+                  className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
+                <span
+                  className="absolute right-4 top-[28px] z-[10] cursor-pointer"
+                  onClick={() => setShowPassword((value) => !value)}
+                >
+                  {showPassword ? (
+                    <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
+                  ) : (
+                    <IoMdEye size={"1.5rem"} className="cursor-pointer" />
+                  )}
+                </span>
+              </div>
+
+              <div className="relative flex flex-col gap-y-1  w-1/2">
+                <label htmlFor="email" className="text-xs ">
+                  Confirm Password
+                </label>
+                <input
+                  type={showPassword === true ? "text" : "password"}
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm Password"
+                  className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
+                <span
+                  className="absolute right-4 top-[28px] z-[10] cursor-pointer"
+                  onClick={() => setShowConfirmPassword((value) => !value)}
+                >
+                  {showConfirmPassword ? (
+                    <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
+                  ) : (
+                    <IoMdEye size={"1.5rem"} className="cursor-pointer" />
+                  )}
+                </span>
+              </div>
             </div>
+
             <div className="mt-3 w-max border-[1px] border-gray-200">
-              <Tab
-                tabData={tabData}
-                field={accountType}
-                setField={setAccountType}
-              />
+              <Tab tabData={tabData} field={role} setField={setRole} />
             </div>
           </div>
           <div className="flex items-center justify-center w-3/6 ">
