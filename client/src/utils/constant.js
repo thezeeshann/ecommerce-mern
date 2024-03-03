@@ -1,4 +1,4 @@
-export const ROLE = {
+export const ACCOUNT_TYPE = {
   USER: "User",
-  ADMIN: "Admin",
-};
+  ADMIN: "Admin"
+}
