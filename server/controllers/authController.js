@@ -8,7 +8,8 @@ dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password, confirmPassword, role } =
+      req.body;
     if (!firstName || !lastName || !email || !password || !role) {
       return res.status(404).json({
         success: false,
@@ -22,6 +23,14 @@ export const register = async (req, res) => {
         message: "Invalid email Address",
       });
     }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "password and confirm password does not match",
+      });
+    }
+
     const existUser = await UserModel.findOne({ email });
     if (existUser) {
       return res.status(404).json({
@@ -119,4 +128,3 @@ export const login = async (req, res) => {
     });
   }
 };
-
