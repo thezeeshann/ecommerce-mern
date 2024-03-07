@@ -1,6 +1,6 @@
 import { DropdownMenu, Text, Avatar } from "@radix-ui/themes";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { logout } from "../../../redux/api/authApi";
 
 const UserMenu = () => {
@@ -25,14 +25,10 @@ const UserMenu = () => {
         <DropdownMenu.Item color="gray">
           <Text as="p" weight="medium">
             {" "}
-            My Profile
+            <Link to="/dashborad">
+            Dashboard
+            </Link>
           </Text>
-        </DropdownMenu.Item>
-        <DropdownMenu.Item color="gray">
-          <Text as="p" weight="medium">
-            {" "}
-            Edit Profle
-          </Text>{" "}
         </DropdownMenu.Item>
         <DropdownMenu.Item
           color="red"
@@ -40,7 +36,7 @@ const UserMenu = () => {
         >
           <Text as="p" weight="medium">
             {" "}
-            Logout
+            Sign Out
           </Text>
         </DropdownMenu.Item>
       </DropdownMenu.Content>
