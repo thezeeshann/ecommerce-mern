@@ -128,3 +128,45 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.existUser.userId;
+    const userDetails = await UserModel.findById(userId);
+    if (!userDetails) {
+      return res.status.json({
+        success: false,
+        message: "User does't exist",
+      });
+    }
+
+    const isPasswrordMatch = await bcrypt.compare(
+      oldPassword,
+      userDetails.password
+    );
+    if (!isPasswrordMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "The password is incorrect" });
+    }
+
+    const encryptedPassword = await bcrypt.hash(newPassword, 10);
+    const updatedPassword = await UserModel.findByIdAndUpdate(
+      req.existUser.userId,
+      { password: encryptedPassword },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "password updated successfully",
+      data: updatedPassword,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error occurred while updating password",
+    });
+  }
+};
