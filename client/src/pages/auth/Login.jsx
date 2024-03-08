@@ -40,6 +40,7 @@ const Login = () => {
         dispath(setToken(response.data.token));
         dispath(setUser(response.data.existUser));
         localStorage.setItem("token", JSON.stringify(response.data.token));
+        localStorage.setItem("user",JSON.stringify(response.data.existUser))
         toast.success("Login successful");
         navigate("/shop");
         console.log("LOGIN API RESPONSE...", response.data);
