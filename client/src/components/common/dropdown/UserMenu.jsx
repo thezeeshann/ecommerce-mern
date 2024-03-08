@@ -5,7 +5,6 @@ import { logout } from "../../../redux/api/authApi";
 
 const UserMenu = () => {
   const { user } = useSelector((state) => state.user);
-  console.log(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -15,7 +14,7 @@ const UserMenu = () => {
         <div>
           <Avatar
             size="2"
-            src={user.image}
+            src={user?.image}
             radius="full"
             className="cursor-pointer"
           />
