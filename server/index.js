@@ -2,6 +2,7 @@ import express from "express"
 import chalk from "chalk"
 import cors from "cors"
 import connectDB from "./config/db.js"
+import profileRoute from "./routes/profleRoute.js"
 import authRoute from "./routes/authRoute.js"
 import productRouter from "./routes/productRoute.js"
 import cloudinaryConnect from "./config/cloudinary.js"
@@ -29,6 +30,7 @@ app.use(fileUpload({
 // routes
 app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/products",productRouter)
+app.use("/api/v1/profile",profileRoute)
 
 app.get("/", (req, res) => {
 	return res.json({
