@@ -1,17 +1,34 @@
 import { Tabs, Box, Badge, Flex } from "@radix-ui/themes";
 import { useSelector } from "react-redux";
 import { useChangePasswordMutation } from "../../redux/api/authApiSlice";
+import { IoLocation } from "react-icons/io5";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import {
+  useUpdateProfileMutation,
+  useUpdateUsernameMutation,
+} from "../../redux/api/profileApiSlice";
 
 const Dashboard = () => {
+  const { user } = useSelector((state) => state.user);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [firstName, setFirstName] = useState(user?.firstName);
+  const [lastName, setLastName] = useState(user?.lastName);
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPasswpord] = useState(false);
-  const { user } = useSelector((state) => state.user);
-  const [changePassword, { isLoading }] = useChangePasswordMutation();
+  const [city, setCity] = useState();
+  const [state, setState] = useState();
+  const [address, setAddress] = useState();
+  const [country, setCountry] = useState();
+  const [zipCode, setZipCode] = useState();
+  const [changePassword, { isLoading: loadingChangePassword }] =
+    useChangePasswordMutation();
+  const [updateUsername, { isLoading: loadingUpdateUsername }] =
+    useUpdateUsernameMutation();
+  const [updateProfile, { isLoading: loadingUpdateProfile }] =
+    useUpdateProfileMutation();
 
   const handleChangePassword = async (e) => {
     e.preventDefault();
@@ -23,13 +40,46 @@ const Dashboard = () => {
       if (response.error) {
         toast.error(response.error.data.message);
       } else {
-        setOldPassword("")
-        setNewPassword("")
+        setOldPassword("");
+        setNewPassword("");
         console.log("CHAGNE PASSWORD API RESPONSE...", response);
         toast.success("password updated successfully");
       }
     } catch (error) {
       console.log("CHANGE PASSWORD API ERROR RESPONSE...", error);
+    }
+  };
+
+  const handleUpdateUsername = async (e) => {
+    e.preventDefault();
+    if (!firstName || !lastName) {
+      toast.error("Enter you firstname and lastname");
+    }
+    try {
+      const response = await updateUsername({ firstName, lastName });
+      if (response.error) {
+        toast.error(response.error.data.messsage);
+      } else {
+        console.log("UPDATE USERNAME API RESPONSE...", response);
+        toast.success("username updated successfully");
+      }
+    } catch (error) {
+      console.log("UPDATE USERNAME API ERROR RESPONSE...", error);
+    }
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await updateProfile({address,city,state,zipCode,country});
+      if(response.error){
+        toast.error(response.error.data.message)
+      }else{
+        console.log("UPDATE PROFILE API RESPONSE...", response);
+        toast.success("Address Added successfully");
+      }
+    } catch (error) {
+      console.log("UPDATE USERNAME API ERROR RESPONSE...", error);
     }
   };
 
@@ -69,35 +119,43 @@ const Dashboard = () => {
               <div className="flex flex-col ">
                 <p className="">Account Details</p>
                 <hr />
-                <div className="flex flex-row w-full mt-5 gap-x-5">
-                  <div className="flex flex-col w-1/2 gap-y-1">
-                    <label htmlFor="email" className="text-xs">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      defaultValue={user?.firstName}
-                      placeholder="Please Enter your First Name"
-                      className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                    />
+                <form onSubmit={handleUpdateUsername}>
+                  <div className="flex flex-row w-full mt-5 gap-x-5">
+                    <div className="flex flex-col w-1/2 gap-y-1">
+                      <label htmlFor="email" className="text-xs">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        onChange={(e) => setFirstName(e.target.value)}
+                        value={firstName}
+                        placeholder="Please Enter your First Name"
+                        className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col w-1/2 gap-y-1">
+                      <label htmlFor="email" className="text-xs">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Please Enter your Last Name"
+                        className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col w-1/2 gap-y-1">
-                    <label htmlFor="email" className="text-xs">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      defaultValue={user?.lastName}
-                      placeholder="Please Enter your Last Name"
-                      className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                    />
-                  </div>
-                </div>
-                <button className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white w-max">
-                  Save Change
-                </button>
+                  <button
+                    type="submit"
+                    disabled={loadingUpdateUsername}
+                    className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white w-max"
+                  >
+                    Save Change
+                  </button>
+                </form>
               </div>
             </Tabs.Content>
 
@@ -171,7 +229,7 @@ const Dashboard = () => {
                     </div>
                     <hr />
                     <button
-                      disabled={isLoading}
+                      disabled={loadingChangePassword}
                       type="submit"
                       className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white"
                     >
@@ -186,12 +244,117 @@ const Dashboard = () => {
               <div>
                 <p>Addresses</p>
                 <hr />
-                <div className="flex flex-row items-center justify-between mt-5">
-                  <p className="text-sm">No addresses found.</p>
-                  <button className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white">
-                    Add
-                  </button>
-                </div>
+
+                {user?.additionalDetails?.status === true ? (
+                  <>
+                    <div className="flex flex-row items-center p-5 mt-3 gap-x-5">
+                      <div>
+                        <IoLocation size={"2rem"} />
+                      </div>
+                      <div>
+                        <span className="text-lg font-semibold">
+                          Delivery Address
+                        </span>
+                        <p className="text-sm">
+                          {user?.additionalDetails?.address} -{" "}
+                          {user?.additionalDetails?.city},{" "}
+                          {user?.additionalDetails?.country},{" "}
+                          {user?.additionalDetails?.zipCode}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col justify-center p-5 mt-5 gap-y-5">
+                      <p className="text-sm font-semibold ">Add you address</p>
+                      <form onSubmit={handleUpdateProfile}>
+                      <div className="flex flex-col w-full gap-y-2">
+                        <div className="flex flex-col gap-y-1">
+                          <label htmlFor="address" className="text-xs">
+                            Address
+                          </label>
+                          <input
+                            type="text"
+                            name="address"
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            placeholder="Address: Street, House No / Apartment No"
+                            className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                          />
+                        </div>
+
+                        <div className="flex flex-row items-center justify-between w-full gap-x-3">
+                          <div className="flex flex-col w-1/2 gap-y-1">
+                            <label htmlFor="city" className="text-xs">
+                              City
+                            </label>
+                            <input
+                              type="text"
+                              name="city"
+                              onChange={(e) => setCity(e.target.value)}
+                              value={city}
+                              placeholder="City"
+                              className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                            />
+                          </div>
+                          <div className="flex flex-col w-1/2 gap-y-1">
+                            <label htmlFor="state" className="text-xs">
+                              State
+                            </label>
+                            <input
+                              type="text"
+                              name="state"
+                              value={state}
+                              onChange={(e) => setState(e.target.value)}
+                              placeholder="State"
+                              className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-row items-center justify-between w-full gap-x-3">
+                          <div className="relative flex flex-col w-1/2 gap-y-1">
+                            <label htmlFor="country" className="text-xs ">
+                              Country
+                            </label>
+                            <input
+                              type="text"
+                              name="country"
+                              value={country}
+                              onChange={(e) => setCountry(e.target.value)}
+                              placeholder="Enter Your country"
+                              className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                            />
+                          </div>
+
+                          <div className="relative flex flex-col w-1/2 gap-y-1 ">
+                            <label htmlFor="zipCode" className="text-xs ">
+                              Zipcode
+                            </label>
+                            <input
+                              type="text"
+                              name="zipCode"
+                              value={zipCode}
+                              onChange={(e) => setZipCode(e.target.value)}
+                              placeholder="Enter Your zip code"
+                              className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                        disabled={loadingUpdateProfile}
+                          type="submit"
+                          className="text-sm w-max border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white"
+                        >
+                          Add Address
+                        </button>
+                      </div>
+                      </form>
+                    </div>
+                  </>
+                )}
               </div>
             </Tabs.Content>
 
