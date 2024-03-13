@@ -52,9 +52,6 @@ const Dashboard = () => {
 
   const handleUpdateUsername = async (e) => {
     e.preventDefault();
-    if (!firstName || !lastName) {
-      toast.error("Enter you firstname and lastname");
-    }
     try {
       const response = await updateUsername({ firstName, lastName });
       if (response.error) {
