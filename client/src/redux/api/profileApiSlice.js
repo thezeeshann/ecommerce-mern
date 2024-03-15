@@ -1,5 +1,9 @@
 import { apiSlice } from "./apiSlice";
-import { UPDATE_PROFILE_API, UPDATE_USERNAME_API } from "../constant";
+import {
+  UPDATE_PROFILE_API,
+  UPDATE_USERNAME_API,
+  GET_SINGLE_USER_API,
+} from "../constant";
 
 export const profileApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -17,9 +21,20 @@ export const profileApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["User"],
+    }),
+
+    getSingleUser: builder.query({
+      query: () => ({
+        url: `${GET_SINGLE_USER_API}`,
+      }),
+      providesTags: ["User"],
     }),
   }),
 });
 
-export const { useUpdateProfileMutation, useUpdateUsernameMutation } =
-  profileApiSlice;
+export const {
+  useUpdateProfileMutation,
+  useUpdateUsernameMutation,
+  useGetSingleUserQuery,
+} = profileApiSlice;
