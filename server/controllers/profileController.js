@@ -3,7 +3,6 @@ import UserModel from "../models/user.js";
 
 export const updateProfile = async (req, res) => {
   try {
-    console.log("1")
     const userId = req.existUser.userId;
     const { address, city, state, country, zipCode } = req.body;
     if (!address || !city || !state || !country || !zipCode) {
@@ -12,25 +11,30 @@ export const updateProfile = async (req, res) => {
         message: "All fields are required",
       });
     }
-    console.log("2")
     const userDetails = await UserModel.findById(userId);
     const profile = await ProfileModel.findById(userDetails.additionalDetails);
-    console.log(profile)
+    if (!profile) {
+      return res.status().json({
+        success: false,
+        message: "User's additional Details not exist",
+      });
+    }
+    console.log(profile);
     if (!userDetails) {
       return res.status(404).json({
         success: false,
         message: "User does not exist",
       });
     }
-    console.log("4")
+    console.log("4");
     profile.address = address;
     profile.city = city;
     profile.state = state;
     profile.country = country;
     profile.zipCode = zipCode;
-    profile.status = true
+    profile.status = true;
     await profile.save();
-    console.log("6")
+    console.log("6");
     const updatedUserDetails = await UserModel.findById(userId)
       .populate("additionalDetails")
       .exec();
@@ -52,11 +56,11 @@ export const updateUsername = async (req, res) => {
   try {
     const userId = req.existUser.userId;
     const { firstName, lastName } = req.body;
-    if(!firstName || !lastName){
+    if (!firstName || !lastName) {
       return res.status(404).json({
-        success:false,
-        message:"Enter you firstname and lastname"
-      })
+        success: false,
+        message: "Enter you firstname and lastname",
+      });
     }
     const user = await UserModel.findByIdAndUpdate(
       userId,
@@ -66,6 +70,54 @@ export const updateUsername = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: "username updated successfully",
+      user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const deleteProfile = async (req, res) => {
+  try {
+    const userId = req.existUser.userId;
+    const user = await UserModel.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    const additionalProfileId = user.additionalDetails;
+    if (additionalProfileId) {
+      await ProfileModel.findByIdAndDelete(additionalProfileId);
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User profile and additional profile deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getSingleUser = async (req, res) => {
+  try {
+    const userId = req.existUser.userId;
+    const user = await UserModel.findById(userId).populate("additionalDetails").exec();
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "user does not exist",
+      });
+    }
+    return res.status(200).json({
+      success: true,
       user,
     });
   } catch (error) {
