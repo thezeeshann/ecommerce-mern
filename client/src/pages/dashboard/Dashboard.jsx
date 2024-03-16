@@ -3,6 +3,7 @@ import { useChangePasswordMutation } from "../../redux/api/authApiSlice";
 import { IoLocation } from "react-icons/io5";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
   useUpdateProfileMutation,
@@ -12,10 +13,15 @@ import {
 
 const Dashboard = () => {
   const { data } = useGetSingleUserQuery();
+  const { user } = useSelector((state) => state.user);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [firstName, setFirstName] = useState(data?.user?.firstName);
-  const [lastName, setLastName] = useState(data?.user?.lastName);
+  const [firstName, setFirstName] = useState(
+    data?.user?.firstName || user?.firstName
+  );
+  const [lastName, setLastName] = useState(
+    data?.user?.lastName || user?.lastName
+  );
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPasswpord] = useState(false);
   const [city, setCity] = useState();
@@ -23,7 +29,6 @@ const Dashboard = () => {
   const [address, setAddress] = useState();
   const [country, setCountry] = useState();
   const [zipCode, setZipCode] = useState();
-  console.log("login user details", data?.user?.firstName);
   const [changePassword, { isLoading: loadingChangePassword }] =
     useChangePasswordMutation();
   const [updateUsername, { isLoading: loadingUpdateUsername }] =
