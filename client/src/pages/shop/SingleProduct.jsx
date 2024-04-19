@@ -52,8 +52,8 @@ const SingleProduct = () => {
                 <input
                   type="number"
                   name=""
+                  defaultValue={1}
                   min="1"
-                  id=""
                   placeholder="Please Enter your email"
                   className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
                 />

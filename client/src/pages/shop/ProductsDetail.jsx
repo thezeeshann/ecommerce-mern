@@ -1,9 +1,11 @@
 import { useGetProductsQuery } from "../../redux/api/productApiSlice";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/Spinner";
+import { PiStarThin } from "react-icons/pi";
+// import { IoMdHeartEmpty } from "react-icons/io";
 
 const ProductsDetail = () => {
-  const { data, isLoading , error } = useGetProductsQuery();
+  const { data, isLoading, error } = useGetProductsQuery();
 
   return (
     <section>
@@ -12,39 +14,55 @@ const ProductsDetail = () => {
           <Spinner />
         </div>
       ) : (
-        <div className=" bg-white">
+        <>
           {error ? (
             <div>
-              <p className="text-center">Something went wrong while fetching products data</p>
+              <p className="text-center">
+                Something went wrong while fetching products data
+              </p>
             </div>
           ) : (
-            <div className="max-w-2xl px-4 py-16 mx-auto sm:px-6 sm:py-8 lg:max-w-7xl lg:px-8">
-              <h2 className="sr-only">Products</h2>
-
-              <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8 ">
-                {data?.products?.map((product) => (
-                  <div key={product._id} className="group">
-                    <div className="w-full overflow-hidden bg-gray-200 rounded-lg aspect-h-1 aspect-w-1 xl:aspect-h-8 xl:aspect-w-7">
+            <>
+              <>
+                <div className="flex flex-row flex-wrap w-full gap-x-3 gap-y-3">
+                  {data?.products?.map((product) => (
+                    <div
+                      key={product._id}
+                      className="bg-white shadow-sm max-w-[24%] cursor-pointer  p-2"
+                    >
+                      {/* <IoMdHeartEmpty   size="1.5rem" color="#FF0000"  /> */}
                       <Link to={`/shop/single-product/${product._id}`}>
                         <img
                           src={product.image}
                           alt={product.productName}
-                          className="object-cover object-center w-full h-full group-hover:opacity-75"
+                          className="object-cover object-center w-[222px] h-[222px] group-hover:opacity-75"
                         />
                       </Link>
+                      <div className="flex flex-col p-2">
+                        <p className="text-blue-500">{product.productName}</p>
+                        <p>
+                          <span className=" text-neutral-500">By </span>Apple
+                        </p>
+                        <div className="flex flex-row items-center justify-between">
+                          <p className="">{product.price}</p>
+
+                          <p className="flex flex-row items-center gap-x-1">
+                            4.2{" "}
+                            <span>
+                              {" "}
+                              <PiStarThin />
+                            </span>{" "}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <h3 className="mt-4 text-sm text-gray-700">
-                      {product.productName}
-                    </h3>
-                    <p className="mt-1 text-lg font-medium text-gray-900">
-                      {product.price}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
+                  ))}
+                </div>
+              </>
+            </>
           )}
-        </div>
+        </>
+
       )}
     </section>
   );

@@ -1,6 +1,6 @@
 import ProductsDetail from "./ProductsDetail";
 import Pagination from "../../components/Pagination";
-import { Slider, Select } from "@radix-ui/themes";
+import {Select } from "@radix-ui/themes";
 
 const Shop = () => {
   return (
@@ -8,11 +8,10 @@ const Shop = () => {
       <div className="flex flex-row w-[80%] mx-auto gap-x-6 ">
         {/* filter products */}
         <aside className="w-[20%] flex flex-col h-min gap-y-3">
-          <div className="flex flex-col px-3 py-4 bg-white gap-y-3">
+          {/* <div className="flex flex-col px-3 py-4 bg-white gap-y-3">
             <p>Price</p>
-            {/* <Slider defaultValue={50} /> */}
             <Slider defaultValue={[50]} />
-          </div>
+          </div> */}
           {/* <div className="flex flex-col p-2 bg-white gap-y-2">
             <p>Rating</p>
             <Rating value={3} />
