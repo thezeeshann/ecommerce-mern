@@ -16,7 +16,8 @@ const Welcome = () => {
             <DropdownMenu.Trigger>
               <div className="flex flex-row items-center cursor-pointer">
                 {" "}
-                <Text as="p" weight="medium" >Welcome! </Text>  <HiChevronDown
+                <p className="text-sm font-medium text-gray-600">Welcome!</p>
+                 <HiChevronDown
                   className="font-semibold text-gray-500"
                   size={"1rem"}/>
               </div>

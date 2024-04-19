@@ -1,6 +1,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { HiChevronDown } from "react-icons/hi";
 import { Fragment } from "react";
+import { Link } from "react-router-dom";
 
 const Brands = () => {
   return (
@@ -10,8 +11,8 @@ const Brands = () => {
         <div className="">
           <Menu as="div" className="relative inline-block text-left">
             <div>
-              <Menu.Button className="inline-flex justify-center w-full text-sm font-semibold text-gray-600 rounded-md ">
-              Category
+              <Menu.Button className="inline-flex justify-center w-full text-sm font-medium text-gray-600 rounded-md ">
+                Category
               </Menu.Button>
             </div>
             <Transition
@@ -28,9 +29,11 @@ const Brands = () => {
                   <div className="px-1 py-1">
                     <div className="flex flex-row items-center justify-between ">
                       <p className="text-lg font-semibold">Shop by Category</p>
-                      <p className="text-sm cursor-pointer text-sky-500 hover:text-gray-900">
-                        See All
-                      </p>
+                      <Link to="/category">
+                        <p className="text-sm cursor-pointer text-sky-500 hover:text-gray-900">
+                          See All
+                        </p>
+                      </Link>
                     </div>
                     <hr className="mt-2" />
                   </div>
@@ -58,13 +61,20 @@ const Brands = () => {
                           Men&apos;s Fashion
                         </span>
                       </Menu.Item>
+                      <Menu.Item>
+                        <span
+                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
+                        >
+                          Beauty, Health
+                        </span>
+                      </Menu.Item>
                     </div>
                     <div>
                       <Menu.Item>
                         <span
                           className={`text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
                         >
-                           Women&apos;s Fashion
+                          Women&apos;s Fashion
                         </span>
                       </Menu.Item>
                       <Menu.Item>
@@ -79,6 +89,13 @@ const Brands = () => {
                           className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
                         >
                           Books
+                        </span>
+                      </Menu.Item>
+                      <Menu.Item>
+                        <span
+                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
+                        >
+                          Home, Kitchen
                         </span>
                       </Menu.Item>
                     </div>

@@ -26,19 +26,19 @@ const Navbar = () => {
               {" "}
               <MdLocalShipping className="text-white" size={"1rem"} />
             </div>
-            <p className="text-sm font-semibold text-white">Free Shipping</p>
+            <p className="text-sm font-medium text-white">Free Shipping</p>
           </div>
           <div className="flex flex-row items-center justify-center gap-x-3">
             <div>
               <MdPayment className="text-white" size={"1rem"} />
             </div>
-            <p className="text-sm font-semibold text-white">Payment Methods</p>
+            <p className="text-sm font-medium text-white">Payment Methods</p>
           </div>
           <div className="flex flex-row items-center justify-center gap-x-3">
             <div>
               <IoCall className="text-white" size={"1rem"} />
             </div>
-            <p className="text-sm font-semibold text-white">
+            <p className="text-sm font-medium text-white">
               Call us 951-999-9999
             </p>
           </div>
@@ -51,7 +51,7 @@ const Navbar = () => {
         <div>
           <Link to={"/"}>
             {" "}
-            <p className="text-2xl font-semibold text-gray-600 cursor-pointer">
+            <p className="text-2xl font-medium text-gray-600 cursor-pointer">
               MERN Store
             </p>
           </Link>
@@ -87,7 +87,7 @@ const Navbar = () => {
             {/* shop */}
             <div className="cursor-pointer">
               <Link to="/shop">
-                <p className="text-sm font-semibold text-gray-600">Shop</p>
+                <p className="text-sm font-medium text-gray-600">Shop</p>
               </Link>
             </div>
             {/* welcome */}
