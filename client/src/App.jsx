@@ -8,8 +8,9 @@ import Error from "./components/Error";
 import Shop from "./pages/shop/Shop";
 import Dashboard from "./pages/dashboard/Dashboard";
 import SingleProduct from "./pages/shop/SingleProduct";
-import "./App.css";
 import PrivateRoute from "./components/Route/PrivateRoute";
+import ProductsCategory from "./pages/shop/ProductCategory";
+import "./App.css";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             path="/shop/single-product/:productId"
             element={<SingleProduct />}
           />
+          <Route path="/category" element={<ProductsCategory/>} />
           <Route path="*" element={<Error />} />
           <Route element={<PrivateRoute />}>
             <Route path="/dashborad" element={<Dashboard />} />
