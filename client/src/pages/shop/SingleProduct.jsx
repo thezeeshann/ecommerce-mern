@@ -6,15 +6,22 @@ import iamgePlaceholder from "../../assets/placeholder-image.png";
 import Spinner from "../../components/Spinner";
 import { addToCart, removeToCart } from "../../redux/features/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 
 const SingleProduct = () => {
+
   const dispatch = useDispatch();
+  const [productQuantity, setQuantity] = useState(1);
   const { productId } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(productId);
   const { cart } = useSelector((state) => state.cart);
 
   const ratingChanged = (newRating) => {
     console.log(newRating);
+  };
+  
+  const handleQuantityChange = (e) => {
+    setQuantity(parseInt(e.target.value));
   };
 
   return (
@@ -51,15 +58,15 @@ const SingleProduct = () => {
                 </label>
                 <input
                   type="number"
-                  name=""
-                  defaultValue={1}
+                  value={productQuantity}
+                  onChange={handleQuantityChange}
                   min="1"
                   placeholder="Please Enter your email"
                   className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
                 />
               </div>
               <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                {cart.length > 0 && cart.includes(data?.singleProduct?._id) ? (
+                {cart.length > 0 ? (
                   <>
                     <button
                       onClick={() => dispatch(removeToCart(productId))}
@@ -75,7 +82,14 @@ const SingleProduct = () => {
                 ) : (
                   <>
                     <button
-                      onClick={() => dispatch(addToCart(productId))}
+                      onClick={() =>
+                        dispatch(
+                          addToCart({
+                            product: data.singleProduct,
+                            quantity: productQuantity,
+                          })
+                        )
+                      }
                       className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
                     >
                       <RiShoppingBagLine

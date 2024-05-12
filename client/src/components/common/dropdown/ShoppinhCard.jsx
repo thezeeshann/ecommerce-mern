@@ -1,48 +1,20 @@
 import { Transition } from "@headlessui/react";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment } from "react";
 import { Dialog } from "@headlessui/react";
 import { RxCross1 } from "react-icons/rx";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BASE_URL, GET_SINGLE_PRODUCT_API } from "../../../redux/constant";
 import { removeToCart } from "../../../redux/features/cartSlice";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 
 const ShoppinhCard = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const productDetails = [];
-      for (const item of cart) {
-        try {
-          const response = await axios.get(
-            `${BASE_URL}${GET_SINGLE_PRODUCT_API}/${item}`
-          );
-          const product = response.data;
-          console.log(product);
-          productDetails.push(product);
-        } catch (error) {
-          console.error(
-            `Error fetching product with ID ${item.productId}:`,
-            error
-          );
-        }
-      }
-      setProducts(productDetails);
-    };
-
-    fetchProducts();
-  }, [cart]);
-
   let totalPrice = 0;
-  products.forEach((product) => {
-    totalPrice += product?.singleProduct.price || 0;
+  cart.forEach((product) => {
+    totalPrice += (product.price || 0) * (product.quantity || 0);
   });
 
   return (
@@ -100,32 +72,25 @@ const ShoppinhCard = ({ open, setOpen }) => {
                         </>
                       ) : (
                         <>
-                          {products.map((product, index) => (
+                          {cart.map((product, index) => (
                             <Fragment key={index}>
                               <div className="flex-1 ">
                                 <div className="flex flex-col py-2 gap-y-3">
                                   <div className="flex flex-row items-center justify-between ">
                                     <div className="flex flex-row items-center gap-x-2">
                                       <img
-                                        src={product?.singleProduct?.image}
+                                        src={product?.image}
                                         className="w-[70px] h-[70px] rounded"
                                         alt=""
                                       />
 
                                       <p className="font-semibold text-blue-500 ">
-                                        {product?.singleProduct?.productName.slice(
-                                          0,
-                                          10
-                                        )}
+                                        {product?.productName.slice(0, 10)}
                                       </p>
                                     </div>
                                     <span
                                       onClick={() =>
-                                        dispatch(
-                                          removeToCart(
-                                            product?.singleProduct?._id
-                                          )
-                                        )
+                                        dispatch(removeToCart(product?._id))
                                       }
                                     >
                                       {" "}
@@ -139,12 +104,12 @@ const ShoppinhCard = ({ open, setOpen }) => {
                                     <div className="flex flex-row items-center justify-between">
                                       <p className="text-lg">Price</p>
                                       <p className="text-lg">
-                                        ${product?.singleProduct?.price}
+                                        ${product?.price}
                                       </p>
                                     </div>
                                     <div className="flex flex-row items-center justify-between">
                                       <p>Quantity</p>
-                                      <p>{product?.singleProduct?.quantity}</p>
+                                      <p>{product?.quantity || 0}</p>
                                     </div>
                                   </div>
                                 </div>
@@ -160,7 +125,9 @@ const ShoppinhCard = ({ open, setOpen }) => {
                               </div>
                               <div className="flex flex-row items-center justify-between">
                                 <p className="text-sm">Total</p>
-                                <p className="text-sm">${totalPrice}</p>
+                                <p className="text-sm">
+                                  ${totalPrice.toFixed(2)}
+                                </p>
                               </div>
                             </div>
                             <div className="flex flex-row items-center justify-center px-5 gap-x-3">
