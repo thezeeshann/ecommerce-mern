@@ -11,22 +11,23 @@ const cartSlice = createSlice({
   initialState: initalState,
   reducers: {
     addToCart: (state, action) => {
-      const { productId, quantity } = action.payload;
+      const { product, quantity } = action.payload;
+
       const existingProductIndex = state.cart.findIndex(
-        (item) => item.productId === productId
+        (item) => item._id === product._id
       );
 
       if (existingProductIndex !== -1) {
         state.cart[existingProductIndex].quantity += quantity;
       } else {
-        state.cart.push({ productId, quantity });
+        state.cart.push({ ...product, quantity });
       }
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
     removeToCart: (state, action) => {
       const productIdRemove = action.payload;
       state.cart = state.cart.filter(
-        (productId) => productId !== productIdRemove
+        (product) => product._id !== productIdRemove
       );
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
