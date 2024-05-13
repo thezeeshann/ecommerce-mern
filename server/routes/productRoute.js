@@ -5,7 +5,7 @@ import {isAdmin,authenticateJwt} from "../middleware/authenticateJwt.js"
 const router = express.Router()
 
 router.get("/",getAllProducts)
-router.get("/:id",getSingleProduct)
+router.get("/:slug",getSingleProduct)
 router.post("/create",authenticateJwt,isAdmin,createProducts)
 router.put("/update/:id",authenticateJwt,isAdmin,updateProducts)
 router.delete("/:id",authenticateJwt,isAdmin,deleteProducts)

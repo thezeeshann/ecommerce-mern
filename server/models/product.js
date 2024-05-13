@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const ProductSchema = new mongoose.Schema({
   productName: {
@@ -6,6 +7,10 @@ const ProductSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
+  },
+  slug: {
+    type: String,
+    unique: true,
   },
   description: {
     type: String,
@@ -16,6 +21,23 @@ const ProductSchema = new mongoose.Schema({
   image: {
     type: String,
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
+  updated: Date,
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+ProductSchema.pre("save", function (next) {
+  if (!this.isModified("productName")) {
+    return next();
+  }
+  this.slug = slugify(this.productName, { lower: true });
+  next();
 });
 
 const ProductModel = mongoose.model("Product", ProductSchema);

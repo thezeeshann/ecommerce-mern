@@ -4,6 +4,7 @@ import { uploadImageToCloudinary } from "../utils/uploadImage.js";
 export const createProducts = async (req, res) => {
   try {
     const { productName, price, description, quantity } = req.body;
+    
     const image = req.files.image;
 
     if (!productName || !price || !description || !quantity) {
@@ -62,8 +63,8 @@ export const getAllProducts = async (req, res) => {
 
 export const getSingleProduct = async (req, res) => {
   try {
-    const productId = req.params.id;
-    const singleProduct = await ProductModel.findOne({ _id: productId });
+    const productSlug = req.params.slug;
+    const singleProduct = await ProductModel.findOne({ slug: productSlug });
     return res.status(200).json({
       success: false,
       singleProduct,
