@@ -66,7 +66,7 @@ export const getSingleProduct = async (req, res) => {
     const productSlug = req.params.slug;
     const singleProduct = await ProductModel.findOne({ slug: productSlug });
     return res.status(200).json({
-      success: false,
+      success: true,
       singleProduct,
     });
   } catch (error) {
