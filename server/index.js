@@ -4,6 +4,7 @@ import cors from "cors"
 import connectDB from "./config/db.js"
 import profileRoute from "./routes/profleRoute.js"
 import authRoute from "./routes/authRoute.js"
+import ReviewRouter from "./routes/reviewRouter.js"
 import productRouter from "./routes/productRoute.js"
 import cloudinaryConnect from "./config/cloudinary.js"
 import fileUpload from "express-fileupload"
@@ -31,6 +32,7 @@ app.use(fileUpload({
 app.use("/api/v1/auth",authRoute)
 app.use("/api/v1/products",productRouter)
 app.use("/api/v1/profile",profileRoute)
+app.use("/api/v1/review",ReviewRouter)
 
 app.get("/", (req, res) => {
 	return res.json({
