@@ -10,3 +10,5 @@ export const GET_SINGLE_USER_API = "profile/getSingleUser"
 
 export const PRODUCT_URL = "/products"
 export const GET_SINGLE_PRODUCT_API = "/products"
+
+export const GET_REVIEW = "/review"
