@@ -1,4 +1,4 @@
-import { SIGNUP_API, LOGIN_API,CHANGE_PASSWORD_API } from "../constant";
+import { SIGNUP_API, LOGIN_API, CHANGE_PASSWORD_API } from "../constant";
 import { apiSlice } from "./apiSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -19,18 +19,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
-
-    changePassword:builder.mutation({
-      query:({ oldPassword, newPassword })=>({
-        url:`${CHANGE_PASSWORD_API}`,
-        method:"POST",
-        body:{ oldPassword, newPassword },
-      })
-    })
-
-
+    changePassword: builder.mutation({
+      query: ({ oldPassword, newPassword }) => ({
+        url: `${CHANGE_PASSWORD_API}`,
+        method: "POST",
+        body: { oldPassword, newPassword },
+      }),
+    }),
   }),
 });
 
-export const { useRegisterMutation, useLoginMutation,useChangePasswordMutation } =
-  authApiSlice;
+export const {
+  useRegisterMutation,
+  useLoginMutation,
+  useChangePasswordMutation,
+} = authApiSlice;

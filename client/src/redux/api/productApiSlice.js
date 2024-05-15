@@ -10,8 +10,8 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
 
     getSingleProduct:builder.query({
-      query:(productId)=>({
-        url:`${GET_SINGLE_PRODUCT_API}/${productId}`
+      query:(productSlug)=>({
+        url:`${GET_SINGLE_PRODUCT_API}/${productSlug}`
       })
     })
 
