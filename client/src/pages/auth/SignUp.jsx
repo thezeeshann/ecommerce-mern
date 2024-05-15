@@ -130,8 +130,8 @@ const SignUp = () => {
               />
             </div>
 
-            <div className="w-full flex flex-row items-center justify-between gap-x-1">
-              <div className="relative flex flex-col gap-y-1 w-1/2">
+            <div className="flex flex-row items-center justify-between w-full gap-x-1">
+              <div className="relative flex flex-col w-1/2 gap-y-1">
                 <label htmlFor="email" className="text-xs ">
                   Password
                 </label>
@@ -155,7 +155,7 @@ const SignUp = () => {
                 </span>
               </div>
 
-              <div className="relative flex flex-col gap-y-1  w-1/2">
+              <div className="relative flex flex-col w-1/2 gap-y-1">
                 <label htmlFor="email" className="text-xs ">
                   Confirm Password
                 </label>

@@ -6,6 +6,7 @@ import { PiStarThin } from "react-icons/pi";
 
 const ProductsDetail = () => {
   const { data, isLoading, error } = useGetProductsQuery();
+  console.log(data)
 
   return (
     <section>
@@ -31,7 +32,7 @@ const ProductsDetail = () => {
                       className="bg-white shadow-sm max-w-[24%] cursor-pointer  p-2"
                     >
                       {/* <IoMdHeartEmpty   size="1.5rem" color="#FF0000"  /> */}
-                      <Link to={`/shop/single-product/${product._id}`}>
+                      <Link to={`/shop/product/${product.slug}`}>
                         <img
                           src={product.image}
                           alt={product.productName}
@@ -44,7 +45,7 @@ const ProductsDetail = () => {
                           <span className=" text-neutral-500">By </span>Apple
                         </p>
                         <div className="flex flex-row items-center justify-between">
-                          <p className="">{product.price}</p>
+                          <p className="">$ {product.price}</p>
 
                           <p className="flex flex-row items-center gap-x-1">
                             4.2{" "}
@@ -62,7 +63,6 @@ const ProductsDetail = () => {
             </>
           )}
         </>
-
       )}
     </section>
   );
