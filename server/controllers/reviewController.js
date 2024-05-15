@@ -42,7 +42,7 @@ export const getReviewWithProduct = async (req, res) => {
       })
       .populate({
         path: "user",
-        select: "firstName lastName",
+        select: "image",
       })
       .exec();
     if (reviews.length === 0) {
