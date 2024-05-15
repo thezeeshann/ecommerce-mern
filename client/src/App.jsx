@@ -23,7 +23,7 @@ function App() {
           <Route path="/register" element={<SignUp />} />
           <Route path="/shop" element={<Shop />} />
           <Route
-            path="/shop/single-product/:productId"
+            path="/shop/product/:slug"
             element={<SingleProduct />}
           />
           <Route path="/category" element={<ProductsCategory/>} />
