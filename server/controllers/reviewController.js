@@ -35,6 +35,9 @@ export const getReviewWithProduct = async (req, res) => {
         message: "Product not found",
       });
     }
+    const totalReviews = await ReviewModel.countDocuments({
+      product: productId,
+    });
     const reviews = await ReviewModel.find({ product: productId })
       .populate({
         path: "product",
@@ -54,6 +57,7 @@ export const getReviewWithProduct = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: reviews,
+      totalReviews: totalReviews,
     });
   } catch (error) {
     return res.status(404).json({
