@@ -1,5 +1,5 @@
 import { useGetReviewQuery } from "../redux/api/reviewApiSlice";
-import GetStars from "./start";
+import ReactStars from "react-rating-stars-component";
 
 const Reviews = ({ productId }) => {
   const { data } = useGetReviewQuery(productId);
@@ -39,8 +39,17 @@ const Reviews = ({ productId }) => {
             </div>
           </div>
           <div>
-            {/* <span>⭐⭐⭐</span> */}
-            <span>{GetStars(review?.rating)}</span>
+            <ReactStars
+              value={review?.rating}
+              count={5}
+              size={24}
+              edit={false}
+              isHalf={true}
+              emptyIcon={<i className="far fa-star"></i>}
+              halfIcon={<i className="fa fa-star-half-alt"></i>}
+              fullIcon={<i className="fa fa-star"></i>}
+              activeColor="#ffd700"
+            />
           </div>
         </div>
       ))}

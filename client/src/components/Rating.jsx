@@ -1,38 +1,43 @@
-const Rating = () => {
+import { useGetReviewQuery } from "../redux/api/reviewApiSlice";
+import ReactStars from "react-rating-stars-component";
+const Rating = ({ productId }) => {
+  const { data } = useGetReviewQuery(productId);
+
+  const totalRatings = data?.data?.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
+  const averageRating =
+    totalRatings > 0 && Math.round(totalRatings / data?.totalReviews);
+
   return (
-    <div className="px-3 py-3 mt-5 bg-white  h-[200px]">
+    <div className="px-3 py-3 mt-5 bg-white h-min">
       <p className="font-semibold">Rating</p>
-      <div className="flex flex-row gap-x-3">
-        <span>⭐⭐⭐ </span>
-        <p className="text-sm">based on 2 reviews.</p>
-      </div>
-      <hr className="mt-2 border-y-4" />
-      <div className="mt-3">
-        <div className="flex flex-row justify-between">
-          <span className="text-sm">5 start</span>
-          <progress value="70" max="100" color="" className="w-3/4" />
-          <span className="text-sm">70%</span>
-        </div>
-        <div className="flex flex-row justify-between">
-          <span className="text-sm">4 start</span>
-          <progress value="40" max="100" color="" className="w-3/4" />
-          <span className="text-sm">40%</span>
-        </div>
-        <div className="flex flex-row justify-between">
-          <span className="text-sm">3 start</span>
-          <progress value="0" max="100" color="" className="w-3/4" />
-          <span className="text-sm">0%</span>
-        </div>
-        <div className="flex flex-row justify-between">
-          <span className="text-sm">2 start</span>
-          <progress value="0" max="100" color="" className="w-3/4" />
-          <span className="text-sm">0%</span>
-        </div>
-        <div className="flex flex-row justify-between">
-          <span className="text-sm">1 start</span>
-          <progress value="0" max="100" color="" className="w-3/4" />
-          <span className="text-sm">0%</span>
-        </div>
+      <div className="flex flex-row items-center gap-x-3">
+        {averageRating && (
+          <>
+            <div className="">
+              <ReactStars
+                count={5}
+                value={averageRating}
+                size={24}
+                edit={false}
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+                activeColor="#ffd700"
+              />
+            </div>
+            <div>
+              {data?.totalReviews > 0 && (
+                <p className="text-sm">
+                  based on {data?.totalReviews} reviews.
+                </p>
+              )}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

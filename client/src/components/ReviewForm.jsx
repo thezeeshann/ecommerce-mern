@@ -1,5 +1,8 @@
 import ReactStars from "react-rating-stars-component";
-import { useAddReviewMutation } from "../redux/api/reviewApiSlice";
+import {
+  useAddReviewMutation,
+  useGetReviewQuery,
+} from "../redux/api/reviewApiSlice";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -7,6 +10,7 @@ import { useSelector } from "react-redux";
 const ReviewForm = ({ productId }) => {
   const { user } = useSelector((state) => state.user);
   const [addReview, { isLoading }] = useAddReviewMutation();
+  const { refetch } = useGetReviewQuery(productId);
   const [formData, setFormData] = useState({
     title: "",
     review: "",
@@ -20,6 +24,14 @@ const ReviewForm = ({ productId }) => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      review: "",
+      rating: "",
+    });
   };
 
   const handleRatingChange = (newRating) => {
@@ -43,12 +55,15 @@ const ReviewForm = ({ productId }) => {
             review,
             rating,
           },
-        });
+        }).unwrap();
+        resetForm();
+        refetch();
         console.log("REViEW API RESPONSE...", response);
         toast.success("revew added successfully");
       }
     } catch (error) {
-      toast.error("Something went wrong with the submission");
+      console.log("REVIEW API ERROR...", error);
+      toast.error(error?.data?.message);
     }
   };
 
