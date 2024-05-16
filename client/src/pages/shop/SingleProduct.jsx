@@ -100,7 +100,7 @@ const SingleProduct = () => {
               </div>
             </div>
 
-            <Rating />
+            <Rating productId={data?.singleProduct?._id} />
             <div>
               <Reviews productId={data?.singleProduct?._id} />
               <ReviewForm productId={data?.singleProduct?._id} />
