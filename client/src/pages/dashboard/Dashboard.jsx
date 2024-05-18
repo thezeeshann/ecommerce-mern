@@ -1,75 +1,24 @@
 import { Tabs, Box, Badge, Flex } from "@radix-ui/themes";
-import { useChangePasswordMutation } from "../../redux/api/authApiSlice";
 import { IoLocation } from "react-icons/io5";
-import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
   useUpdateProfileMutation,
-  useUpdateUsernameMutation,
   useGetSingleUserQuery,
 } from "../../redux/api/profileApiSlice";
+import ChangePassword from "./user/ChangePassword";
+import AccountDetails from "./user/AccountDetails";
+import WishList from "./user/WishList";
 
 const Dashboard = () => {
   const { data } = useGetSingleUserQuery();
-  const { user } = useSelector((state) => state.user);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [firstName, setFirstName] = useState(
-    data?.user?.firstName || user?.firstName
-  );
-  const [lastName, setLastName] = useState(
-    data?.user?.lastName || user?.lastName
-  );
-  const [showOldPassword, setShowOldPassword] = useState(false);
-  const [showNewPassword, setShowNewPasswpord] = useState(false);
   const [city, setCity] = useState();
   const [state, setState] = useState();
   const [address, setAddress] = useState();
   const [country, setCountry] = useState();
   const [zipCode, setZipCode] = useState();
-  const [changePassword, { isLoading: loadingChangePassword }] =
-    useChangePasswordMutation();
-  const [updateUsername, { isLoading: loadingUpdateUsername }] =
-    useUpdateUsernameMutation();
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useUpdateProfileMutation();
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    if (!oldPassword || !newPassword) {
-      return toast.error("Please enter both old and new passwords");
-    }
-    try {
-      const response = await changePassword({ oldPassword, newPassword });
-      if (response.error) {
-        toast.error(response.error.data.message);
-      } else {
-        setOldPassword("");
-        setNewPassword("");
-        console.log("CHAGNE PASSWORD API RESPONSE...", response);
-        toast.success("password updated successfully");
-      }
-    } catch (error) {
-      console.log("CHANGE PASSWORD API ERROR RESPONSE...", error);
-    }
-  };
-
-  const handleUpdateUsername = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await updateUsername({ firstName, lastName });
-      if (response.error) {
-        toast.error(response.error.data.messsage);
-      } else {
-        console.log("UPDATE USERNAME API RESPONSE...", response);
-        toast.success("username updated successfully");
-      }
-    } catch (error) {
-      console.log("UPDATE USERNAME API ERROR RESPONSE...", error);
-    }
-  };
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -100,7 +49,7 @@ const Dashboard = () => {
           Member
         </Badge>
       </div>
-      <div className="border-[1px]">
+      <div className="border-[1px] ">
         <Tabs.Root defaultValue="account-details">
           <Tabs.List>
             <Flex
@@ -110,7 +59,7 @@ const Dashboard = () => {
               align="center"
               justify="between"
             >
-              <Tabs.Trigger value="account-details">
+              <Tabs.Trigger value="account-details"  >
                 Account Details
               </Tabs.Trigger>
               <Tabs.Trigger value="account-security">
@@ -125,128 +74,11 @@ const Dashboard = () => {
 
           <Box px="4" pt="3" pb="2">
             <Tabs.Content value="account-details">
-              <div className="flex flex-col ">
-                <p className="">Account Details</p>
-                <hr />
-                <form onSubmit={handleUpdateUsername}>
-                  <div className="flex flex-row w-full mt-5 gap-x-5">
-                    <div className="flex flex-col w-1/2 gap-y-1">
-                      <label htmlFor="email" className="text-xs">
-                        First Name
-                      </label>
-                      <input
-                        type="text"
-                        name="firstName"
-                        onChange={(e) => setFirstName(e.target.value)}
-                        value={firstName}
-                        placeholder="Please Enter your First Name"
-                        className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                      />
-                    </div>
-                    <div className="flex flex-col w-1/2 gap-y-1">
-                      <label htmlFor="email" className="text-xs">
-                        Last Name
-                      </label>
-                      <input
-                        type="text"
-                        name="lastName"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        placeholder="Please Enter your Last Name"
-                        className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                      />
-                    </div>
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loadingUpdateUsername}
-                    className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white w-max"
-                  >
-                    Save Change
-                  </button>
-                </form>
-              </div>
+              <AccountDetails/>
             </Tabs.Content>
 
             <Tabs.Content value="account-security">
-              <div>
-                <p>Account Security</p>
-                <hr />
-
-                <form onSubmit={handleChangePassword}>
-                  <div className="mt-5">
-                    <p>Change Password</p>
-                    <div className="flex flex-row w-full mt-5 mb-5 gap-x-5">
-                      <div className="relative flex flex-col w-1/2 gap-y-1">
-                        <label htmlFor="oldPassword" className="text-xs">
-                          Password
-                        </label>
-                        <input
-                          value={oldPassword}
-                          onChange={(e) => setOldPassword(e.target.value)}
-                          type={showOldPassword === true ? "text" : "password"}
-                          name="oldPassword"
-                          placeholder="Old Password"
-                          className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                        />
-                        <span
-                          className="absolute right-4 top-[28px] z-[10] cursor-pointer"
-                          onClick={() => setShowOldPassword((value) => !value)}
-                        >
-                          {showOldPassword ? (
-                            <IoMdEyeOff
-                              size={"1.5rem"}
-                              className="cursor-pointer"
-                            />
-                          ) : (
-                            <IoMdEye
-                              size={"1.5rem"}
-                              className="cursor-pointer"
-                            />
-                          )}
-                        </span>
-                      </div>
-                      <div className="relative flex flex-col w-1/2 gap-y-1">
-                        <label htmlFor="newPassword" className="text-xs">
-                          New Password
-                        </label>
-                        <input
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          type={showNewPassword === true ? "text" : "password"}
-                          name="newPassword"
-                          placeholder="Confirm Password"
-                          className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                        />
-                        <span
-                          className="absolute right-4 top-[28px] z-[10] cursor-pointer"
-                          onClick={() => setShowNewPasswpord((value) => !value)}
-                        >
-                          {showNewPassword ? (
-                            <IoMdEyeOff
-                              size={"1.5rem"}
-                              className="cursor-pointer"
-                            />
-                          ) : (
-                            <IoMdEye
-                              size={"1.5rem"}
-                              className="cursor-pointer"
-                            />
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <hr />
-                    <button
-                      disabled={loadingChangePassword}
-                      type="submit"
-                      className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white"
-                    >
-                      Reset Password
-                    </button>
-                  </div>
-                </form>
-              </div>
+              <ChangePassword />
             </Tabs.Content>
 
             <Tabs.Content value="address">
@@ -406,24 +238,7 @@ const Dashboard = () => {
             </Tabs.Content>
 
             <Tabs.Content value="wishlist">
-              <div className="flex flex-col mt-3">
-                <p>Your Wishlist</p>
-                <hr />
-                <div className="flex flex-row gap-x-4 border-[1px] mt-5">
-                  <img
-                    src="https://mernstore-bucket.s3.us-east-2.amazonaws.com/pexels-ready-made-3987280.jpg"
-                    className="w-[90px] h-[90px]"
-                    alt=""
-                  />
-                  <div className="flex flex-col gap-y-1 ">
-                    <p className="font-semibold">Converse All Star</p>
-                    <p className="text-sm">$40</p>
-                    <p className="text-sm">
-                      Wishlist Added on Monday, Mar 4, 2024
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <WishList />
             </Tabs.Content>
 
             <Tabs.Content value="support">
