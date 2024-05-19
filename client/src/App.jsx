@@ -10,6 +10,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import SingleProduct from "./pages/shop/SingleProduct";
 import PrivateRoute from "./components/Route/PrivateRoute";
 import ProductsCategory from "./pages/shop/ProductCategory";
+import Order from "./pages/order/Order";
 import "./App.css";
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path="*" element={<Error />} />
           <Route element={<PrivateRoute />}>
             <Route path="/dashborad" element={<Dashboard />} />
+            <Route path="/order" element={<Order/>} />
           </Route>
         </Routes>
       </main>
