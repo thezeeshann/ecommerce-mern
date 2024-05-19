@@ -10,6 +10,7 @@ import { removeToCart } from "../../../redux/features/cartSlice";
 import { useDispatch } from "react-redux";
 
 const ShoppinhCard = ({ open, setOpen }) => {
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { cart } = useSelector((state) => state.cart);
   let totalPrice = 0;
@@ -83,9 +84,8 @@ const ShoppinhCard = ({ open, setOpen }) => {
                                         className="w-[70px] h-[70px] rounded"
                                         alt=""
                                       />
-
                                       <p className="font-semibold text-blue-500 ">
-                                        {product?.productName.slice(0, 10)}
+                                        {product?.productName}
                                       </p>
                                     </div>
                                     <span
@@ -140,7 +140,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                                 </button>
                               </Link>
                               <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
-                                Proceed to Checkout
+                                {user ? "Place Order" : "Proceed To Checkout"}
                               </button>
                             </div>
                           </div>
