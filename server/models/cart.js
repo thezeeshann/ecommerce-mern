@@ -1,24 +1,25 @@
 import mongoose from "mongoose";
+import { CART_ITEM_STATUS } from "../utils/constant.js";
+
 
 const CartSchema = new mongoose.Schema({
-  product: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
+    ref: "User",
   },
-  quantity: Number,
-  purchasePrice: {
-    type: Number,
-    default: 0,
-  },
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      quantity: {
+        type: Number,
+        default: 1,
+      },
+    },
+  ],
   totalPrice: {
-    type: Number,
-    default: 0,
-  },
-  priceWithTax: {
-    type: Number,
-    default: 0,
-  },
-  totalTax: {
     type: Number,
     default: 0,
   },
@@ -32,6 +33,11 @@ const CartSchema = new mongoose.Schema({
       CART_ITEM_STATUS.Delivered,
       CART_ITEM_STATUS.Cancelled,
     ],
+  },
+  updated: Date,
+  created: {
+    type: Date,
+    default: Date.now,
   },
 });
 

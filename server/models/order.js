@@ -1,6 +1,16 @@
 import mongoose from "mongoose";
 
+
+const generateOrderId = () => {
+  return "ORDER-" + Math.random().toString(36).substr(2, 11).toUpperCase();
+};
+
 const OrderSchema = new mongoose.Schema({
+  orderId: {
+    type: String,
+    default: generateOrderId,
+    unique: true,
+  },
   cart: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Cart",
@@ -12,6 +22,10 @@ const OrderSchema = new mongoose.Schema({
   total: {
     type: Number,
     default: 0,
+  },
+  orderDate: {
+    type: Date,
+    default: Date.now,
   },
   updated: Date,
   created: {
