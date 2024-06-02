@@ -6,17 +6,34 @@ import { RiShoppingBagLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { removeToCart } from "../../../redux/features/cartSlice";
-import { useDispatch } from "react-redux";
+// import { removeToCart } from "../../../redux/features/cartSlice";
+// import { useDispatch } from "react-redux";
+import {
+  useGetCartsQuery,
+  useRemoveFromCartMutation,
+} from "../../../redux/api/cartApiSlice";
+import toast from "react-hot-toast";
 
 const ShoppinhCard = ({ open, setOpen }) => {
+  // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const { cart } = useSelector((state) => state.cart);
-  let totalPrice = 0;
-  cart.forEach((product) => {
-    totalPrice += (product.price || 0) * (product.quantity || 0);
-  });
+  const { data } = useGetCartsQuery();
+  const [removeFromCart] = useRemoveFromCartMutation();
+
+  const handleRemoveFromCart = async (pId) => {
+    try {
+      const productId = {
+        productId: pId,
+      };
+      const response = await removeFromCart(productId);
+      if (response.status === 200) {
+        toast.success("Item removed from cart");
+      }
+      console.log("REMOVE FROM CART API RESPONSE",response)
+    } catch (error) {
+      console.log("REMOVE ITEM FROM CART API ERROR", error);
+    }
+  };
 
   return (
     <>
@@ -59,7 +76,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                       </div>
                       <hr />
 
-                      {cart.length === 0 ? (
+                      {data?.totalProducts === 0 ? (
                         <>
                           <div className="flex flex-col items-center justify-center h-full gap-y-2">
                             <span>
@@ -73,77 +90,82 @@ const ShoppinhCard = ({ open, setOpen }) => {
                         </>
                       ) : (
                         <>
-                          {cart.map((product, index) => (
-                            <Fragment key={index}>
-                              <div className="flex-1 ">
-                                <div className="flex flex-col py-2 gap-y-3">
-                                  <div className="flex flex-row items-center justify-between ">
-                                    <div className="flex flex-row items-center gap-x-2">
-                                      <img
-                                        src={product?.image}
-                                        className="w-[70px] h-[70px] rounded"
-                                        alt=""
-                                      />
-                                      <p className="font-semibold text-blue-500 ">
-                                        {product?.productName}
-                                      </p>
-                                    </div>
-                                    <span
-                                      onClick={() =>
-                                        dispatch(removeToCart(product?._id))
-                                      }
+                          {data?.data?.map((product, index) => (
+                            <>
+                              <Fragment key={index}>
+                                <div className="flex-1 ">
+                                  {product?.items?.map((p, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex flex-col py-2 gap-y-3 "
                                     >
-                                      {" "}
-                                      <MdDelete
-                                        size={"1.5rem"}
-                                        className="cursor-pointer hover:text-red-500"
-                                      />
-                                    </span>
+                                      <div className="flex flex-row items-center justify-between ">
+                                        <div className="flex flex-row items-center gap-x-2">
+                                          <img
+                                            src={p?.product?.image}
+                                            className="w-[70px] h-[70px] rounded"
+                                            alt=""
+                                          />
+                                          <p className="font-semibold text-blue-500 ">
+                                            {p?.product?.productName}
+                                          </p>
+                                        </div>
+                                        <span onClick={()=>handleRemoveFromCart(p?.product?._id)}>
+                                          {" "}
+                                          <MdDelete
+                                            size={"1.5rem"}
+                                            className="cursor-pointer hover:text-red-500"
+                                          />
+                                        </span>
+                                      </div>
+                                      <div className="flex flex-col">
+                                        <div className="flex flex-row items-center justify-between">
+                                          <p className="text-lg">Price</p>
+                                          <p className="text-lg">
+                                            ${p?.product?.price}
+                                          </p>
+                                        </div>
+                                        <div className="flex flex-row items-center justify-between">
+                                          <p>Quantity</p>
+                                          <p>{p?.quantity || 0}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </Fragment>
+
+                              <div className="flex flex-col py-3 font-Poppins gap-y-5">
+                                <div className="p-5 flex flex-col bg-[#F6F7F8] gap-y-2">
+                                  <div className="flex flex-row items-center justify-between ">
+                                    <p className="text-sm">Free Shippling </p>
+                                    <p className="text-sm">$0</p>
                                   </div>
-                                  <div className="flex flex-col">
-                                    <div className="flex flex-row items-center justify-between">
-                                      <p className="text-lg">Price</p>
-                                      <p className="text-lg">
-                                        ${product?.price}
-                                      </p>
-                                    </div>
-                                    <div className="flex flex-row items-center justify-between">
-                                      <p>Quantity</p>
-                                      <p>{product?.quantity || 0}</p>
-                                    </div>
+                                  <div className="flex flex-row items-center justify-between">
+                                    <p className="text-sm">Total</p>
+                                    <p className="text-sm">
+                                      ${product?.totalPrice}
+                                    </p>
                                   </div>
                                 </div>
+                                <div className="flex flex-row items-center justify-center px-5 gap-x-3">
+                                  <Link to="/shop">
+                                    <button
+                                      onClick={() => setOpen(false)}
+                                      className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white"
+                                    >
+                                      Continue Shopping
+                                    </button>
+                                  </Link>
+                                  <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
+                                    {user
+                                      ? "Place Order"
+                                      : "Proceed To Checkout"}
+                                  </button>
+                                </div>
                               </div>
-                            </Fragment>
+                            </>
                           ))}
-
-                          <div className="flex flex-col py-3 font-Poppins gap-y-5">
-                            <div className="p-5 flex flex-col bg-[#F6F7F8] gap-y-2">
-                              <div className="flex flex-row items-center justify-between ">
-                                <p className="text-sm">Free Shippling </p>
-                                <p className="text-sm">$0</p>
-                              </div>
-                              <div className="flex flex-row items-center justify-between">
-                                <p className="text-sm">Total</p>
-                                <p className="text-sm">
-                                  ${totalPrice.toFixed(2)}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="flex flex-row items-center justify-center px-5 gap-x-3">
-                              <Link to="/shop">
-                                <button
-                                  onClick={() => setOpen(false)}
-                                  className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white"
-                                >
-                                  Continue Shopping
-                                </button>
-                              </Link>
-                              <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
-                                {user ? "Place Order" : "Proceed To Checkout"}
-                              </button>
-                            </div>
-                          </div>
                         </>
                       )}
                     </div>

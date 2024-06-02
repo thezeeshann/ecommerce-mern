@@ -7,14 +7,13 @@ import Brands from "./dropdown/Brands";
 import Welcome from "./dropdown/Welcome";
 import ShoppinhCard from "./dropdown/ShoppinhCard";
 import { useState } from "react";
-import {useSelector} from "react-redux"
+import { useSelector } from "react-redux";
+import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
 
 const Navbar = () => {
-
-
-  const [open,setOpen] = useState(false)
-  const {cart} = useSelector((state)=>state.cart)
-
+  const [open, setOpen] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const { data } = useGetCartsQuery();
 
   return (
     <header className="w-full font-Poppins">
@@ -69,11 +68,16 @@ const Navbar = () => {
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
-            {
-              cart.length > 0 && (
-                <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">{cart.length}</span>
-              )
-            }
+            {data?.totalProducts > 0 && (
+              <span
+                className={`${
+                  user && data?.totalProducts ? "bg-blue-500" : ""
+                }  w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white`}
+              >
+                {user ? `${data.totalProducts}` : ""}
+              </span>
+            )}
+
             <RiShoppingBagLine
               size={"1.5rem"}
               className="cursor-pointer"

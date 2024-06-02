@@ -3,22 +3,58 @@ import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/api/productApiSlice";
 import iamgePlaceholder from "../../assets/placeholder-image.png";
 import Spinner from "../../components/Spinner";
-import { addToCart } from "../../redux/features/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
+// import { addToCart } from "../../redux/features/cartSlice";
+import { useSelector } from "react-redux";
 import { useState } from "react";
 import Rating from "../../components/Rating";
 import Reviews from "../../components/Reviews";
 import ReviewForm from "../../components/ReviewForm";
+import { useAddToCartMutation, useGetCartsQuery } from "../../redux/api/cartApiSlice";
+import toast from "react-hot-toast";
 
 const SingleProduct = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [productQuantity, setQuantity] = useState(1);
   const { slug } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(slug);
   const { cart } = useSelector((state) => state.cart);
+  const { user } = useSelector((state) => state.user);
+  const [addToCart] = useAddToCartMutation();
+  const {data:productInTheCart} = useGetCartsQuery()
+  console.log(productInTheCart)
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value));
+  };
+
+  const addToCartForm = async (e) => {
+    try {
+      e.preventDefault();
+      if (!user) {
+        return toast.error("you must be logged in");
+      }
+      const cartData = {
+        user: user._id,
+        items: [
+          {
+            product: data?.singleProduct?._id,
+            quantity: productQuantity,
+          },
+        ],
+      };
+
+      const response = await addToCart(cartData);
+
+      if (response.error) {
+        toast.error(response.error.data.message || "An error occurred");
+        console.log(response.error);
+      } else {
+        console.log("ADD TO CART API RESPONSE...", response);
+        toast.success("Product added to cart");
+      }
+    } catch (error) {
+      console.log("ADD TO CART API ERROR", error);
+    }
   };
 
   return (
@@ -49,55 +85,59 @@ const SingleProduct = () => {
               <hr className="" />
               <p className="">{data?.singleProduct?.description}</p>
               <p className="text-3xl">$ {data?.singleProduct?.price}</p>
-              <div className="flex flex-col gap-y-1">
-                <label htmlFor="email" className="text-sm">
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  value={productQuantity}
-                  onChange={handleQuantityChange}
-                  min="1"
-                  placeholder="Please Enter your email"
-                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                />
-              </div>
-              <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                {cart.length > 0 ? (
-                  <>
-                    <button
-                      // onClick={() => dispatch(removeToCart(productId))}
-                      className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
-                    >
-                      <RiShoppingBagLine
-                        size={"1.5rem"}
-                        className="cursor-pointer"
-                      />{" "}
-                      <p> Remove From Cart</p>
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={() =>
-                        dispatch(
-                          addToCart({
-                            product: data.singleProduct,
-                            quantity: productQuantity,
-                          })
-                        )
-                      }
-                      className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
-                    >
-                      <RiShoppingBagLine
-                        size={"1.5rem"}
-                        className="cursor-pointer"
-                      />{" "}
-                      <p> Add To Cart</p>
-                    </button>
-                  </>
-                )}
-              </div>
+
+              <form onSubmit={addToCartForm}>
+                <div className="flex flex-col gap-y-1">
+                  <label htmlFor="email" className="text-sm">
+                    Quantity
+                  </label>
+                  <input
+                    type="number"
+                    value={productQuantity}
+                    onChange={handleQuantityChange}
+                    min="1"
+                    placeholder="Please Enter your email"
+                    className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                  />
+                </div>
+                <div className="flex flex-row items-center mt-3 gap-x-5 ">
+                  {cart.length > 0 ? (
+                    <>
+                      <button
+                        // onClick={() => dispatch(removeToCart(productId))}
+                        className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
+                      >
+                        <RiShoppingBagLine
+                          size={"1.5rem"}
+                          className="cursor-pointer"
+                        />{" "}
+                        <p> Remove From Cart</p>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        type="submit"
+                        // onClick={() =>
+                        //   dispatch(
+                        //     addToCart({
+                        //       product: data.singleProduct,
+                        //       quantity: productQuantity,
+                        //     })
+                        //   )
+                        // }
+                        className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
+                      >
+                        <RiShoppingBagLine
+                          size={"1.5rem"}
+                          className="cursor-pointer"
+                        />{" "}
+                        <p> Add To Cart</p>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </form>
             </div>
 
             <Rating productId={data?.singleProduct?._id} />
