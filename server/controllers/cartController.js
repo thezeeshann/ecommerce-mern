@@ -11,6 +11,35 @@ const calculateTotalPrice = (items) => {
   }, 0);
 };
 
+export const getCarts = async (req, res) => {
+  try {
+    const carts = await CartModel.find().populate({
+      path: "items.product",
+      select: "productName image price",
+    });
+
+    const uniqueProductIds = new Set();
+
+    carts.forEach((cart) => {
+      cart.items.forEach((item) => {
+        uniqueProductIds.add(item.product._id.toString());
+      });
+    });
+
+    const totalProducts = uniqueProductIds.size;
+
+    return res.status(200).json({
+      success: true,
+      data: carts,
+      totalProducts,
+    });
+  } catch (error) {
+    res.status(400).json({
+      error: "Your request could not be processed. Please try again.",
+    });
+  }
+};
+
 export const add = async (req, res) => {
   try {
     const userId = req.existUser.userId;
@@ -165,31 +194,3 @@ export const deleteProductFromCart = async (req, res) => {
   }
 };
 
-export const getCarts = async (req, res) => {
-  try {
-    const carts = await CartModel.find().populate({
-      path: "items.product",
-      select: "productName image price",
-    });
-
-    const uniqueProductIds = new Set();
-
-    carts.forEach((cart) => {
-      cart.items.forEach((item) => {
-        uniqueProductIds.add(item.product._id.toString());
-      });
-    });
-
-    const totalProducts = uniqueProductIds.size;
-
-    return res.status(200).json({
-      success: true,
-      data: carts,
-      totalProducts,
-    });
-  } catch (error) {
-    res.status(400).json({
-      error: "Your request could not be processed. Please try again.",
-    });
-  }
-};

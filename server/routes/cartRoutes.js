@@ -8,7 +8,7 @@ import { authenticateJwt } from "../middleware/authenticateJwt.js";
 
 const router = express.Router();
 
-router.get("/", getCarts);
+router.get("/", authenticateJwt,getCarts);
 router.post("/", authenticateJwt, add);
 router.delete("/", authenticateJwt, deleteProductFromCart);
 
