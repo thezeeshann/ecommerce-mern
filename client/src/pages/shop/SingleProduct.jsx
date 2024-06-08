@@ -3,25 +3,28 @@ import { useParams } from "react-router-dom";
 import { useGetSingleProductQuery } from "../../redux/api/productApiSlice";
 import iamgePlaceholder from "../../assets/placeholder-image.png";
 import Spinner from "../../components/Spinner";
-// import { addToCart } from "../../redux/features/cartSlice";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import Rating from "../../components/Rating";
 import Reviews from "../../components/Reviews";
 import ReviewForm from "../../components/ReviewForm";
-import { useAddToCartMutation, useGetCartsQuery } from "../../redux/api/cartApiSlice";
+import {
+  useAddToCartMutation,
+  useRemoveFromCartMutation,
+  useGetCartsQuery,
+} from "../../redux/api/cartApiSlice";
 import toast from "react-hot-toast";
 
 const SingleProduct = () => {
-  // const dispatch = useDispatch();
   const [productQuantity, setQuantity] = useState(1);
   const { slug } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(slug);
-  const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
   const [addToCart] = useAddToCartMutation();
-  const {data:productInTheCart} = useGetCartsQuery()
-  console.log(productInTheCart)
+  const [removeFromCart] = useRemoveFromCartMutation();
+  const { data: productInTheCart, refetch } = useGetCartsQuery();
+  const pInCart = productInTheCart?.data?.map((p) => p?.items);
+  const productIds = pInCart?.flat().map((item) => item.product._id);
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value));
@@ -51,9 +54,29 @@ const SingleProduct = () => {
       } else {
         console.log("ADD TO CART API RESPONSE...", response);
         toast.success("Product added to cart");
+        refetch();
       }
     } catch (error) {
       console.log("ADD TO CART API ERROR", error);
+    }
+  };
+
+  const handleRemoveFromCart = async (pId) => {
+    try {
+      const productId = {
+        productId: pId,
+      };
+      const response = await removeFromCart(productId);
+      if (response.error) {
+        toast.error(response.error.data.message);
+        console.log(response.error);
+      } else {
+        toast.success("Item removed from cart");
+        refetch();
+      }
+      console.log("REMOVE FROM CART API RESPONSE", response);
+    } catch (error) {
+      console.log("REMOVE ITEM FROM CART API ERROR", error);
     }
   };
 
@@ -101,10 +124,12 @@ const SingleProduct = () => {
                   />
                 </div>
                 <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                  {cart.length > 0 ? (
+                  {data?.singleProduct?._id == productIds ? (
                     <>
                       <button
-                        // onClick={() => dispatch(removeToCart(productId))}
+                        onClick={() =>
+                          handleRemoveFromCart(data?.singleProduct?._id)
+                        }
                         className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
                       >
                         <RiShoppingBagLine
@@ -118,14 +143,6 @@ const SingleProduct = () => {
                     <>
                       <button
                         type="submit"
-                        // onClick={() =>
-                        //   dispatch(
-                        //     addToCart({
-                        //       product: data.singleProduct,
-                        //       quantity: productQuantity,
-                        //     })
-                        //   )
-                        // }
                         className=" flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
                       >
                         <RiShoppingBagLine

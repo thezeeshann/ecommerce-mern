@@ -6,8 +6,6 @@ import { RiShoppingBagLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import { removeToCart } from "../../../redux/features/cartSlice";
-// import { useDispatch } from "react-redux";
 import {
   useGetCartsQuery,
   useRemoveFromCartMutation,
@@ -15,9 +13,8 @@ import {
 import toast from "react-hot-toast";
 
 const ShoppinhCard = ({ open, setOpen }) => {
-  // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
-  const { data } = useGetCartsQuery();
+  const { data, refetch } = useGetCartsQuery();
   const [removeFromCart] = useRemoveFromCartMutation();
 
   const handleRemoveFromCart = async (pId) => {
@@ -26,10 +23,14 @@ const ShoppinhCard = ({ open, setOpen }) => {
         productId: pId,
       };
       const response = await removeFromCart(productId);
-      if (response.status === 200) {
+      if (response.error) {
+        toast.error(response.error.data.message);
+        console.log(response.error);
+      } else {
         toast.success("Item removed from cart");
+        refetch();
       }
-      console.log("REMOVE FROM CART API RESPONSE",response)
+      console.log("REMOVE FROM CART API RESPONSE", response);
     } catch (error) {
       console.log("REMOVE ITEM FROM CART API ERROR", error);
     }
@@ -110,7 +111,13 @@ const ShoppinhCard = ({ open, setOpen }) => {
                                             {p?.product?.productName}
                                           </p>
                                         </div>
-                                        <span onClick={()=>handleRemoveFromCart(p?.product?._id)}>
+                                        <span
+                                          onClick={() =>
+                                            handleRemoveFromCart(
+                                              p?.product?._id
+                                            )
+                                          }
+                                        >
                                           {" "}
                                           <MdDelete
                                             size={"1.5rem"}
