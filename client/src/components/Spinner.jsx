@@ -1,7 +1,12 @@
-import "./SpinnerModule.css"
+import "./SpinnerModule.css";
 
 function Spinner() {
-  return <div className="spinner"></div>;
+  return (
+    <div className="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  );
 }
 
 export default Spinner;
