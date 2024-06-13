@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const generateOrderId = () => {
-  return "ORDER-" + Math.random().toString(36).substr(2, 11).toUpperCase();
+  return Math.random().toString(36).substr(2, 12).toUpperCase();
 };
 
 const OrderSchema = new mongoose.Schema({

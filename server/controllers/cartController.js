@@ -16,6 +16,9 @@ export const getCarts = async (req, res) => {
     const carts = await CartModel.find().populate({
       path: "items.product",
       select: "productName image price",
+    }).populate({
+      path: "user",
+      select: "firstName lastName",
     });
 
     const uniqueProductIds = new Set();
