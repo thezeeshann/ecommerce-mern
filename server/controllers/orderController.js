@@ -70,3 +70,59 @@ export const getOrders = async (req, res) => {
     });
   }
 };
+
+export const getSingleOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await OrderModel.findOne({ orderId }).populate({
+      path: "cart",
+      populate: {
+        path: "items.product",
+        select: "productName image price",
+      },
+    });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: order,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const deleteOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const order = await OrderModel.findOne({ orderId });
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
+    }
+
+    await OrderModel.deleteOne({ orderId });
+
+    return res.status(200).json({
+      success: true,
+      message: "Order deleted successfully",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
