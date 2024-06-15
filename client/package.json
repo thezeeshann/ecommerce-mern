@@ -10,8 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.18",
-    "@radix-ui/themes": "^2.0.3",
     "@reduxjs/toolkit": "^2.1.0",
     "axios": "^1.6.7",
     "react-hot-toast": "^2.4.1",
