@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import {
   useGetSingleUserQuery,
@@ -7,26 +7,32 @@ import {
 
 const AccountDetails = () => {
   const { data, refetch } = useGetSingleUserQuery();
-  const [firstName, setFirstName] = useState(data?.user?.firstName);
-  const [lastName, setLastName] = useState(data?.user?.lastName);
-
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [updateUsername, { isLoading }] = useUpdateUsernameMutation();
 
   const handleUpdateUsername = async (e) => {
     e.preventDefault();
     try {
       const response = await updateUsername({ firstName, lastName }).unwrap();
-      refetch();
       if (response.error) {
         toast.error(response.error.data.messsage);
       } else {
         console.log("UPDATE USERNAME API RESPONSE...", response);
         toast.success("username updated successfully");
+        refetch();
       }
     } catch (error) {
       console.log("UPDATE USERNAME API ERROR RESPONSE...", error);
     }
   };
+
+  useEffect(() => {
+    if (data && data.user) {
+      setFirstName(data.user.firstName);
+      setLastName(data.user.lastName);
+    }
+  }, [data]);
 
   return (
     <section className="flex flex-col ">

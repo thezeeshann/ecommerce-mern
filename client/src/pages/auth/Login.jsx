@@ -7,6 +7,7 @@ import { setUser } from "../../redux/features/profileSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import { useGetSingleUserQuery } from "../../redux/api/profileApiSlice";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +20,7 @@ const Login = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { refetch } = useGetSingleUserQuery();
   const [login, { isLoading }] = useLoginMutation();
 
   const handleChange = (e) => {
@@ -40,9 +42,10 @@ const Login = () => {
         dispath(setToken(response.data.token));
         dispath(setUser(response.data.existUser));
         localStorage.setItem("token", JSON.stringify(response.data.token));
-        localStorage.setItem("user",JSON.stringify(response.data.existUser))
+        localStorage.setItem("user", JSON.stringify(response.data.existUser));
         toast.success("Login successful");
-        navigate("/shop");
+        refetch();
+        navigate("/dashborad");
         console.log("LOGIN API RESPONSE...", response.data);
       }
     } catch (error) {
@@ -91,7 +94,7 @@ const Login = () => {
               >
                 {showPassword ? (
                   <IoMdEyeOff size={"1.5rem"} className="cursor-pointer" />
-                  ) : (
+                ) : (
                   <IoMdEye size={"1.5rem"} className="cursor-pointer" />
                 )}
               </span>

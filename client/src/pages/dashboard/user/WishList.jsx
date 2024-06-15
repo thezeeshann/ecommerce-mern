@@ -5,11 +5,12 @@ import toast from "react-hot-toast";
 
 const WishList = () => {
   const dispatch = useDispatch();
-  const { wishList } = useSelector((state) => state.wishlist);
+  const { wishList } = useSelector((state) => state.wishlist);  
+
 
   return (
-    <div className="flex flex-col mt-3">
-      <p>Your Wishlist</p>
+    <div className="flex flex-col">
+      <p>{wishList.length} Your Wishlist</p>
       <hr />
       <div className="relative">
         {wishList.length === 0 ? (
@@ -37,7 +38,7 @@ const WishList = () => {
                 <div className="">
                   <MdCancel
                     onClick={() => {
-                      toast.success("Product removed from your wishlist!");
+                      toast.success("Product removed from your wishlist");
                       dispatch(removeFromWishList(wishlist._id));
                     }}
                     size={"2rem"}

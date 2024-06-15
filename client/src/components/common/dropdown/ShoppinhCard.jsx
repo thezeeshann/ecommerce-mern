@@ -4,35 +4,40 @@ import { Dialog } from "@headlessui/react";
 import { RxCross1 } from "react-icons/rx";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {
-  useGetCartsQuery,
-  useRemoveFromCartMutation,
-} from "../../../redux/api/cartApiSlice";
+import { useGetCartsQuery } from "../../../redux/api/cartApiSlice";
+import useRemoveProductFromCart from "../../../hooks/removeProductFromCart";
+import { useCreateOrderMutation } from "../../../redux/api/orderApiSlice";
 import toast from "react-hot-toast";
 
 const ShoppinhCard = ({ open, setOpen }) => {
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { data, refetch } = useGetCartsQuery();
-  const [removeFromCart] = useRemoveFromCartMutation();
+  const { data } = useGetCartsQuery();
+  const [createOrder] = useCreateOrderMutation();
+  const removeProductFromCart = useRemoveProductFromCart();
 
   const handleRemoveFromCart = async (pId) => {
+    await removeProductFromCart(pId);
+  };
+
+  const orderProduct = async (cartId) => {
     try {
-      const productId = {
-        productId: pId,
+      const data = {
+        cart: cartId,
       };
-      const response = await removeFromCart(productId);
+      const response = await createOrder(data);
       if (response.error) {
-        toast.error(response.error.data.message);
         console.log(response.error);
       } else {
-        toast.success("Item removed from cart");
-        refetch();
+        console.log("CREATE ORDER API RESPONSE", response);
+        toast.success("Your order has been placed successfully!");
+        navigate(`/order/success/${response?.data?.data?.orderId}`);
+        setOpen(false)
       }
-      console.log("REMOVE FROM CART API RESPONSE", response);
     } catch (error) {
-      console.log("REMOVE ITEM FROM CART API ERROR", error);
+      console.log("CREAET ORDER API ERROR", error);
     }
   };
 
@@ -164,7 +169,10 @@ const ShoppinhCard = ({ open, setOpen }) => {
                                       Continue Shopping
                                     </button>
                                   </Link>
-                                  <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
+                                  <button
+                                    onClick={() => orderProduct(product._id)}
+                                    className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white"
+                                  >
                                     {user
                                       ? "Place Order"
                                       : "Proceed To Checkout"}

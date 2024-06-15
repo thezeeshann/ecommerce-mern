@@ -10,10 +10,10 @@ import Reviews from "../../components/Reviews";
 import ReviewForm from "../../components/ReviewForm";
 import {
   useAddToCartMutation,
-  useRemoveFromCartMutation,
   useGetCartsQuery,
 } from "../../redux/api/cartApiSlice";
 import toast from "react-hot-toast";
+import useRemoveProductFromCart from "../../hooks/removeProductFromCart";
 
 const SingleProduct = () => {
   const [productQuantity, setQuantity] = useState(1);
@@ -21,7 +21,7 @@ const SingleProduct = () => {
   const { data, isLoading } = useGetSingleProductQuery(slug);
   const { user } = useSelector((state) => state.user);
   const [addToCart] = useAddToCartMutation();
-  const [removeFromCart] = useRemoveFromCartMutation();
+  const removeProductFromCart = useRemoveProductFromCart();
   const { data: productInTheCart, refetch } = useGetCartsQuery();
   const pInCart = productInTheCart?.data?.map((p) => p?.items);
   const productIds = pInCart?.flat().map((item) => item.product._id);
@@ -61,23 +61,9 @@ const SingleProduct = () => {
     }
   };
 
+
   const handleRemoveFromCart = async (pId) => {
-    try {
-      const productId = {
-        productId: pId,
-      };
-      const response = await removeFromCart(productId);
-      if (response.error) {
-        toast.error(response.error.data.message);
-        console.log(response.error);
-      } else {
-        toast.success("Item removed from cart");
-        refetch();
-      }
-      console.log("REMOVE FROM CART API RESPONSE", response);
-    } catch (error) {
-      console.log("REMOVE ITEM FROM CART API ERROR", error);
-    }
+    await removeProductFromCart(pId);
   };
 
   return (
@@ -124,7 +110,7 @@ const SingleProduct = () => {
                   />
                 </div>
                 <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                  {data?.singleProduct?._id == productIds ? (
+                  {productIds?.includes(data?.singleProduct?._id) ? (
                     <>
                       <button
                         onClick={() =>
