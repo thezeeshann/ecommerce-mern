@@ -1,10 +1,41 @@
 import ProductModel from "../models/product.js";
 import { uploadImageToCloudinary } from "../utils/uploadImage.js";
 
+
+export const priceLowTOHignProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find({}).sort({ price: 1 });
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const priceHighToLowProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find({}).sort({ price: -1 });
+    return res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const createProducts = async (req, res) => {
   try {
     const { productName, price, description, quantity } = req.body;
-    
+
     const image = req.files.image;
 
     if (!productName || !price || !description || !quantity) {
@@ -48,7 +79,7 @@ export const createProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductModel.find({});
+    const products = await ProductModel.find({}).sort({ created: -1 });
     return res.status(200).json({
       success: true,
       products,

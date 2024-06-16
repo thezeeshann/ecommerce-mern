@@ -1,5 +1,7 @@
 import express from "express";
 import {
+  priceLowTOHignProducts,
+  priceHighToLowProducts,
   createProducts,
   updateProducts,
   getAllProducts,
@@ -10,6 +12,8 @@ import { isAdmin, authenticateJwt } from "../middleware/authenticateJwt.js";
 
 const router = express.Router();
 
+router.get("/price-low", priceLowTOHignProducts);
+router.get("/price-high", priceHighToLowProducts);
 router.get("/", getAllProducts);
 router.get("/:slug", getSingleProduct);
 router.post("/create", authenticateJwt, isAdmin, createProducts);
