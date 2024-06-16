@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { useGetSingleUserQuery } from "../../redux/api/profileApiSlice";
+import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -20,8 +21,9 @@ const Login = () => {
   const dispath = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { refetch } = useGetSingleUserQuery();
+  const { refetch: refetchSingleUser } = useGetSingleUserQuery();
   const [login, { isLoading }] = useLoginMutation();
+  const { refetch: refetchCart } = useGetCartsQuery();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -44,7 +46,8 @@ const Login = () => {
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("user", JSON.stringify(response.data.existUser));
         toast.success("Login successful");
-        refetch();
+        refetchSingleUser();
+        refetchCart();
         navigate("/dashborad");
         console.log("LOGIN API RESPONSE...", response.data);
       }

@@ -34,12 +34,15 @@ const ShoppinhCard = ({ open, setOpen }) => {
         console.log("CREATE ORDER API RESPONSE", response);
         toast.success("Your order has been placed successfully!");
         navigate(`/order/success/${response?.data?.data?.orderId}`);
-        setOpen(false)
+        setOpen(false);
       }
     } catch (error) {
       console.log("CREAET ORDER API ERROR", error);
     }
   };
+
+  const currentUserCart =
+    data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
 
   return (
     <>
@@ -82,7 +85,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                       </div>
                       <hr />
 
-                      {data?.totalProducts === 0 ? (
+                      {currentUserCart.length === 0 ? (
                         <>
                           <div className="flex flex-col items-center justify-center h-full gap-y-2">
                             <span>
@@ -96,7 +99,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                         </>
                       ) : (
                         <>
-                          {data?.data?.map((product, index) => (
+                          {currentUserCart.map((product, index) => (
                             <>
                               <Fragment key={index}>
                                 <div className="flex-1 ">

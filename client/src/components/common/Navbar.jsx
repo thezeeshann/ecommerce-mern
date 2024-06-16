@@ -15,6 +15,13 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.user);
   const { data } = useGetCartsQuery();
 
+  const currentUserCart =
+    data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
+  const totalProducts = currentUserCart.reduce(
+    (acc, cart) => acc + cart.items.length,
+    0
+  );
+
   return (
     <header className="w-full font-Poppins">
       {/* top level headers */}
@@ -68,13 +75,9 @@ const Navbar = () => {
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
-            {data?.totalProducts > 0 && (
-              <span
-                className={`${
-                  user && data?.totalProducts ? "bg-blue-500" : ""
-                }  w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white`}
-              >
-                {user ? `${data.totalProducts}` : ""}
+            {totalProducts > 0 && (
+              <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
+                {user ? `${totalProducts}` : ""}
               </span>
             )}
 

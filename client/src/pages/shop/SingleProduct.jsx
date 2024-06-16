@@ -23,8 +23,11 @@ const SingleProduct = () => {
   const [addToCart] = useAddToCartMutation();
   const removeProductFromCart = useRemoveProductFromCart();
   const { data: productInTheCart, refetch } = useGetCartsQuery();
-  const pInCart = productInTheCart?.data?.map((p) => p?.items);
-  const productIds = pInCart?.flat().map((item) => item.product._id);
+
+  const currentUserCart = productInTheCart?.data?.filter((cart) => cart.user._id === user._id) || [];
+  const productIds = currentUserCart.flatMap(cart => cart.items.map(item => item.product._id));
+  const isProductInCart = productIds.includes(data?.singleProduct?._id);
+
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value));
@@ -110,7 +113,7 @@ const SingleProduct = () => {
                   />
                 </div>
                 <div className="flex flex-row items-center mt-3 gap-x-5 ">
-                  {productIds?.includes(data?.singleProduct?._id) ? (
+                  {/* {productIds?.includes(data?.singleProduct?._id) ? (
                     <>
                       <button
                         onClick={() =>
@@ -138,6 +141,24 @@ const SingleProduct = () => {
                         <p> Add To Cart</p>
                       </button>
                     </>
+                  )} */}
+                   {isProductInCart ? (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFromCart(data?.singleProduct?._id)}
+                      className="flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
+                    >
+                      <RiShoppingBagLine size={"1.5rem"} className="cursor-pointer" />
+                      <p>Remove From Cart</p>
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="flex flex-row items-center gap-x-2 text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
+                    >
+                      <RiShoppingBagLine size={"1.5rem"} className="cursor-pointer" />
+                      <p>Add To Cart</p>
+                    </button>
                   )}
                 </div>
               </form>
