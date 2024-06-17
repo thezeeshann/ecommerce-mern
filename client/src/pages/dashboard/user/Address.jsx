@@ -39,13 +39,13 @@ const Address = () => {
   };
 
   return (
-    <section>
-      <p>Addresses</p>
+    <section className="flex flex-col gap-y-4">
+      <p className="text-lg font-medium">Addresses</p>
       <hr />
 
       {data?.user?.additionalDetails?.status === true ? (
         <>
-          <div className="flex flex-row items-center p-5 mt-3 gap-x-5">
+          <div className="flex flex-row items-center gap-x-5">
             <div>
               <IoLocation size={"2rem"} />
             </div>

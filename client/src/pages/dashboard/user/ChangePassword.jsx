@@ -32,16 +32,15 @@ const ChangePassword = () => {
   };
 
   return (
-    <section>
-      <p>Account Security</p>
+    <section className="flex flex-col gap-y-4">
+      <p className="text-lg font-medium">Account Security</p>
       <hr />
-
       <form onSubmit={handleChangePassword}>
-        <div className="mt-5">
+        <div className="">
           <p>Change Password</p>
           <div className="flex flex-row w-full mt-5 mb-5 gap-x-5">
             <div className="relative flex flex-col w-1/2 gap-y-1">
-              <label htmlFor="oldPassword" className="text-xs">
+              <label htmlFor="oldPassword" className="text-sm">
                 Password
               </label>
               <input
@@ -64,7 +63,7 @@ const ChangePassword = () => {
               </span>
             </div>
             <div className="relative flex flex-col w-1/2 gap-y-1">
-              <label htmlFor="newPassword" className="text-xs">
+              <label htmlFor="newPassword" className="text-sm">
                 New Password
               </label>
               <input
@@ -91,7 +90,7 @@ const ChangePassword = () => {
           <button
             disabled={loadingChangePassword}
             type="submit"
-            className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white"
+            className="text-sm border-[1px] px-4 py-2 mt-5 hover:bg-blue-500 hover:text-white"
           >
             Reset Password
           </button>

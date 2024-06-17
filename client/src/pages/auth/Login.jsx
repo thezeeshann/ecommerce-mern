@@ -48,7 +48,7 @@ const Login = () => {
         toast.success("Login successful");
         refetchSingleUser();
         refetchCart();
-        navigate("/dashborad");
+        navigate("/dashboard");
         console.log("LOGIN API RESPONSE...", response.data);
       }
     } catch (error) {

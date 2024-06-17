@@ -24,7 +24,7 @@ const UserMenu = () => {
         <DropdownMenu.Item color="gray">
           <Text as="p" weight="medium">
             {" "}
-            <Link to="/dashborad">
+            <Link to="/dashboard">
             Dashboard
             </Link>
           </Text>

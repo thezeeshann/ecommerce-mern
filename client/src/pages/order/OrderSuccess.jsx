@@ -11,9 +11,11 @@ const OrderSuccess = () => {
         Order <span className="font-semibold"> # {orderId}</span> is complete.
       </p>
       <div className="space-x-3">
-        <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
-          Manage Orders
-        </button>
+        <Link to="/dashboard/order" >
+          <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
+            Manage Orders
+          </button>
+        </Link>
         <Link to="/shop">
           <button className="border-[1px] py-2 px-3 text-sm hover:bg-blue-500 hover:text-white">
             Continue Shopping

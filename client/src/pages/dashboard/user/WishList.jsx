@@ -9,8 +9,8 @@ const WishList = () => {
 
 
   return (
-    <div className="flex flex-col">
-      <p>{wishList.length} Your Wishlist</p>
+    <div className="flex flex-col gap-y-4">
+      <p className="text-lg font-medium">{wishList.length} Your Wishlist</p>
       <hr />
       <div className="relative">
         {wishList.length === 0 ? (

@@ -6,8 +6,8 @@ const Orders = () => {
   console.log("data", data);
 
   return (
-    <section className="">
-      <p>{data ? data?.data?.length : 0} Your Orders</p>
+    <section className="flex flex-col gap-y-4">
+      <p className="text-lg font-medium">{data ? data?.data?.length : 0} Your Orders</p>
       <hr />
 
       {data ? (

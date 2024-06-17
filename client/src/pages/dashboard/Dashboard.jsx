@@ -1,28 +1,96 @@
-import { Tabs, Box, Badge, Flex } from "@radix-ui/themes";
-import ChangePassword from "./user/ChangePassword";
-import AccountDetails from "./user/AccountDetails";
-import WishList from "./user/WishList";
-import Orders from "./user/Orders";
-import Support from "./user/Support";
-import Address from "./user/Address";
-import { useGetSingleUserQuery } from "../../redux/api/profileApiSlice";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
-  const { data } = useGetSingleUserQuery();
-  console.log(data, "single u");
+  const location = useLocation();
 
   return (
-    <section className="flex flex-col w-[80%] mx-auto gap-y-5 py-6 ">
-      <div className="flex flex-row items-center justify-center gap-x-5">
-        <p>{data?.user?.email}</p>
-        <Badge
-          size={"2"}
-          color={`${data?.user.role === "Admin" ? "green" : "blue"}`}
-        >
-          {data?.user?.role === "Admin" ? "Admin" : "Member"}
-        </Badge>
+    <section className="flex flex-col w-[80%] mx-auto py-6 ">
+      <div className="flex flex-row gap-x-6">
+        <div className="w-[25%] border text-center ">
+          <div className="py-2">
+            <p className="text-lg font-medium">Account</p>
+          </div>
+          <hr />
+          <div className="flex flex-col ">
+            <Link to="/dashboard">
+              <p
+                className={`${
+                  location.pathname === "/dashboard"
+                    ? "bg-white"
+                    : "bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                Account Details
+              </p>
+            </Link>
+            <hr />
+            <Link to="/dashboard/security">
+              <p
+                className={`${
+                  location.pathname === "/dashboard/security"
+                    ? "bg-white"
+                    : " bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                Account Security
+              </p>
+            </Link>
+            <hr />
+            <Link to="/dashboard/address">
+              <p
+                className={`${
+                  location.pathname === "/dashboard/address"
+                    ? "bg-white"
+                    : " bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                Address
+              </p>
+            </Link>
+            <hr />
+            <Link to="/dashboard/order">
+              <p
+                className={`${
+                  location.pathname === "/dashboard/order"
+                    ? "bg-white"
+                    : " bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                Orders
+              </p>
+            </Link>
+            <hr />
+            <Link to="/dashboard/wishlist">
+              <p
+                className={`${
+                  location.pathname === "/dashboard/wishlist"
+                    ? "bg-white"
+                    : " bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                WishList
+              </p>
+            </Link>
+            <hr />
+            <Link to="/dashboard/support">
+              <p
+                className={`${
+                  location.pathname === "/dashboard/support"
+                    ? "bg-white"
+                    : " bg-[#F8F9FA]"
+                } cursor-pointer py-2`}
+              >
+                Support
+              </p>
+            </Link>
+          </div>
+        </div>
+        <div className="w-[75%]">
+          <Outlet />
+        </div>
       </div>
-      <div className="border-[1px] ">
+
+      {/* <div className="border-[1px] ">
         <Tabs.Root defaultValue="account-details">
           <Tabs.List>
             <Flex
@@ -71,7 +139,7 @@ const Dashboard = () => {
             </Tabs.Content>
           </Box>
         </Tabs.Root>
-      </div>
+      </div> */}
     </section>
   );
 };

@@ -4,6 +4,7 @@ import {
   useGetSingleUserQuery,
   useUpdateUsernameMutation,
 } from "../../../redux/api/profileApiSlice";
+import { Badge } from "@/components/ui/badge";
 
 const AccountDetails = () => {
   const { data, refetch } = useGetSingleUserQuery();
@@ -35,13 +36,23 @@ const AccountDetails = () => {
   }, [data]);
 
   return (
-    <section className="flex flex-col ">
-      <p className="">Account Details</p>
+    <section className="flex flex-col gap-y-4">
+      <p className="text-lg font-medium">Account Details</p>
       <hr />
-      <form onSubmit={handleUpdateUsername}>
-        <div className="flex flex-row w-full mt-5 gap-x-5">
+
+      <div className="flex flex-row gap-x-2">
+        <p className="font-medium">{data?.user?.email}</p>
+        <Badge
+          variant={data?.user.role === "Admin" ? "destructive" : "secondary"}
+        >
+          {data?.user?.role === "Admin" ? "Admin" : "Member"}
+        </Badge>
+      </div>
+
+      <form onSubmit={handleUpdateUsername} className="flex flex-col gap-y-3">
+        <div className="flex flex-row w-full gap-x-5">
           <div className="flex flex-col w-1/2 gap-y-1">
-            <label htmlFor="email" className="text-xs">
+            <label htmlFor="email" className="text-sm">
               First Name
             </label>
             <input
@@ -54,7 +65,7 @@ const AccountDetails = () => {
             />
           </div>
           <div className="flex flex-col w-1/2 gap-y-1">
-            <label htmlFor="email" className="text-xs">
+            <label htmlFor="email" className="text-sm">
               Last Name
             </label>
             <input
@@ -67,6 +78,7 @@ const AccountDetails = () => {
             />
           </div>
         </div>
+        <hr className="mt-3" />
         <button
           type="submit"
           disabled={isLoading}

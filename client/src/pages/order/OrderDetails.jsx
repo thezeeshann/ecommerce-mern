@@ -18,7 +18,7 @@ const OrderDetails = () => {
     try {
       const response = await deleteOrder(OId);
       console.log("DELETE ORDER API RESPONSE", response);
-      navigate("/dashborad");
+      navigate("/dashboard/order");
     } catch (error) {
       console.log("DELETE ORDER API ERROR", error);
     }
@@ -41,7 +41,7 @@ const OrderDetails = () => {
               {" "}
               <FaArrowLeftLong />
             </span>
-            <Link to="/dashborad">
+            <Link to="/dashboard/order">
               <p> Back To Orders</p>
             </Link>
           </span>
