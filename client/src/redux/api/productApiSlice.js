@@ -3,6 +3,7 @@ import {
   GET_SINGLE_PRODUCT_API,
   GET_HIGH_TO_LOW_PRICE_PRODUCT_API,
   GET_LOW_TO_HIGH_PRICE_PRODUCT_API,
+  DELETE_PRODUCT_API,
 } from "../constant";
 import { apiSlice } from "./apiSlice";
 
@@ -31,6 +32,13 @@ export const productApiSlice = apiSlice.injectEndpoints({
         url: `${GET_HIGH_TO_LOW_PRICE_PRODUCT_API}`,
       }),
     }),
+
+    deleteProduct: builder.mutation({
+      query: (productId) => ({
+        url: `${DELETE_PRODUCT_API}/${productId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -39,4 +47,5 @@ export const {
   useGetSingleProductQuery,
   useGetLowToHightPriceProductQuery,
   useGetHighToLowPriceProductQuery,
+  useDeleteProductMutation,
 } = productApiSlice;

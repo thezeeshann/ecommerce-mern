@@ -3,6 +3,7 @@ import {
   UPDATE_PROFILE_API,
   UPDATE_USERNAME_API,
   GET_SINGLE_USER_API,
+  GET_ALL_USERS_API,
 } from "../constant";
 
 export const profileApiSlice = apiSlice.injectEndpoints({
@@ -30,6 +31,12 @@ export const profileApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
+
+    getAllUsers: builder.query({
+      query: () => ({
+        url: `${GET_ALL_USERS_API}`,
+      }),
+    }),
   }),
 });
 
@@ -37,4 +44,5 @@ export const {
   useUpdateProfileMutation,
   useUpdateUsernameMutation,
   useGetSingleUserQuery,
+  useGetAllUsersQuery,
 } = profileApiSlice;

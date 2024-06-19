@@ -8,12 +8,14 @@ export const CHANGE_PASSWORD_API = "/auth/changePassword"
 export const UPDATE_PROFILE_API= "profile/updateProfile"
 export const UPDATE_USERNAME_API = "profile/updateUsername"
 export const GET_SINGLE_USER_API = "profile/getSingleUser"
+export const GET_ALL_USERS_API = "profile/getAllUsers"
 
 // products
-export const PRODUCT_URL_API = "/products"
-export const GET_SINGLE_PRODUCT_API = "/products"
 export const GET_LOW_TO_HIGH_PRICE_PRODUCT_API = "/products/price-low"
 export const GET_HIGH_TO_LOW_PRICE_PRODUCT_API = "/products/price-high"
+export const PRODUCT_URL_API = "/products"
+export const GET_SINGLE_PRODUCT_API = "/products"
+export const DELETE_PRODUCT_API = "/products"
 
 // review
 export const GET_REVIEW_API = "/review"
