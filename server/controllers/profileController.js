@@ -109,7 +109,9 @@ export const deleteProfile = async (req, res) => {
 export const getSingleUser = async (req, res) => {
   try {
     const userId = req.existUser.userId;
-    const user = await UserModel.findById(userId).populate("additionalDetails").exec();
+    const user = await UserModel.findById(userId)
+      .populate("additionalDetails")
+      .exec();
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -119,6 +121,28 @@ export const getSingleUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find({ role: "User" }).populate("additionalDetails")
+    .exec();;
+    if (!users || users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "user does not exist",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      data: users,
     });
   } catch (error) {
     return res.status(500).json({
