@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
+  const { user } = useSelector((state) => state.user);
+  console.log("logged in user", user);
   const location = useLocation();
 
   return (
@@ -36,6 +39,46 @@ const Dashboard = () => {
               </p>
             </Link>
             <hr />
+            {user.role === "Admin" && (
+              <>
+                <Link to="/dashboard/products">
+                  <p
+                    className={`${
+                      location.pathname === "/dashboard/products"
+                        ? "bg-white"
+                        : "bg-[#F8F9FA]"
+                    } cursor-pointer py-2`}
+                  >
+                    Manage Products
+                  </p>
+                </Link>
+                <hr />
+                <Link to="/dashboard/orders">
+                  <p
+                    className={`${
+                      location.pathname === "/dashboard/orders"
+                        ? "bg-white"
+                        : " bg-[#F8F9FA]"
+                    } cursor-pointer py-2`}
+                  >
+                    Manage Orders
+                  </p>
+                </Link>
+                <hr />
+                <Link to="/dashboard/users">
+                  <p
+                    className={`${
+                      location.pathname === "/dashboard/users"
+                        ? "bg-white"
+                        : " bg-[#F8F9FA]"
+                    } cursor-pointer py-2`}
+                  >
+                    Manage User
+                  </p>
+                </Link>
+              </>
+            )}
+
             <Link to="/dashboard/address">
               <p
                 className={`${
@@ -89,57 +132,6 @@ const Dashboard = () => {
           <Outlet />
         </div>
       </div>
-
-      {/* <div className="border-[1px] ">
-        <Tabs.Root defaultValue="account-details">
-          <Tabs.List>
-            <Flex
-              width="100%"
-              display="flex"
-              direction="row"
-              align="center"
-              justify="between"
-            >
-              <Tabs.Trigger value="account-details">
-                Account Details
-              </Tabs.Trigger>
-              <Tabs.Trigger value="account-security">
-                Account Security
-              </Tabs.Trigger>
-              <Tabs.Trigger value="address">Address</Tabs.Trigger>
-              <Tabs.Trigger value="orders">Orders</Tabs.Trigger>
-              <Tabs.Trigger value="wishlist">WishList</Tabs.Trigger>
-              <Tabs.Trigger value="support">Support</Tabs.Trigger>
-            </Flex>
-          </Tabs.List>
-
-          <Box px="4" pt="3" pb="2">
-            <Tabs.Content value="account-details">
-              <AccountDetails />
-            </Tabs.Content>
-
-            <Tabs.Content value="account-security">
-              <ChangePassword />
-            </Tabs.Content>
-
-            <Tabs.Content value="address">
-              <Address />
-            </Tabs.Content>
-
-            <Tabs.Content value="orders">
-              <Orders />
-            </Tabs.Content>
-
-            <Tabs.Content value="wishlist">
-              <WishList />
-            </Tabs.Content>
-
-            <Tabs.Content value="support">
-              <Support />
-            </Tabs.Content>
-          </Box>
-        </Tabs.Root>
-      </div> */}
     </section>
   );
 };

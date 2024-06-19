@@ -1,5 +1,5 @@
 import ProductsDetail from "./ProductsDetail";
-import Pagination from "../../components/Pagination";
+import ProductsPagination from "@/components/Pagination";
 import {
   Select,
   SelectContent,
@@ -62,7 +62,7 @@ const Shop = () => {
           </div>
 
           <div className="mt-5">
-            <Pagination />
+            <ProductsPagination />
           </div>
         </div>
       </div>

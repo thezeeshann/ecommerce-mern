@@ -1,117 +1,59 @@
-import { Menu, Transition } from "@headlessui/react";
 import { HiChevronDown } from "react-icons/hi";
-import { Fragment } from "react";
 import { Link } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Brands = () => {
   return (
     <>
-      <div className="flex flex-row items-center justify-center c">
-        {/* <p className="text-sm font-semibold text-gray-600">Brands </p> */}
-        <div className="">
-          <Menu as="div" className="relative inline-block text-left">
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div className="flex items-center felx-row ">
+            <p className="text-sm font-medium text-gray-600 rounded-md ">
+              Brands
+            </p>
             <div>
-              <Menu.Button className="inline-flex justify-center w-full text-sm font-medium text-gray-600 rounded-md ">
-                Category
-              </Menu.Button>
+              <HiChevronDown
+                className="font-semibold text-gray-500"
+                size={"1rem"}
+              />
             </div>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg w-96">
-                <div className="px-3 py-3 ">
-                  <div className="px-1 py-1">
-                    <div className="flex flex-row items-center justify-between ">
-                      <p className="text-lg font-semibold">Shop by Category</p>
-                      <Link to="/category">
-                        <p className="text-sm cursor-pointer text-sky-500 hover:text-gray-900">
-                          See All
-                        </p>
-                      </Link>
-                    </div>
-                    <hr className="mt-2" />
-                  </div>
-
-                  <div className="flex flex-row items-center justify-between w-[90%]">
-                    <div>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Mobiles, Computers
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          TV, Electronics
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Men&apos;s Fashion
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Beauty, Health
-                        </span>
-                      </Menu.Item>
-                    </div>
-                    <div>
-                      <Menu.Item>
-                        <span
-                          className={`text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Women&apos;s Fashion
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={`text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Sports, Fitness
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Books
-                        </span>
-                      </Menu.Item>
-                      <Menu.Item>
-                        <span
-                          className={` text-gray-900 group flex w-full items-center rounded-md px-[6px] py-[6px] text-sm cursor-pointer hover:text-sky-500`}
-                        >
-                          Home, Kitchen
-                        </span>
-                      </Menu.Item>
-                    </div>
-                  </div>
-                </div>
-              </Menu.Items>
-            </Transition>
-          </Menu>
-        </div>
-        <div>
-          <HiChevronDown
-            className="font-semibold text-gray-500"
-            size={"1rem"}
-          />
-        </div>
-      </div>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-[300px] px-4 py-2">
+          <DropdownMenuLabel>
+            <div className="flex flex-row items-center justify-between ">
+              <p className="text-lg font-semibold">SHOP BY BRAND</p>
+              <Link to="/category">
+                <p className="text-sm cursor-pointer text-sky-500 hover:text-gray-900">
+                  See All
+                </p>
+              </Link>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <div className="flex flex-row items-center justify-between">
+            <div>
+              <DropdownMenuItem>Gucci</DropdownMenuItem>
+              <DropdownMenuItem>Polo</DropdownMenuItem>
+              <DropdownMenuItem>Nike</DropdownMenuItem>
+              <DropdownMenuItem>Puma</DropdownMenuItem>
+            </div>
+            <div>
+              <DropdownMenuItem>Apple</DropdownMenuItem>
+              <DropdownMenuItem>Tommy Hilfiger</DropdownMenuItem>
+              <DropdownMenuItem>Calvin Klein</DropdownMenuItem>
+              <DropdownMenuItem>Converse</DropdownMenuItem>
+            </div>
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   );
 };

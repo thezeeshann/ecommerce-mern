@@ -4,7 +4,7 @@ import { useGetSingleOrderQuery } from "../../redux/api/orderApiSlice";
 import Spinner from "../../components/Spinner";
 import React, { useRef, useState } from "react";
 import { useDeleteOrderMutation } from "../../redux/api/orderApiSlice";
-import useClickOutside from "../../hooks/useClickOutSide";
+// import useClickOutside from "../../hooks/useClickOutSide";
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -28,7 +28,7 @@ const OrderDetails = () => {
     setIsOpen((prev) => !prev);
   };
 
-  useClickOutside(clickRef, handleIsOpen);
+  // useClickOutside(clickRef, handleIsOpen);
 
   return (
     <section className=" flex flex-col w-[80%] mx-auto gap-y-2 py-6 ">
@@ -72,7 +72,7 @@ const OrderDetails = () => {
               <div className="relative">
                 <button
                   ref={clickRef}
-                  onClick={handleIsOpen}
+                  onClick={() => handleIsOpen()}
                   type="submit"
                   className="text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
                 >
