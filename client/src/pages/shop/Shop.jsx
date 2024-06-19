@@ -1,4 +1,5 @@
 import ProductsDetail from "./ProductsDetail";
+import ReactStars from "react-rating-stars-component";
 import ProductsPagination from "@/components/Pagination";
 import {
   Select,
@@ -9,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { Slider } from "@/components/ui/slider";
 
 const Shop = () => {
   const [sortBy, setSortBy] = useState("new");
@@ -17,20 +19,40 @@ const Shop = () => {
     <section className=" bg-[#F6F7F8] py-6">
       <div className="flex flex-row w-[80%] mx-auto gap-x-6 ">
         {/* filter products */}
-        <aside className="w-[20%] flex flex-col h-min gap-y-3">
-          {/* <div className="flex flex-col px-3 py-4 bg-white gap-y-3">
-            <p>Price</p>
-            <Slider defaultValue={[50]} />
-          </div> */}
-          {/* <div className="flex flex-col p-2 bg-white gap-y-2">
-            <p>Rating</p>
-            <Rating value={3} />
-          </div> */}
+        <aside className="w-[20%] flex flex-col h-min gap-y-5">
+          <div className="flex flex-col bg-white ">
+            <div className="p-3 bg-[#F6F7F8] border-[1px]">
+              <p className="text-lg font-medium">Price</p>
+            </div>
+            <div className="p-3 py-6 border-[1px]">
+              <Slider defaultValue={[33]} max={100} step={1} />
+            </div>
+          </div>
+
+          <div className="flex flex-col bg-white ">
+            <div className="p-3 bg-[#F6F7F8] border-[1px]">
+              <p className="text-lg font-medium">Rating</p>
+            </div>
+            <div className="p-3 border-[1px] ">
+              <ReactStars
+                count={5}
+                // onChange={handleRatingChange}
+                // value={rating}
+                classNames="border-2 border-red-500"
+                size={24}
+                isHalf={true}
+                emptyIcon={<i className="far fa-star"></i>}
+                halfIcon={<i className="fa fa-star-half-alt"></i>}
+                fullIcon={<i className="fa fa-star"></i>}
+                activeColor="#ffd700"
+              />
+            </div>
+          </div>
         </aside>
 
         <div className="flex flex-col w-[80%] ">
           {/* short by price */}
-          <div className="flex flex-row items-center justify-between w-full px-3 py-1.5 bg-white rounded-md">
+          <div className="flex flex-row items-center justify-between w-full px-3 py-1.5 bg-white border-[1px]">
             <p className="w-[60%] text-base">
               Showing: 1-10 products of 12 products
             </p>

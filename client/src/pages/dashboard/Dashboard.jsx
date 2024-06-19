@@ -3,7 +3,6 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useSelector((state) => state.user);
-  console.log("logged in user", user);
   const location = useLocation();
 
   return (

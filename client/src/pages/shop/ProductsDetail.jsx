@@ -50,7 +50,7 @@ const ProductsDetail = ({ sortBy }) => {
                             key={product._id}
                             className="bg-white shadow-sm max-w-[24%] cursor-pointer  p-2"
                           >
-                            <div className="absolute ">
+                            <div className="absolute m-1">
                               {isInWishList ? (
                                 <FaHeart
                                   size={"1.5rem"}
