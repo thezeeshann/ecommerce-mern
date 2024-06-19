@@ -19,6 +19,9 @@ import ChangePassword from "./pages/dashboard/user/ChangePassword";
 import WishList from "./pages/dashboard/user/WishList";
 import Support from "./pages/dashboard/user/Support";
 import AccountDetails from "./pages/dashboard/user/AccountDetails";
+import ManageProducts from "./pages/dashboard/admin/ManageProducts";
+import ManageOrders from "./pages/dashboard/admin/ManageOrders";
+import ManageUser from "./pages/dashboard/admin/ManageUser";
 
 function App() {
   return (
@@ -34,15 +37,17 @@ function App() {
           <Route path="/category" element={<ProductsCategory />} />
           <Route path="*" element={<Error />} />
           <Route element={<PrivateRoute />}>
-            {/* <Route path="/dashborad" element={<Dashboard />} /> */}
             <Route path="/dashboard" element={<Dashboard />}>
-            <Route index element={<AccountDetails />} />
-            <Route path="security" element={<ChangePassword />} />
-            <Route path="address" element={<Address />} />
-            <Route path="order" element={<Orders />} />
-            <Route path="wishlist" element={<WishList />} />
-            <Route path="support" element={<Support />} />
-          </Route>
+              <Route index element={<AccountDetails />} />
+              <Route path="security" element={<ChangePassword />} />
+              <Route path="products" element={<ManageProducts />} />
+              <Route path="orders" element={<ManageOrders />} />
+              <Route path="users" element={<ManageUser />} />
+              <Route path="address" element={<Address />} />
+              <Route path="order" element={<Orders />} />
+              <Route path="wishlist" element={<WishList />} />
+              <Route path="support" element={<Support />} />
+            </Route>
             <Route path="/order/success/:orderId" element={<OrderSuccess />} />
             <Route path="/order/details/:orderId" element={<OrderDetails />} />
           </Route>
