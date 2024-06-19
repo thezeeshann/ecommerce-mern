@@ -1,7 +1,6 @@
-// import { DropdownMenu, Text, Avatar } from "@radix-ui/themes";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { logout } from "../../../redux/api/authApi";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useLogout } from "@/hooks/useLogout";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,8 +12,7 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 const UserMenu = () => {
   const { user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const logout = useLogout();
 
   return (
     <DropdownMenu>
@@ -31,10 +29,7 @@ const UserMenu = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => dispatch(logout(navigate))}>
-          {" "}
-          Sign Out
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => logout()}>Sign Out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
