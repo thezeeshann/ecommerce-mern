@@ -71,6 +71,35 @@ export const getOrders = async (req, res) => {
   }
 };
 
+export const getOrdersAdmin = async (req, res) => {
+  try {
+    const orders = await OrderModel.find().populate({  //role:"User"
+      path: "cart",
+      populate: {
+        path: "items.product",
+        select: "productName image price",
+      },
+    }).populate({
+      path: "user",
+      select: "firstName lastName",
+    });
+
+
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ error: "No orders found " });
+    }
+    res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 export const getSingleOrder = async (req, res) => {
   try {
     const { orderId } = req.params;

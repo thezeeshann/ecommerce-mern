@@ -1,7 +1,6 @@
 import ProductModel from "../models/product.js";
 import { uploadImageToCloudinary } from "../utils/uploadImage.js";
 
-
 export const priceLowTOHignProducts = async (req, res) => {
   try {
     const products = await ProductModel.find({}).sort({ price: 1 });
@@ -35,8 +34,7 @@ export const priceHighToLowProducts = async (req, res) => {
 export const createProducts = async (req, res) => {
   try {
     const { productName, price, description, quantity } = req.body;
-
-    const image = req.files.image;
+    const image = req.files?.image;
 
     if (!productName || !price || !description || !quantity) {
       return res
@@ -50,7 +48,6 @@ export const createProducts = async (req, res) => {
         message: "Image fields are required",
       });
     }
-
     const uploadImage = await uploadImageToCloudinary(
       image,
       process.env.FOLDER_NAME
