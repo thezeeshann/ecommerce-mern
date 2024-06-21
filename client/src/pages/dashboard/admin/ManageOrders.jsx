@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -13,98 +12,56 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
-
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+import { useGetOrdersAdminQuery } from "@/redux/api/orderApiSlice";
 
 const ManageOrders = () => {
+  const { data } = useGetOrdersAdminQuery();
+  console.log("get orders", data);
+
   return (
     <section className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center justify-between">
         <p className="text-lg font-medium">Manage Orders</p>
         <p className="text-lg font-medium cursor-pointer">Add Orders</p>
       </div>
-      <hr />	
+      <hr />
 
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[10%]">Order ID</TableHead>
-            <TableHead className="w-[25%]">Customer</TableHead>
-            <TableHead className="w-[10%]">Product</TableHead>
+            <TableHead className="w-[15%]">Order ID</TableHead>
+            <TableHead className="w-[15%]">Customer</TableHead>
+            <TableHead className="w-[15%]">Product</TableHead>
             <TableHead className="w-[10%]">Amount</TableHead>
-            <TableHead className="w-[10%]">Status</TableHead>
+            <TableHead className="w-[15%]">Status</TableHead>
             <TableHead className="w-[10%]">Rating</TableHead>
             <TableHead className="w-[10%]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
+          {data?.data?.map((order) => (
+            <TableRow key={order._id}>
               <TableCell className="">
-                <p>asdf1234asf</p>
+                <p>{order.orderId}</p>
               </TableCell>
               <TableCell className="">
-                <div className="flex flex-row items-center gap-x-2">
-                  <img
-                    src={
-                      "https://res.cloudinary.com/dwhf51atn/image/upload/v1715583166/Ecommerce/ub9xg7dpggdrlqv5zskv.jpg"
-                    }
-                    alt=""
-                    className="w-[15%] h-[15%]"
-                  />
-                  <p className="font-medium text-blue-500 cursor-pointer">
-                    Mens Cotton Jacket
+               
+                  <p className="font-medium cursor-pointer">
+                    {order?.user?.firstName + order?.user?.lastName}
                   </p>
-                </div>
               </TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell>{invoice.totalAmount}</TableCell>
+              {order?.cart?.items?.map((p) => (
+                <div key={p._id}>
+                  <TableCell className="font-medium">{p?.product?.productName}</TableCell>
+                </div>
+              ))}
+              <TableCell className="font-medium text-green-500/80">${order?.cart?.totalPrice}</TableCell>
+              <TableCell>
+                <Badge variant="secondary">{order?.cart?.status}</Badge>{" "}
+              </TableCell>
               <TableCell>5</TableCell>
               <TableCell>
                 <DropdownMenu>
@@ -115,20 +72,14 @@ const ManageOrders = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
-                    <DropdownMenuItem>Update Product</DropdownMenuItem>
-                    <DropdownMenuItem>Delete Product</DropdownMenuItem>
+                    <DropdownMenuItem>Update Order</DropdownMenuItem>
+                    <DropdownMenuItem>Delete Order</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
-          {/* <TableRow>
-          <TableCell colSpan={4}>Total</TableCell>
-          <TableCell className="text-right">$2,500.00</TableCell>
-        </TableRow> */}
-        </TableFooter>
       </Table>
     </section>
   );

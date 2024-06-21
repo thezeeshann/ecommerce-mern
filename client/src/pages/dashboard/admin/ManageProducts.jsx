@@ -23,18 +23,66 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@radix-ui/themes";
-import { useGetProductsQuery } from "@/redux/api/productApiSlice";
+import {
+  useCreateProductMutation,
+  useGetProductsQuery,
+} from "@/redux/api/productApiSlice";
 import { Link } from "react-router-dom";
 import { useDeleteProductMutation } from "@/redux/api/productApiSlice";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
 const ManageProducts = () => {
+  const { data, refetch } = useGetProductsQuery();
   const [isOpen, setIsOpen] = useState(false);
   const [addProductOpen, setAddProductOpen] = useState(false);
-  const { data, refetch } = useGetProductsQuery();
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
   const [deleteProduct] = useDeleteProductMutation();
+  const [createProduct, { isLoading }] = useCreateProductMutation();
+  const [formData, setFormData] = useState({
+    productName: "",
+    price: "",
+    description: "",
+    quantity: "",
+    image: null,
+  });
+
+  const { productName, price, description, quantity, image } = formData;
+
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files ? files[0] : value,
+    }));
+  };
+
+  const handleCreateProduct = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("productName", productName);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("quantity", quantity);
+      formData.append("image", image);
+
+      const response = await createProduct(formData);
+      if (response.error) {
+        console.log(response);
+        toast.error(response.error.data.message);
+      } else {
+        toast.success("Product create successfully");
+        console.log("CREATE PRODUCT API RESPONSE", response);
+      }
+    } catch (error) {
+      console.log("CREATE PRODUCT API ERROR", error);
+    }
+  };
 
   const handleDeleteProduct = async (productId) => {
     try {
@@ -45,6 +93,11 @@ const ManageProducts = () => {
     } catch (error) {
       console.log("DELETE PRODUCT API ERROR", error);
     }
+  };
+
+  const openDeleteDialog = (productId) => {
+    setProductIdToDelete(productId);
+    setIsOpen(true);
   };
 
   return (
@@ -72,137 +125,99 @@ const ManageProducts = () => {
         <hr />
 
         {addProductOpen === true ? (
-          <div>
-            <form >
-              <div className="flex flex-row w-full mt-10">
-                <div className="flex flex-col w-3/6 gap-y-2">
-                  <div className="flex flex-col gap-y-1">
-                    <label htmlFor="email" className="text-xs">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      // value={firstName}
-                      // onChange={handleChange}
-                      placeholder="Please Enter your First Name"
-                      className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-y-1">
-                    <label htmlFor="email" className="text-xs">
-                      Last Name
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      // onChange={handleChange}
-                      // value={lastName}
-                      placeholder="Please Enter your Last Name"
-                      className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-y-1">
-                    <label htmlFor="email" className="text-xs">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      // value={email}
-                      // onChange={handleChange}
-                      placeholder="Please Enter your Email"
-                      className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                    />
-                  </div>
-
-                  <div className="flex flex-row items-center justify-between w-full gap-x-1">
-                    <div className="relative flex flex-col w-1/2 gap-y-1">
-                      <label htmlFor="email" className="text-xs ">
-                        Password
-                      </label>
-                      <input
-                        type={"text"}
-                        name="password"
-                        // value={password}
-                        // onChange={handleChange}
-                        placeholder="Enter Password"
-                        className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                      />
-                      {/* <span
-                        className="absolute right-4 top-[28px] z-[10] cursor-pointer"
-                        onClick={() => setShowPassword((value) => !value)}
-                      >
-                        {showPassword ? (
-                          <IoMdEyeOff
-                            size={"1.5rem"}
-                            className="cursor-pointer"
-                          />
-                        ) : (
-                          <IoMdEye size={"1.5rem"} className="cursor-pointer" />
-                        )}
-                      </span> */}
-                    </div>
-
-                    <div className="relative flex flex-col w-1/2 gap-y-1">
-                      <label htmlFor="email" className="text-xs ">
-                        Confirm Password
-                      </label>
-                      <input
-                        type={"text"}
-                        name="confirmPassword"
-                        // value={confirmPassword}
-                        // onChange={handleChange}
-                        placeholder="Confirm Password"
-                        className=" px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                      />
-                      {/* <span
-                        className="absolute right-4 top-[28px] z-[10] cursor-pointer"
-                        onClick={() =>
-                          setShowConfirmPassword((value) => !value)
-                        }
-                      >
-                        {showConfirmPassword ? (
-                          <IoMdEyeOff
-                            size={"1.5rem"}
-                            className="cursor-pointer"
-                          />
-                        ) : (
-                          <IoMdEye size={"1.5rem"} className="cursor-pointer" />
-                        )}
-                      </span> */}
-                    </div>
-                  </div>
-
-                  {/* <div className="mt-3 w-max border-[1px] border-gray-200">
-                    <Tab tabData={tabData} field={role} setField={setRole} />
-                  </div> */}
-                </div>
-                {/* <div className="flex items-center justify-center w-3/6 ">
-                  <img src={registerImg} alt="" width={"45%"} />
-                </div> */}
+          <form
+            onSubmit={handleCreateProduct}
+            className="flex flex-col gap-y-3"
+          >
+            <div className="flex flex-row w-full gap-x-5">
+              <div className="flex flex-col w-1/2 gap-y-1">
+                <label htmlFor="text" className="text-sm">
+                  Product Name
+                </label>
+                <input
+                  type="text"
+                  name="productName"
+                  onChange={handleChange}
+                  value={productName}
+                  placeholder="Product Name"
+                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
               </div>
-              <hr className="mt-6" />
-              <div className="flex flex-row w-full">
-                {/* <div className="flex flex-row items-center w-3/6 mt-3 gap-x-5">
-                  <button
-                    disabled={isLoading}
-                    type="submit"
-                    className="text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
-                  >
-                    {isLoading ? "Sign...." : "Sign Up"}
-                  </button>
-                </div> */}
-                <div className="w-3/6 mt-3">
-                  <Link to="/login">
-                    <p className="text-sm cursor-pointer text-sky-500 text-end">
-                      Back to Login?
-                    </p>
-                  </Link>
-                </div>
+              <div className="flex flex-col w-1/2 gap-y-1">
+                <label htmlFor="number" className="text-sm">
+                  Price
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  value={price}
+                  onChange={handleChange}
+                  placeholder="Price"
+                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
               </div>
-            </form>
-          </div>
+            </div>
+            <div className="flex flex-row w-full gap-x-5">
+              <div className="flex flex-col w-1/2 gap-y-1">
+                <Label htmlFor="message">Description</Label>
+                <Textarea
+                  value={description}
+                  name="description"
+                  onChange={handleChange}
+                  placeholder="Type your message here."
+                  id="message"
+                />
+              </div>
+              <div className="flex flex-col w-1/2 gap-y-1">
+                <label htmlFor="email" className="text-sm">
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  name="quantity"
+                  value={quantity}
+                  onChange={handleChange}
+                  placeholder="Product Quantity"
+                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
+              </div>
+            </div>
+            <div className="flex flex-row w-full gap-x-5">
+              <div className="flex flex-col w-1/2 gap-y-1">
+                <label htmlFor="email" className="text-sm">
+                  Image
+                </label>
+                <Input
+                  type="file"
+                  name="image"
+                  onChange={handleChange}
+                  id="picture"
+                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
+              </div>
+              {/* <div className="flex flex-col w-1/2 gap-y-1">
+                <label htmlFor="email" className="text-sm">
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  // value={lastName}
+                  // onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Please Enter your Last Name"
+                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
+                />
+              </div> */}
+            </div>
+            <hr className="mt-3" />
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white w-max"
+            >
+              Add Product
+            </button>
+          </form>
         ) : (
           <Table>
             <TableHeader>
@@ -238,22 +253,25 @@ const ManageProducts = () => {
                       {product.isActive === true ? "True" : "False"}
                     </TableCell>
                     <TableCell>
-                      <DropdownMenu>
+                      <DropdownMenu dir="ltr">
                         <DropdownMenuTrigger asChild>
                           <Button variant="ghost" className="w-8 h-8 p-0 cur">
                             <span className="sr-only">Open menu</span>
                             <DotsHorizontalIcon className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="center">
+                        <DropdownMenuContent>
                           <DropdownMenuItem>Update Product</DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => setIsOpen(true)}>
+                          <DropdownMenuItem
+                            onClick={() => openDeleteDialog(product._id)}
+                          >
                             Delete Product
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
+
                   <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
                     <AlertDialogTrigger asChild></AlertDialogTrigger>
                     <AlertDialogContent>
@@ -265,7 +283,8 @@ const ManageProducts = () => {
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDeleteProduct(product._id)}
+                          onClick={() => handleDeleteProduct(productIdToDelete)}
+                          // onClick={() => handleDeleteProduct(product._id)}
                           className="bg-red-500/80"
                         >
                           Continue

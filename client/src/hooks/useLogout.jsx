@@ -11,6 +11,8 @@ export function useLogout() {
   const logout = () => {
     dispatch(setUser(null));
     dispatch(setToken(null));
+    localStorage.removeItem("user")
+    localStorage.removeItem("token")
     toast.success("Logged Out");
     navigate("/login");
   };

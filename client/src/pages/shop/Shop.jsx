@@ -38,7 +38,7 @@ const Shop = () => {
                 count={5}
                 // onChange={handleRatingChange}
                 // value={rating}
-                classNames="border-2 border-red-500"
+                classNames=" mx-auto space-x-2"
                 size={24}
                 isHalf={true}
                 emptyIcon={<i className="far fa-star"></i>}
