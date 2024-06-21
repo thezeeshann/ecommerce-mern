@@ -4,6 +4,7 @@ import {
   GET_HIGH_TO_LOW_PRICE_PRODUCT_API,
   GET_LOW_TO_HIGH_PRICE_PRODUCT_API,
   DELETE_PRODUCT_API,
+  CREATE_PRODUCT_API,
 } from "../constant";
 import { apiSlice } from "./apiSlice";
 
@@ -33,6 +34,14 @@ export const productApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    createProduct: builder.mutation({
+      query: (formData) => ({
+        url: `${CREATE_PRODUCT_API}`,
+        method: "POST",
+        body: formData, 
+      }),
+    }),
+
     deleteProduct: builder.mutation({
       query: (productId) => ({
         url: `${DELETE_PRODUCT_API}/${productId}`,
@@ -47,5 +56,6 @@ export const {
   useGetSingleProductQuery,
   useGetLowToHightPriceProductQuery,
   useGetHighToLowPriceProductQuery,
+  useCreateProductMutation,
   useDeleteProductMutation,
 } = productApiSlice;
