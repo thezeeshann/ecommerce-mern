@@ -4,6 +4,7 @@ import {
   UPDATE_USERNAME_API,
   GET_SINGLE_USER_API,
   GET_ALL_USERS_API,
+  DELETE_USER_API,
 } from "../constant";
 
 export const profileApiSlice = apiSlice.injectEndpoints({
@@ -22,14 +23,12 @@ export const profileApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["User"],
     }),
 
     getSingleUser: builder.query({
       query: () => ({
         url: `${GET_SINGLE_USER_API}`,
       }),
-      providesTags: ["User"],
     }),
 
     getAllUsers: builder.query({
@@ -37,11 +36,19 @@ export const profileApiSlice = apiSlice.injectEndpoints({
         url: `${GET_ALL_USERS_API}`,
       }),
     }),
+
+    deleteUser: builder.mutation({
+      query: (userId) => ({
+        url: `${DELETE_USER_API}/${userId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
 export const {
   useUpdateProfileMutation,
+  useDeleteUserMutation,
   useUpdateUsernameMutation,
   useGetSingleUserQuery,
   useGetAllUsersQuery,
