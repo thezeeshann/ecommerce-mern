@@ -1,10 +1,12 @@
 import { RiShoppingBagLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetCartsQuery } from "../../../redux/api/cartApiSlice";
 import useRemoveProductFromCart from "../../../hooks/removeProductFromCart";
-import { useCreateOrderMutation } from "../../../redux/api/orderApiSlice";
+import {
+  useCreateOrderMutation
+} from "../../../redux/api/orderApiSlice";
 import toast from "react-hot-toast";
 import {
   Sheet,
@@ -14,11 +16,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { clearCart,setOrderedCart } from "@/redux/features/cartSlice";
+
 
 const ShoppinhCard = ({ open, setOpen }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
   const { data } = useGetCartsQuery();
+  // console.log(data, "get cart query");
   const [createOrder] = useCreateOrderMutation();
   const removeProductFromCart = useRemoveProductFromCart();
 
@@ -37,6 +43,17 @@ const ShoppinhCard = ({ open, setOpen }) => {
       } else {
         console.log("CREATE ORDER API RESPONSE", response);
         toast.success("Your order has been placed successfully!");
+
+        const cartProducts = currentUserCart.find(cart => cart._id === cartId)?.items || [];
+        dispatch(setOrderedCart(cartProducts))
+        dispatch(clearCart())
+
+        // for (const product of cartProducts) {
+        //   await handleRemoveFromCart(product?.product?._id);
+        // }
+
+        console.log(cartProducts,"cartProducts")
+
         navigate(`/order/success/${response?.data?.data?.orderId}`);
         setOpen(false);
       }
@@ -48,11 +65,11 @@ const ShoppinhCard = ({ open, setOpen }) => {
   const currentUserCart =
     data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
 
+
   return (
     <>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-        </SheetTrigger>
+        <SheetTrigger asChild></SheetTrigger>
         <SheetContent>
           <SheetHeader>
             <SheetTitle></SheetTitle>
@@ -60,7 +77,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
           </SheetHeader>
 
           <div className="my-4">
-            <hr  />
+            <hr />
 
             {currentUserCart.length === 0 ? (
               <div className="flex flex-col items-center justify-center min-h-screen gap-y-2">
@@ -130,7 +147,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
                           <p className="text-sm">${product?.totalPrice}</p>
                         </div>
                       </div>
-                      <div className="flex flex-row items-center justify-center px-5 gap-x-3">
+                      <div className="flex flex-row items-center justify-evenly">
                         <Link to="/shop">
                           <button
                             onClick={() => setOpen(false)}

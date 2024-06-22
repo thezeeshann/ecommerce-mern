@@ -25,11 +25,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RxCross2 } from "react-icons/rx";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@radix-ui/themes";
 import {
   useCreateProductMutation,
   useGetProductsQuery,
+  useUpdateProductMutation,
 } from "@/redux/api/productApiSlice";
 import { Link } from "react-router-dom";
 import { useDeleteProductMutation } from "@/redux/api/productApiSlice";
@@ -37,11 +39,14 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 
 const ManageProducts = () => {
-  const { data, refetch } = useGetProductsQuery();
   const [isOpen, setIsOpen] = useState(false);
   const [addProductOpen, setAddProductOpen] = useState(false);
   const [productIdToDelete, setProductIdToDelete] = useState(null);
+  const [currentProductId, setCurrentProductId] = useState(null);
+  const { data, refetch } = useGetProductsQuery();
   const [deleteProduct] = useDeleteProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
+  const [actionType, setActionType] = useState(null);
   const [createProduct, { isLoading }] = useCreateProductMutation();
   const [formData, setFormData] = useState({
     productName: "",
@@ -95,9 +100,61 @@ const ManageProducts = () => {
     }
   };
 
+  const handleUpdateProduct = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("productName", productName);
+      formData.append("price", price);
+      formData.append("description", description);
+      formData.append("quantity", quantity);
+      formData.append("image", image);
+
+      const response = await updateProduct({
+        productId: currentProductId,
+        formData,
+      });
+      if (response.error) {
+        console.log(response);
+        toast.error(response.error.data.message);
+      } else {
+        toast.success("Product updated successfully");
+        console.log("UPDATE PRODUCT API RESPONSE");
+        refetch();
+      }
+    } catch (error) {
+      console.log("UPDATE PRODUCT API ERROR", error);
+    }
+  };
+
   const openDeleteDialog = (productId) => {
     setProductIdToDelete(productId);
     setIsOpen(true);
+  };
+
+  const openAddProductForm = () => {
+    setFormData({
+      productName: "",
+      price: "",
+      description: "",
+      quantity: "",
+      image: null,
+    });
+    setActionType("add");
+    setAddProductOpen(true);
+  };
+
+  const openEditProductForm = (product) => {
+    setFormData({
+      productName: product.productName,
+      price: product.price,
+      description: product.description,
+      quantity: product.quantity,
+      image: null,
+    });
+    setCurrentProductId(product._id);
+    setActionType("edit");
+    setAddProductOpen(true);
   };
 
   return (
@@ -111,11 +168,11 @@ const ManageProducts = () => {
               onClick={() => setAddProductOpen(false)}
               className="text-lg font-medium cursor-pointer"
             >
-              Cancel
+              <RxCross2 size={"2rem"} className="font-medium text-red-500/80" />
             </p>
           ) : (
             <p
-              onClick={() => setAddProductOpen(true)}
+              onClick={openAddProductForm}
               className="text-lg font-medium cursor-pointer"
             >
               Add Products
@@ -126,7 +183,9 @@ const ManageProducts = () => {
 
         {addProductOpen === true ? (
           <form
-            onSubmit={handleCreateProduct}
+            onSubmit={
+              actionType === "add" ? handleCreateProduct : handleUpdateProduct
+            }
             className="flex flex-col gap-y-3"
           >
             <div className="flex flex-row w-full gap-x-5">
@@ -159,7 +218,9 @@ const ManageProducts = () => {
             </div>
             <div className="flex flex-row w-full gap-x-5">
               <div className="flex flex-col w-1/2 gap-y-1">
-                <Label htmlFor="message">Description</Label>
+                <Label htmlFor="message" className="font-normal">
+                  Description
+                </Label>
                 <Textarea
                   value={description}
                   name="description"
@@ -195,19 +256,6 @@ const ManageProducts = () => {
                   className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
                 />
               </div>
-              {/* <div className="flex flex-col w-1/2 gap-y-1">
-                <label htmlFor="email" className="text-sm">
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  // value={lastName}
-                  // onChange={(e) => setLastName(e.target.value)}
-                  placeholder="Please Enter your Last Name"
-                  className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
-                />
-              </div> */}
             </div>
             <hr className="mt-3" />
             <button
@@ -215,7 +263,7 @@ const ManageProducts = () => {
               disabled={isLoading}
               className="text-sm border-[1px] px-4 py-2 mt-3 hover:bg-blue-500 hover:text-white w-max"
             >
-              Add Product
+              {actionType === "add" ? "Add Product" : "Update Product"}
             </button>
           </form>
         ) : (
@@ -261,7 +309,11 @@ const ManageProducts = () => {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                          <DropdownMenuItem>Update Product</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => openEditProductForm(product)}
+                          >
+                            Update Product
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => openDeleteDialog(product._id)}
                           >
@@ -284,7 +336,6 @@ const ManageProducts = () => {
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDeleteProduct(productIdToDelete)}
-                          // onClick={() => handleDeleteProduct(product._id)}
                           className="bg-red-500/80"
                         >
                           Continue

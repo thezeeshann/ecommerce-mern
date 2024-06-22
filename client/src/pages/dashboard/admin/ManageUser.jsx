@@ -7,6 +7,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -14,12 +24,37 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
-import { useGetAllUsersQuery } from "@/redux/api/profileApiSlice";
-
+import {
+  useGetAllUsersQuery,
+  useDeleteUserMutation,
+} from "@/redux/api/profileApiSlice";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const ManageUser = () => {
-  const { data } = useGetAllUsersQuery();
-  console.log(data, "all users");
+  const { data, refetch } = useGetAllUsersQuery();
+  console.log(data);
+  const [isOpen, setIsOpen] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  console.log(userIdToDelete);
+  const [deleteUser] = useDeleteUserMutation();
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      const response = await deleteUser(userId);
+      toast.success("User profile deleted successfully");
+      console.log("DELETE USER API RESPONSE", response);
+      refetch();
+    } catch (error) {
+      console.log("DELETE USER API ERROR", error);
+    }
+  };
+
+  const openDeleteDialog = (userId) => {
+    setUserIdToDelete(userId);
+    setIsOpen(true);
+  };
+
   return (
     <section className="flex flex-col gap-y-4">
       <div className="flex flex-row items-center justify-between">
@@ -61,7 +96,11 @@ const ManageUser = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
-                    <DropdownMenuItem>Delete User</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => openDeleteDialog(user?._id)}
+                    >
+                      Delete User
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -69,6 +108,26 @@ const ManageUser = () => {
           ))}
         </TableBody>
       </Table>
+
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogTrigger asChild></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete!
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleDeleteUser(userIdToDelete)}
+              className="bg-red-500/80"
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 };

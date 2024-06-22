@@ -39,7 +39,7 @@ const Address = () => {
   };
 
   return (
-    <section className="flex flex-col gap-y-4">
+    <section className="flex flex-col ">
       <p className="text-lg font-medium">Addresses</p>
       <hr />
 
