@@ -82,7 +82,7 @@ export const updateUsername = async (req, res) => {
 
 export const deleteProfile = async (req, res) => {
   try {
-    const userId = req.existUser.userId;
+    const userId = req.params.id;
     const user = await UserModel.findByIdAndDelete(userId);
     if (!user) {
       return res.status(404).json({
@@ -132,8 +132,9 @@ export const getSingleUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await UserModel.find({ role: "User" }).populate("additionalDetails")
-    .exec();;
+    const users = await UserModel.find({ role: "User" })
+      .populate("additionalDetails")
+      .exec();
     if (!users || users.length === 0) {
       return res.status(404).json({
         success: false,

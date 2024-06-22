@@ -110,45 +110,38 @@ export const updateProducts = async (req, res) => {
     const productId = req.params.id;
     const update = req.body;
 
-    const existProduct = await ProductModel.find({ _id: productId });
+    let product = await ProductModel.findById(productId);
 
-    if (!existProduct) {
+    if (!product) {
       return res.status(404).json({
         success: false,
         message: "Product not found",
       });
     }
 
-    if (req.files) {
+    if (req.files && req.files.image) {
       const image = req.files.image;
       const productImage = await uploadImageToCloudinary(
         image,
         process.env.FOLDER_NAME
       );
-      existProduct.image = productImage.secure_url;
+      update.image = productImage.secure_url;
     }
 
-    for (const key in update) {
-      if (update.hasOwnProperty(key)) {
-        existProduct[key] = update[key];
-      }
-    }
-
-    await existProduct.save();
-
-    const updatedProduct = await BlogModal.findOne({
-      _id: productId,
+    product = await ProductModel.findByIdAndUpdate(productId, update, {
+      new: true,
     });
 
     return res.status(200).json({
-      success: false,
-      message: "Product update successfully",
-      data: updatedProduct,
+      success: true,
+      message: "Product updated successfully",
+      data: product,
     });
   } catch (error) {
-    return res.status(404).json({
+    return res.status(500).json({
       success: false,
       message: "Product not updated",
+      error: error.message,
     });
   }
 };
