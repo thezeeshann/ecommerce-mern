@@ -1,13 +1,16 @@
+
 import { useGetOrdersQuery } from "../../../redux/api/orderApiSlice";
 import { Link } from "react-router-dom";
 
 const Orders = () => {
   const { data } = useGetOrdersQuery();
-  console.log("data", data);
+  console.log(data, "get order query");
 
   return (
     <section className="flex flex-col gap-y-4">
-      <p className="text-lg font-medium">{data ? data?.data?.length : 0} Your Orders</p>
+      <p className="text-lg font-medium">
+        {data ? data?.data?.length : 0} Your Orders
+      </p>
       <hr />
 
       {data ? (

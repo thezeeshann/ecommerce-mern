@@ -7,6 +7,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -15,11 +25,34 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Button } from "@radix-ui/themes";
-import { useGetOrdersAdminQuery } from "@/redux/api/orderApiSlice";
+import {
+  useGetOrdersAdminQuery,
+  useDeleteOrderMutation,
+} from "@/redux/api/orderApiSlice";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const ManageOrders = () => {
-  const { data } = useGetOrdersAdminQuery();
-  console.log("get orders", data);
+  const { data, refetch } = useGetOrdersAdminQuery();
+  const [isOpen, setIsOpen] = useState();
+  const [orderIdToDelete, setOrderIdToDelete] = useState(null);
+  const [deleteOrder] = useDeleteOrderMutation();
+
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      const response = await deleteOrder(orderId);
+      refetch();
+      toast.success("Order deleted successfully");
+      console.log("DELETE ORDER API RESPONSE", response);
+    } catch (error) {
+      console.log("DELETE ORDER API ERROR ", error);
+    }
+  };
+
+  const openDeleteDialog = (orderId) => {
+    setOrderIdToDelete(orderId);
+    setIsOpen(true);
+  };
 
   return (
     <section className="flex flex-col gap-y-4">
@@ -48,17 +81,20 @@ const ManageOrders = () => {
                 <p>{order.orderId}</p>
               </TableCell>
               <TableCell className="">
-               
-                  <p className="font-medium cursor-pointer">
-                    {order?.user?.firstName + order?.user?.lastName}
-                  </p>
+                <p className="font-medium cursor-pointer">
+                  {order?.user?.firstName + order?.user?.lastName}
+                </p>
               </TableCell>
               {order?.cart?.items?.map((p) => (
                 <div key={p._id}>
-                  <TableCell className="font-medium">{p?.product?.productName}</TableCell>
+                  <TableCell className="font-medium">
+                    {p?.product?.productName}
+                  </TableCell>
                 </div>
               ))}
-              <TableCell className="font-medium text-green-500/80">${order?.cart?.totalPrice}</TableCell>
+              <TableCell className="font-medium text-green-500/80">
+                ${order?.cart?.totalPrice}
+              </TableCell>
               <TableCell>
                 <Badge variant="secondary">{order?.cart?.status}</Badge>{" "}
               </TableCell>
@@ -73,7 +109,11 @@ const ManageOrders = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
                     <DropdownMenuItem>Update Order</DropdownMenuItem>
-                    <DropdownMenuItem>Delete Order</DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => openDeleteDialog(order.orderId)}
+                    >
+                      Delete Order
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
@@ -81,6 +121,26 @@ const ManageOrders = () => {
           ))}
         </TableBody>
       </Table>
+
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogTrigger asChild></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete!
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleDeleteOrder(orderIdToDelete)}
+              className="bg-red-500/80"
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 };

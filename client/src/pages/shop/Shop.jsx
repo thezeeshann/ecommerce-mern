@@ -11,9 +11,11 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
+import { useParams } from "react-router-dom";
 
 const Shop = () => {
   const [sortBy, setSortBy] = useState("new");
+  const { slug } = useParams();
 
   return (
     <section className=" bg-[#F6F7F8] py-6">
@@ -80,7 +82,7 @@ const Shop = () => {
 
           {/* products list */}
           <div className="mt-5">
-            <ProductsDetail sortBy={sortBy} />
+            <ProductsDetail sortBy={sortBy} brandSlug={slug} />
           </div>
 
           <div className="mt-5">

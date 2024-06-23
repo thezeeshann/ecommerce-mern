@@ -37,9 +37,9 @@ const Dashboard = () => {
                 Account Security
               </p>
             </Link>
-            <hr />
             {user.role === "Admin" && (
               <>
+              <hr />
                 <Link to="/dashboard/products">
                   <p
                     className={`${
@@ -77,7 +77,7 @@ const Dashboard = () => {
                 </Link>
               </>
             )}
-
+            <hr />
             <Link to="/dashboard/address">
               <p
                 className={`${

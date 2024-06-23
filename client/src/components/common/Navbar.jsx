@@ -12,6 +12,7 @@ import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { cart } = useSelector((state) => state.cart);
   const { user } = useSelector((state) => state.user);
   const { data } = useGetCartsQuery();
 
@@ -75,12 +76,22 @@ const Navbar = () => {
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
-            {totalProducts > 0 && (
+            {/* {totalProducts > 0 && (
               <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
                 {user ? `${totalProducts}` : ""}
               </span>
             )}
 
+            <RiShoppingBagLine
+              size={"1.5rem"}
+              className="cursor-pointer"
+              onClick={() => setOpen(true)}
+            /> */}
+            {cart.length > 0 && (
+              <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
+                {cart.length}
+              </span>
+            )}
             <RiShoppingBagLine
               size={"1.5rem"}
               className="cursor-pointer"
