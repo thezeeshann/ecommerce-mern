@@ -33,10 +33,10 @@ export const priceHighToLowProducts = async (req, res) => {
 
 export const createProducts = async (req, res) => {
   try {
-    const { productName, price, description, quantity } = req.body;
+    const { productName, price, description, quantity, brand } = req.body;
     const image = req.files?.image;
 
-    if (!productName || !price || !description || !quantity) {
+    if (!productName || !price || !description || !quantity || !brand) {
       return res
         .status(404)
         .json({ success: false, message: "All fields are required" });
@@ -58,6 +58,7 @@ export const createProducts = async (req, res) => {
       price: price,
       description: description,
       quantity: quantity,
+      brand: brand,
       image: uploadImage.secure_url,
     });
 
@@ -76,7 +77,10 @@ export const createProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductModel.find({}).sort({ created: -1 });
+    const products = await ProductModel.find({}).sort({ created: -1 }).populate({
+      path:"brand",
+      select:"name slug isActive"
+    });
     return res.status(200).json({
       success: true,
       products,
@@ -92,7 +96,10 @@ export const getAllProducts = async (req, res) => {
 export const getSingleProduct = async (req, res) => {
   try {
     const productSlug = req.params.slug;
-    const singleProduct = await ProductModel.findOne({ slug: productSlug });
+    const singleProduct = await ProductModel.findOne({ slug: productSlug }).populate({
+      path:"brand",
+      select:"name slug isActive"
+    });
     return res.status(200).json({
       success: true,
       singleProduct,

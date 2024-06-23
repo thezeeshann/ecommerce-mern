@@ -16,6 +16,11 @@ const ProductSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  brand: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Brand",
+    default: null,
+  },
   quantity: {
     type: Number,
   },
@@ -41,14 +46,12 @@ ProductSchema.pre("save", function (next) {
   next();
 });
 
-
-ProductSchema.pre("remove", async function(next) {
+ProductSchema.pre("remove", async function (next) {
   const product = this;
   await mongoose.model("Review").deleteMany({ product: product._id });
 
   next();
 });
-
 
 const ProductModel = mongoose.model("Product", ProductSchema);
 export default ProductModel;

@@ -11,10 +11,21 @@ const OrderSchema = new mongoose.Schema({
     default: generateOrderId,
     unique: true,
   },
-  cart: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Cart",
-  },
+  // cart: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Cart",
+  // },
+  items: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+      productName: String,
+      quantity: Number,
+      price: Number,
+    },
+  ],
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

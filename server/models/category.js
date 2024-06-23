@@ -1,14 +1,13 @@
 import mongoose from "mongoose";
+import slugify from "slugify";
 
 const CategorySchema = new mongoose.Schema({
-  categoryName: {
+  name: {
     type: String,
     required: true,
   },
   slug: {
     type: String,
-    slug: "categoryName",
-    required: true,
     unique: true,
   },
   isActive: {
@@ -21,6 +20,15 @@ const CategorySchema = new mongoose.Schema({
       ref: "Product",
     },
   ],
+});
+
+
+CategorySchema.pre("save", function (next) {
+  if (!this.isModified("name")) {
+    return next();
+  }
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const CategoryModel = mongoose.model("Category", CategorySchema);
