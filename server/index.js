@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 import profileRoute from "./routes/profleRoute.js";
 import authRoute from "./routes/authRoute.js";
 import ReviewRouter from "./routes/reviewRouter.js";
+import BrandRouter from "./routes/brandRoute.js";
 import productRouter from "./routes/productRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import cartRouter from "./routes/cartRoutes.js";
@@ -41,6 +42,7 @@ app.use("/api/v1/profile", profileRoute);
 app.use("/api/v1/review", ReviewRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
+app.use("/api/v1/brand", BrandRouter);
 
 app.get("/", (req, res) => {
   return res.json({
