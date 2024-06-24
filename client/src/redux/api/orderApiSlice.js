@@ -4,6 +4,7 @@ import {
   GET_ORDER_API,
   DELETE_ORDER_API,
   GET_SINGLE_ORDER_API,
+  UPDATE_ORDER_API,
   GET_ORDER_ADMIN_API,
 } from "../constant";
 
@@ -35,6 +36,14 @@ export const orderApiSlice = apiSlice.injectEndpoints({
       }),
     }),
 
+    updateOrder: builder.mutation({
+      query: (data) => ({
+        url: `${UPDATE_ORDER_API}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
+
     deleteOrder: builder.mutation({
       query: (orderId) => ({
         url: `${DELETE_ORDER_API}/${orderId}`,
@@ -49,5 +58,6 @@ export const {
   useGetOrdersQuery,
   useGetOrdersAdminQuery,
   useGetSingleOrderQuery,
+  useUpdateOrderMutation,
   useDeleteOrderMutation,
 } = orderApiSlice;
