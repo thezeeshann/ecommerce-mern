@@ -24,7 +24,7 @@ export  const authenticateJwt = async (req, res, next) => {
   } catch (error) {
     return res.status(404).json({
       success: false,
-      message: "token is invalid",
+      message: "Unauthorized",
     });
   }
 };
@@ -39,7 +39,7 @@ export const isAdmin =  async(req,res,next)=>{
     if(userDetails.role !== "Admin"){
       return res.status(404).json({
         success:false,
-        message:"You are not authorized to create products"
+        message:"You are not authorized to create or modify data"
       })
     }
     next()

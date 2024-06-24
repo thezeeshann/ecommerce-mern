@@ -4,9 +4,10 @@ import {
   getOrders,
   getOrdersAdmin,
   getSingleOrder,
+  updateOrderStatus,
   deleteOrder,
 } from "../controllers/orderController.js";
-import { authenticateJwt } from "../middleware/authenticateJwt.js";
+import { authenticateJwt, isAdmin } from "../middleware/authenticateJwt.js";
 
 const router = express.Router();
 
@@ -14,6 +15,8 @@ router.get("/", authenticateJwt, getOrders);
 router.get("/admin", authenticateJwt, getOrdersAdmin);
 router.post("/", authenticateJwt, createOrder);
 router.get("/:orderId", authenticateJwt, getSingleOrder);
-router.delete("/:orderId", authenticateJwt, deleteOrder);
+router.get("/:orderId", authenticateJwt, getSingleOrder);
+router.put("/", authenticateJwt, isAdmin, updateOrderStatus);
+router.delete("/:orderId", authenticateJwt, isAdmin, deleteOrder);
 
 export default router;
