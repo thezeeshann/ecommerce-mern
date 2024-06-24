@@ -4,24 +4,34 @@ import { IoCall } from "react-icons/io5";
 import { MdLocalShipping } from "react-icons/md";
 import { RiShoppingBagLine } from "react-icons/ri";
 import Brands from "./dropdown/Brands";
+import { RxHamburgerMenu } from "react-icons/rx";
 import Welcome from "./dropdown/Welcome";
 import ShoppinhCard from "./dropdown/ShoppinhCard";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+} from "@/components/ui/sheet";
+
+// import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+// import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState(false);
   const { cart } = useSelector((state) => state.cart);
-  const { user } = useSelector((state) => state.user);
-  const { data } = useGetCartsQuery();
+  // const { user } = useSelector((state) => state.user);
+  // const { data } = useGetCartsQuery();
 
-  const currentUserCart =
-    data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
-  const totalProducts = currentUserCart.reduce(
-    (acc, cart) => acc + cart.items.length,
-    0
-  );
+  // const currentUserCart =
+  //   data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
+  // const totalProducts = currentUserCart.reduce(
+  //   (acc, cart) => acc + cart.items.length,
+  //   0
+  // );
 
   return (
     <header className="w-full font-Poppins">
@@ -55,10 +65,14 @@ const Navbar = () => {
       {/* headers */}
       <nav className="w-[80%] mx-auto py-5  flex flex-row justify-between items-center">
         {/* shop name          */}
-        <div>
+        <div className="flex flex-row items-center gap-x-3">
+          <RxHamburgerMenu
+            onClick={() => setOpenCategory(true)}
+            size={"1.5rem"}
+            className="-mt-1 cursor-pointer text-neutral-400"
+          />
           <Link to={"/"}>
-            {" "}
-            <p className="text-2xl font-medium text-gray-600 cursor-pointer">
+            <p className="text-xl font-medium text-gray-600 cursor-pointer">
               MERN Store
             </p>
           </Link>
@@ -113,6 +127,24 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      <Sheet open={openCategory} onOpenChange={setOpenCategory}>
+        <SheetContent side="left">
+          <SheetHeader>
+            <SheetDescription>
+              <div className="py-5">
+                <hr />
+                <p className="mt-8 text-xl font-medium">SHOP BY CATEGORY</p>
+                <div className="flex flex-col pt-5 ">
+                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Shoes</p>
+                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Bags</p>
+                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Perfumes</p>
+                </div>
+              </div>
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
 
       <hr />
 

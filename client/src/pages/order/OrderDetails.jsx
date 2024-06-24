@@ -12,6 +12,7 @@ const OrderDetails = () => {
   const [isOpen, setIsOpen] = useState(false);
   const clickRef = useRef();
   const { data, isLoading } = useGetSingleOrderQuery(orderId);
+  console.log("single order",data)
   const [deleteOrder] = useDeleteOrderMutation();
 
   const handleDeleteOrder = async (OId) => {
@@ -101,7 +102,7 @@ const OrderDetails = () => {
                 <p className="text-lg font-semibold">Order Items</p>
                 <hr />
                 <div className="flex flex-row items-center justify-between">
-                  {data?.data?.cart?.items?.map((p) => (
+                  {data?.data?.items?.map((p) => (
                     <React.Fragment key={p._id}>
                       <div className="flex flex-row items-center justify-between gap-x-2">
                         <img
@@ -124,13 +125,13 @@ const OrderDetails = () => {
                       <div className="flex flex-col items-center ">
                         <p className="text-sm font-semibold">Total Price</p>
                         <p className="text-sm">
-                          $ {data?.data?.cart?.totalPrice}
+                          $ {data?.data?.total}
                         </p>
                       </div>
                       <div className="flex flex-col items-center">
                         <p className="text-sm font-semibold">Status</p>
                         <p className="text-sm text-neutral-500">
-                          {data?.data?.cart?.status}
+                          {data?.data?.status}
                         </p>
                       </div>
                     </React.Fragment>
@@ -143,7 +144,7 @@ const OrderDetails = () => {
                 <div className="flex flex-col text-sm gap-y-3">
                   <div className="flex items-center justify-between">
                     <p>Subtotal </p>
-                    <p>${data?.data?.cart?.totalPrice}</p>
+                    <p>${data?.data?.total}</p>
                   </div>
                   <div className="flex items-center justify-between">
                     <p>Est. Sales Tax </p>
@@ -158,7 +159,7 @@ const OrderDetails = () => {
                 <div className="flex flex-row items-center justify-between gap-y-3">
                   <span className="text-sm">Total</span>{" "}
                   <span className="text-sm">
-                    ${data?.data?.cart?.totalPrice}
+                    ${data?.data?.total}
                   </span>
                 </div>
               </div>

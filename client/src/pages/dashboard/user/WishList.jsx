@@ -2,11 +2,12 @@ import { MdCancel } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromWishList } from "../../../redux/features/wishlistSlice";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 const WishList = () => {
   const dispatch = useDispatch();
-  const { wishList } = useSelector((state) => state.wishlist);  
-
+  const { wishList } = useSelector((state) => state.wishlist);
+  console.log(wishList);
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -19,22 +20,27 @@ const WishList = () => {
           </p>
         ) : (
           wishList.map((wishlist) => (
-            <div key={wishList._id}>
-              <div className="flex flex-row justify-between items-center  p-3 gap-x-4 border-[1px] mt-5">
-                <div className="flex flex-row items-center gap-x-2">
-                  <img
-                    src={wishlist.image}
-                    className="w-[70px] h-[70px]"
-                    alt=""
-                  />
-                  <div className="flex flex-col ">
-                    <p className="font-semibold">{wishlist.productName}</p>
-                    <p className="text-sm">${wishlist.price}</p>
-                    <p className="text-sm">
-                      Wishlist Added on Monday, Mar 4, 2024
-                    </p>
+            <div
+              key={wishList._id}
+              className=" hover:bg-[#F6F7F8] cursor-pointer"
+            >
+              <div className="flex flex-row justify-between items-center p-3 gap-x-4 border-[1px] mt-5">
+                <Link to={`/shop/product/${wishlist.slug}`}>
+                  <div className="flex flex-row items-center gap-x-2">
+                    <img
+                      src={wishlist.image}
+                      className="w-[70px] h-[70px]"
+                      alt=""
+                    />
+                    <div className="flex flex-col ">
+                      <p className="font-semibold">{wishlist.productName}</p>
+                      <p className="text-sm">${wishlist.price}</p>
+                      <p className="text-sm">
+                        Wishlist Added on Monday, Mar 4, 2024
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </Link>
                 <div className="">
                   <MdCancel
                     onClick={() => {

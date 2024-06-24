@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 const Orders = () => {
   const { data } = useGetOrdersQuery();
-  console.log(data, "get order query");
 
   return (
     <section className="flex flex-col gap-y-4">
@@ -18,7 +17,7 @@ const Orders = () => {
           {data?.data?.map((order, index) => (
             <Link to={`/order/details/${order.orderId}`} key={index}>
               <div className="flex hover:bg-[#F6F7F8] cursor-pointer  flex-row items-center gap-x-5 border-[1px] p-3 mt-5">
-                {order?.cart?.items?.map((p) => (
+                {order?.items?.map((p) => (
                   <div key={p._id}>
                     <img
                       src={p.product?.image}
@@ -33,7 +32,7 @@ const Orders = () => {
                     <span>Status</span>
                     <span className="font-semibold">
                       {" "}
-                      {order?.cart?.status}
+                      {order?.status}
                     </span>
                   </div>
                   <div>
@@ -56,7 +55,7 @@ const Orders = () => {
                     <span>Order Total</span>
                     <span className="font-semibold">
                       {" "}
-                      ${order?.cart?.totalPrice}
+                      ${order?.total}
                     </span>
                   </div>
                 </div>

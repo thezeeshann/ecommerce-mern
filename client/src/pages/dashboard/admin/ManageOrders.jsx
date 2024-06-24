@@ -7,6 +7,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -28,15 +36,22 @@ import { Button } from "@radix-ui/themes";
 import {
   useGetOrdersAdminQuery,
   useDeleteOrderMutation,
+  useUpdateOrderMutation,
 } from "@/redux/api/orderApiSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { CART_ITEM_STATUS } from "@/utils/constant";
+import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
 const ManageOrders = () => {
   const { data, refetch } = useGetOrdersAdminQuery();
   const [isOpen, setIsOpen] = useState();
+  const [status, setStatus] = useState("");
+  const [isOpenUpdate, setIsOpenUpdate] = useState(false);
   const [orderIdToDelete, setOrderIdToDelete] = useState(null);
+  const [orderIdToUpdate, setOrderIdToUpdate] = useState(null);
   const [deleteOrder] = useDeleteOrderMutation();
+  const [updateOrder] = useUpdateOrderMutation();
 
   const handleDeleteOrder = async (orderId) => {
     try {
@@ -49,9 +64,34 @@ const ManageOrders = () => {
     }
   };
 
+  const handleUpdateOrder = async (orderId) => {
+    try {
+      const data = {
+        status,
+        orderId,
+      };
+      const response = await updateOrder(data);
+      if (response.error) {
+        console.log(response.error.data.message, "Error hai");
+        toast.error(response.error.data.message);
+      } else {
+        console.log("UPDATE ORDER API RESPONSE", response);
+        toast.success("Order status updated successfully");
+        refetch();
+      }
+    } catch (error) {
+      console.log("UPDATE ORDER API ERROR", error);
+    }
+  };
+
   const openDeleteDialog = (orderId) => {
     setOrderIdToDelete(orderId);
     setIsOpen(true);
+  };
+
+  const openUpdateDialog = (orderId) => {
+    setOrderIdToUpdate(orderId);
+    setIsOpenUpdate(true);
   };
 
   return (
@@ -85,7 +125,7 @@ const ManageOrders = () => {
                   {order?.user?.firstName + order?.user?.lastName}
                 </p>
               </TableCell>
-              {order?.cart?.items?.map((p) => (
+              {order?.items?.map((p) => (
                 <div key={p._id}>
                   <TableCell className="font-medium">
                     {p?.product?.productName}
@@ -93,10 +133,10 @@ const ManageOrders = () => {
                 </div>
               ))}
               <TableCell className="font-medium text-green-500/80">
-                ${order?.cart?.totalPrice}
+                ${order?.total}
               </TableCell>
               <TableCell>
-                <Badge variant="secondary">{order?.cart?.status}</Badge>{" "}
+                <Badge variant="secondary">{order?.status}</Badge>{" "}
               </TableCell>
               <TableCell>5</TableCell>
               <TableCell>
@@ -108,7 +148,12 @@ const ManageOrders = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
-                    <DropdownMenuItem>Update Order</DropdownMenuItem>
+                    <DropdownMenuItem
+                      // onClick={() => handleUpdateOrder(order.orderId)}
+                      onClick={() => openUpdateDialog(order?.orderId)}
+                    >
+                      Update Order
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => openDeleteDialog(order.orderId)}
                     >
@@ -122,6 +167,43 @@ const ManageOrders = () => {
         </TableBody>
       </Table>
 
+      <AlertDialog open={isOpenUpdate} onOpenChange={setIsOpenUpdate}>
+        <AlertDialogTrigger asChild></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Update order status</AlertDialogTitle>
+            <AlertDialogDescription>
+              <Select
+                value={status}
+                onValueChange={(value) => setStatus(value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Update Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {Object.values(CART_ITEM_STATUS).map((statusOption) => (
+                      <SelectItem key={statusOption} value={statusOption}>
+                        {statusOption}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleUpdateOrder(orderIdToUpdate)}
+              className="bg-green-500/80 hover:bg-green-500"
+            >
+              Update
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
         <AlertDialogTrigger asChild></AlertDialogTrigger>
         <AlertDialogContent>
@@ -134,9 +216,9 @@ const ManageOrders = () => {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => handleDeleteOrder(orderIdToDelete)}
-              className="bg-red-500/80"
+              className="bg-red-500/80 hover:bg-red-500"
             >
-              Continue
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
