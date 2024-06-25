@@ -1,18 +1,29 @@
 import { PiStarThin } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import ReactStars from "react-rating-stars-component";
 import {
   addToWishList,
   removeFromWishList,
 } from "@/redux/features/wishlistSlice";
 import toast from "react-hot-toast";
+import { useGetSingleReviewQuery } from "@/redux/api/reviewApiSlice";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
+  const { data } = useGetSingleReviewQuery(product._id);
   const { wishList } = useSelector((state) => state.wishlist);
   const isInWishList = wishList.some((item) => item._id === product._id);
+
+  const totalRatings = data?.data?.reduce(
+    (acc, review) => acc + review.rating,
+    0
+  );
+  const averageRating =
+    totalRatings > 0 && Math.round(totalRatings / data?.totalReviews);
 
   return (
     <div
@@ -58,11 +69,21 @@ const ProductCard = ({ product }) => {
           <p className="">$ {product.price}</p>
 
           <p className="flex flex-row items-center gap-x-1">
-            4.2{" "}
-            <span>
-              {" "}
-              <PiStarThin />
-            </span>{" "}
+            {averageRating ? (
+              <div className="flex flex-row items-center gap-x-1">
+                <span>{averageRating}</span>
+                <span>
+                  <FaStar className="text-[#FFD700]" size={"1.1rem"} />
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-row items-center gap-x-1">
+                <span>0</span>
+                <span>
+                  <FaStar className="text-[#FFD700]" size={"1.1rem"} />
+                </span>
+              </div>
+            )}
           </p>
         </div>
       </div>

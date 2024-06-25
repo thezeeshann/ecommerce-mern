@@ -1,8 +1,8 @@
-import { useGetReviewQuery } from "../redux/api/reviewApiSlice";
+import { useGetSingleReviewQuery } from "../redux/api/reviewApiSlice";
 import ReactStars from "react-rating-stars-component";
 
 const Reviews = ({ productId }) => {
-  const { data } = useGetReviewQuery(productId);
+  const { data } = useGetSingleReviewQuery(productId);
 
   return (
     <div className="flex flex-col mt-5 gap-y-3">

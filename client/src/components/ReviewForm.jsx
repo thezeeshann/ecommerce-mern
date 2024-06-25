@@ -1,7 +1,7 @@
 import ReactStars from "react-rating-stars-component";
 import {
   useAddReviewMutation,
-  useGetReviewQuery,
+  useGetSingleReviewQuery,
 } from "../redux/api/reviewApiSlice";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
@@ -10,11 +10,11 @@ import { useSelector } from "react-redux";
 const ReviewForm = ({ productId }) => {
   const { user } = useSelector((state) => state.user);
   const [addReview, { isLoading }] = useAddReviewMutation();
-  const { refetch } = useGetReviewQuery(productId);
+  const { refetch } = useGetSingleReviewQuery(productId);
   const [formData, setFormData] = useState({
     title: "",
     review: "",
-    rating: "",
+    rating: 0,
   });
 
   const { title, review, rating } = formData;
@@ -30,7 +30,7 @@ const ReviewForm = ({ productId }) => {
     setFormData({
       title: "",
       review: "",
-      rating: "",
+      rating: 0,
     });
   };
 

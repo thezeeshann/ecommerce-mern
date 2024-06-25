@@ -1,7 +1,7 @@
-import { useGetReviewQuery } from "../redux/api/reviewApiSlice";
+import { useGetSingleReviewQuery } from "../redux/api/reviewApiSlice";
 import ReactStars from "react-rating-stars-component";
 const Rating = ({ productId }) => {
-  const { data } = useGetReviewQuery(productId);
+  const { data } = useGetSingleReviewQuery(productId);
 
   const totalRatings = data?.data?.reduce(
     (acc, review) => acc + review.rating,
@@ -14,7 +14,7 @@ const Rating = ({ productId }) => {
     <div className="px-3 py-3 mt-5 bg-white h-min">
       <p className="font-semibold">Rating</p>
       <div className="flex flex-row items-center gap-x-3">
-        {averageRating && (
+        {averageRating ? (
           <>
             <div className="">
               <ReactStars
@@ -37,6 +37,8 @@ const Rating = ({ productId }) => {
               )}
             </div>
           </>
+        ) : (
+        <p className="mt-2 text-sm">Rating Not Added Yet!</p>
         )}
       </div>
     </div>

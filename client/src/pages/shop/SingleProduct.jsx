@@ -15,20 +15,7 @@ const SingleProduct = () => {
   const [productQuantity, setQuantity] = useState(1);
   const { slug } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(slug);
-  console.log(data?.singleProduct);
   const { cart } = useSelector((state) => state.cart);
-  // const { user } = useSelector((state) => state.user);
-  // const [addToCart] = useAddToCartMutation();
-  // const removeProductFromCart = useRemoveProductFromCart();
-  // const { data: productInTheCart, } = useGetCartsQuery();
-
-  // const currentUserCart =
-  //   productInTheCart?.data?.filter((cart) => cart.user._id === user._id) || [];
-
-  // const productIds = currentUserCart.flatMap((cart) =>
-  //   cart.items.map((item) => item.product._id)
-  // );
-  // const isProductInCart = productIds.includes(data?.singleProduct?._id);
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value));
