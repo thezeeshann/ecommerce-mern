@@ -39,7 +39,7 @@ const Dashboard = () => {
             </Link>
             {user.role === "Admin" && (
               <>
-              <hr />
+                <hr />
                 <Link to="/dashboard/products">
                   <p
                     className={`${
@@ -64,6 +64,19 @@ const Dashboard = () => {
                   </p>
                 </Link>
                 <hr />
+                <Link to="/dashboard/reviews">
+                  <p
+                    className={`${
+                      location.pathname === "/dashboard/reviews"
+                        ? "bg-white"
+                        : " bg-[#F8F9FA]"
+                    } cursor-pointer py-2`}
+                  >
+                    Manage Reivews
+                  </p>
+                </Link>
+                <hr />
+
                 <Link to="/dashboard/users">
                   <p
                     className={`${

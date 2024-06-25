@@ -22,6 +22,7 @@ import AccountDetails from "./pages/dashboard/user/AccountDetails";
 import ManageProducts from "./pages/dashboard/admin/ManageProducts";
 import ManageOrders from "./pages/dashboard/admin/ManageOrders";
 import ManageUser from "./pages/dashboard/admin/ManageUser";
+import ManageReviews from "./pages/dashboard/admin/ManageReviews";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
               <Route path="products" element={<ManageProducts />} />
               <Route path="orders" element={<ManageOrders />} />
               <Route path="users" element={<ManageUser />} />
+              <Route path="reviews" element={<ManageReviews />} />
               <Route path="address" element={<Address />} />
               <Route path="order" element={<Orders />} />
               <Route path="wishlist" element={<WishList />} />
