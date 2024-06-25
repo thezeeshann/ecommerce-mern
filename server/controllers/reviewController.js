@@ -10,7 +10,7 @@ export const getReview = async (req, res) => {
       })
       .populate({
         path: "user",
-        select: "firstName lastName",
+        select: "firstName lastName image",
       })
       .exec();
     return res.status(200).json({
@@ -27,7 +27,7 @@ export const getReview = async (req, res) => {
 
 export const getReviewWithProduct = async (req, res) => {
   try {
-    const productId = req.params.id;
+    const { productId } = req.params;
     const isProductMatch = await ReviewModel.findOne({ product: productId });
     if (!isProductMatch) {
       return res.status(404).json({
@@ -41,7 +41,7 @@ export const getReviewWithProduct = async (req, res) => {
     const reviews = await ReviewModel.find({ product: productId })
       .populate({
         path: "product",
-        select: "productName slug ",
+        select: "productName slug image",
       })
       .populate({
         path: "user",
@@ -70,7 +70,6 @@ export const getReviewWithProduct = async (req, res) => {
 export const addReview = async (req, res) => {
   try {
     const userId = req.existUser.userId;
-    const productId = req.params.id;
 
     if (!userId) {
       return res.status(404).json({
@@ -78,7 +77,7 @@ export const addReview = async (req, res) => {
         message: "User not found",
       });
     }
-    const { title, rating, review } = req.body;
+    const { title, rating, review, productId } = req.body;
 
     if (!title || !rating || !review) {
       return res.status(404).json({
@@ -117,25 +116,19 @@ export const addReview = async (req, res) => {
 };
 
 export const deleteReview = async (req, res) => {
+  const { reviewId } = req.params;
+
   try {
-    const { reviewId } = req.body;
-    if (!reviewId) {
-      return res.status(400).json({
-        success: false,
-        message: "Review not found",
-      });
+    const review = await ReviewModel.findById(reviewId);
+
+    if (!review) {
+      return res.status(404).json({ message: "Review not found" });
     }
 
-    await ReviewModel.findByIdAndDelete({ _id: reviewId });
-
-    return res.status(200).json({
-      success: true,
-      message: "Review deleted",
-    });
+    await ReviewModel.findByIdAndDelete(reviewId);
+    
+    return res.status(200).json({ message: "Review deleted successfully" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message,
-    });
+    return res.status(500).json({ message: "An error occurred", error });
   }
 };

@@ -23,6 +23,8 @@ export const DELETE_PRODUCT_API = "/products"
 // review
 export const GET_SINGLE_REVIEW_API = "/review"
 export const GET_REVIEW_API = "/review"
+export const CREATE_REVIEW_API = "/review/create"
+export const DELETE_REVIEW_API = "/review/delete"
 export const ADD_TO_CART_API = "/cart"
 
 // orders
