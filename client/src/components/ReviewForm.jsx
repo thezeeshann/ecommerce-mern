@@ -1,6 +1,7 @@
 import ReactStars from "react-rating-stars-component";
 import {
   useAddReviewMutation,
+  useGetReviewsQuery,
   useGetSingleReviewQuery,
 } from "../redux/api/reviewApiSlice";
 import { toast } from "react-hot-toast";
@@ -11,6 +12,7 @@ const ReviewForm = ({ productId }) => {
   const { user } = useSelector((state) => state.user);
   const [addReview, { isLoading }] = useAddReviewMutation();
   const { refetch } = useGetSingleReviewQuery(productId);
+  const { refetch: refetchGetReview } = useGetReviewsQuery();
   const [formData, setFormData] = useState({
     title: "",
     review: "",
@@ -48,18 +50,18 @@ const ReviewForm = ({ productId }) => {
       if (!user) {
         return toast.error("you must be logged in");
       } else {
-        const response = await addReview({
-          productId: productId,
-          data: {
-            title,
-            review,
-            rating,
-          },
-        }).unwrap();
-        resetForm();
-        refetch();
+        const data = {
+          title,
+          review,
+          rating,
+          productId,
+        };
+        const response = await addReview(data);
         console.log("REViEW API RESPONSE...", response);
         toast.success("revew added successfully");
+        resetForm();
+        refetch();
+        refetchGetReview();
       }
     } catch (error) {
       console.log("REVIEW API ERROR...", error);

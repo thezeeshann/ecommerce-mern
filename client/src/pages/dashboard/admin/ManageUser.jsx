@@ -33,10 +33,8 @@ import toast from "react-hot-toast";
 
 const ManageUser = () => {
   const { data, refetch } = useGetAllUsersQuery();
-  console.log(data);
   const [isOpen, setIsOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  console.log(userIdToDelete);
   const [deleteUser] = useDeleteUserMutation();
 
   const handleDeleteUser = async (userId) => {
