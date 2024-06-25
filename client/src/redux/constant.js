@@ -21,6 +21,7 @@ export const UPDATE_PRODUCT_API = "/products/update"
 export const DELETE_PRODUCT_API = "/products"
 
 // review
+export const GET_SINGLE_REVIEW_API = "/review"
 export const GET_REVIEW_API = "/review"
 export const ADD_TO_CART_API = "/cart"
 
