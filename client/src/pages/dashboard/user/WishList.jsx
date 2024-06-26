@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 const WishList = () => {
   const dispatch = useDispatch();
   const { wishList } = useSelector((state) => state.wishlist);
-  console.log(wishList);
 
   return (
     <div className="flex flex-col gap-y-4">

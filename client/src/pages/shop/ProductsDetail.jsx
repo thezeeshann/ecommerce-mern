@@ -8,8 +8,6 @@ import ProductCard from "./ProductCard";
 
 const ProductsDetail = ({ sortBy, brandSlug }) => {
   const { data, isLoading, error } = useGetProductsQuery();
-  console.log(data, "data");
-  console.log(brandSlug, "b slug");
   const { data: hignToLowPriceProducts } = useGetHighToLowPriceProductQuery();
   const { data: lowToHighPriceProducts } = useGetLowToHightPriceProductQuery();
 

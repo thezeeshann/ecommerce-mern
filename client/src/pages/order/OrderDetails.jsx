@@ -2,34 +2,42 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useGetSingleOrderQuery } from "../../redux/api/orderApiSlice";
 import Spinner from "../../components/Spinner";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDeleteOrderMutation } from "../../redux/api/orderApiSlice";
-// import useClickOutside from "../../hooks/useClickOutSide";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const OrderDetails = () => {
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const clickRef = useRef();
-  const { data, isLoading } = useGetSingleOrderQuery(orderId);
-  console.log("single order",data)
+  const { data, isLoading, refetch } = useGetSingleOrderQuery(orderId);
+  const [orderIdToDelete, setOrderIdToDelete] = useState(null);
   const [deleteOrder] = useDeleteOrderMutation();
 
   const handleDeleteOrder = async (OId) => {
     try {
       const response = await deleteOrder(OId);
       console.log("DELETE ORDER API RESPONSE", response);
+      refetch();
       navigate("/dashboard/order");
     } catch (error) {
       console.log("DELETE ORDER API ERROR", error);
     }
   };
 
-  const handleIsOpen = () => {
-    setIsOpen((prev) => !prev);
+  const handleOpenDialog = (orderId) => {
+    setOrderIdToDelete(orderId);
+    setIsOpen(true);
   };
-
-  // useClickOutside(clickRef, handleIsOpen);
 
   return (
     <section className=" flex flex-col w-[80%] mx-auto gap-y-2 py-6 ">
@@ -72,29 +80,12 @@ const OrderDetails = () => {
               </div>
               <div className="relative">
                 <button
-                  ref={clickRef}
-                  onClick={() => handleIsOpen()}
+                  onClick={() => handleOpenDialog(data?.data?.orderId)}
                   type="submit"
                   className="text-xs border-[1px] border-gray-200 px-8 py-2 hover:bg-blue-500 hover:text-white"
                 >
                   Cancel Order
                 </button>
-                {isOpen && (
-                  <div className="absolute z-10 py-3 bg-white rounded shadow-md">
-                    <div className="flex flex-col items-center justify-center gap-y-2 ">
-                      <p className="text-sm text-center">
-                        Are you sure you want to cancel
-                      </p>
-                      <button
-                        onClick={() => handleDeleteOrder(data?.data?.orderId)}
-                        type="submit"
-                        className=" text-xs border-[1px] bg-red-500 text-white font-semibold border-gray-200 px-2 py-2 hover:bg-red-600 hover:text-white"
-                      >
-                        Confirm cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
             <div className="flex flex-row items-center justify-between pt-5 gap-x-3">
@@ -124,9 +115,7 @@ const OrderDetails = () => {
                       </div>
                       <div className="flex flex-col items-center ">
                         <p className="text-sm font-semibold">Total Price</p>
-                        <p className="text-sm">
-                          $ {data?.data?.total}
-                        </p>
+                        <p className="text-sm">$ {data?.data?.total}</p>
                       </div>
                       <div className="flex flex-col items-center">
                         <p className="text-sm font-semibold">Status</p>
@@ -158,15 +147,33 @@ const OrderDetails = () => {
                 <hr />
                 <div className="flex flex-row items-center justify-between gap-y-3">
                   <span className="text-sm">Total</span>{" "}
-                  <span className="text-sm">
-                    ${data?.data?.total}
-                  </span>
+                  <span className="text-sm">${data?.data?.total}</span>
                 </div>
               </div>
             </div>
           </>
         )}
       </div>
+
+      <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+        <AlertDialogTrigger asChild></AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure you want to delete!
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleDeleteOrder(orderIdToDelete)}
+              className="bg-red-500/80 hover:bg-red-500"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </section>
   );
 };

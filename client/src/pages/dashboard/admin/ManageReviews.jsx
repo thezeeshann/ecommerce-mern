@@ -35,9 +35,7 @@ import { FaStar } from "react-icons/fa6";
 const ManageReviews = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [reviewIdToDelete, setReviewIdToDelete] = useState(null);
-  console.log(reviewIdToDelete);
   const { data, refetch } = useGetReviewsQuery();
-  console.log(data);
   const [deleteReview] = useDeleteReviewMutation();
 
   const openDeleteDialog = (reviewId) => {

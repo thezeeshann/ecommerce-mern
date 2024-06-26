@@ -62,7 +62,7 @@ const Address = () => {
         </>
       ) : (
         <>
-          <div className="flex flex-col justify-center p-5 mt-5 gap-y-5">
+          <div className="flex flex-col justify-center gap-y-5">
             <p className="text-sm font-semibold ">Add you address</p>
             <form onSubmit={handleUpdateProfile}>
               <div className="flex flex-col w-full gap-y-2">

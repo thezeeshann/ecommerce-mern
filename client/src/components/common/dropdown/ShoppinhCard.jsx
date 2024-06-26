@@ -12,7 +12,6 @@ const ShoppinhCard = ({ open, setOpen }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { cart } = useSelector((state) => state.cart);
-  console.log(cart, "cart");
   const { user } = useSelector((state) => state.user);
   const [createOrder] = useCreateOrderMutation();
   let totalPrice = 0;

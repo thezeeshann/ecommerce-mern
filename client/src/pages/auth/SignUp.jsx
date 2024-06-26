@@ -7,15 +7,12 @@ import registerImg from "../../assets/login_register/undraw_authentication_re_sv
 import { useRegisterMutation } from "../../redux/api/authApiSlice";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { ACCOUNT_TYPE } from "../../utils/constant";
-import Tab from "../../components/Tab";
 
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [role, setRole] = useState(ACCOUNT_TYPE.USER);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -45,7 +42,6 @@ const SignUp = () => {
         email,
         password,
         confirmPassword,
-        role,
       });
       if (response.error) {
         toast.error(response.error.data.message);
@@ -68,19 +64,6 @@ const SignUp = () => {
     dispatch(setLoading(false));
     toast.dismiss(toastId);
   };
-
-  const tabData = [
-    {
-      id: 1,
-      tabName: "User",
-      type: ACCOUNT_TYPE.USER,
-    },
-    {
-      id: 2,
-      tabName: "Admin",
-      type: ACCOUNT_TYPE.ADMIN,
-    },
-  ];
 
   return (
     <section className="w-[80%] mx-auto mt-7 mb-10">
@@ -160,7 +143,7 @@ const SignUp = () => {
                   Confirm Password
                 </label>
                 <input
-                  type={showPassword === true ? "text" : "password"}
+                  type={showConfirmPassword === true ? "text" : "password"}
                   name="confirmPassword"
                   value={confirmPassword}
                   onChange={handleChange}
@@ -178,10 +161,6 @@ const SignUp = () => {
                   )}
                 </span>
               </div>
-            </div>
-
-            <div className="mt-3 w-max border-[1px] border-gray-200">
-              <Tab tabData={tabData} field={role} setField={setRole} />
             </div>
           </div>
           <div className="flex items-center justify-center w-3/6 ">
