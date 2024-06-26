@@ -109,7 +109,6 @@ export const add = async (req, res) => {
 
       try {
         await existingUserCart.save();
-        console.log("7");
       } catch (saveError) {
         console.error("Error saving the cart:", saveError);
         return res.status(500).json({

@@ -19,14 +19,12 @@ export const updateProfile = async (req, res) => {
         message: "User's additional Details not exist",
       });
     }
-    console.log(profile);
     if (!userDetails) {
       return res.status(404).json({
         success: false,
         message: "User does not exist",
       });
     }
-    console.log("4");
     profile.address = address;
     profile.city = city;
     profile.state = state;
@@ -34,7 +32,6 @@ export const updateProfile = async (req, res) => {
     profile.zipCode = zipCode;
     profile.status = true;
     await profile.save();
-    console.log("6");
     const updatedUserDetails = await UserModel.findById(userId)
       .populate("additionalDetails")
       .exec();

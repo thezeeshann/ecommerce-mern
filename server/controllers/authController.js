@@ -8,9 +8,9 @@ dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, confirmPassword, role } =
+    const { firstName, lastName, email, password, confirmPassword } =
       req.body;
-    if (!firstName || !lastName || !email || !password || !role) {
+    if (!firstName || !lastName || !email || !password) {
       return res.status(404).json({
         success: false,
         message: "All fields are required",
@@ -54,7 +54,6 @@ export const register = async (req, res) => {
       firstName: firstName,
       lastName: lastName,
       email: email,
-      role: role,
       password: hashPassword,
       additionalDetails: profileInfo._id,
       image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName}%20${lastName}`,

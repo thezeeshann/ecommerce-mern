@@ -17,6 +17,6 @@ router.post("/", authenticateJwt, createOrder);
 router.get("/:orderId", authenticateJwt, getSingleOrder);
 router.get("/:orderId", authenticateJwt, getSingleOrder);
 router.put("/", authenticateJwt, isAdmin, updateOrderStatus);
-router.delete("/:orderId", authenticateJwt, isAdmin, deleteOrder);
+router.delete("/:orderId", authenticateJwt, deleteOrder);
 
 export default router;
