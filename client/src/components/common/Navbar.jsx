@@ -15,23 +15,13 @@ import {
   SheetDescription,
   SheetHeader,
 } from "@/components/ui/sheet";
-
-// import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-// import { useGetCartsQuery } from "../../redux/api/cartApiSlice";
+import Search from "./Search";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
   const { cart } = useSelector((state) => state.cart);
-  // const { user } = useSelector((state) => state.user);
-  // const { data } = useGetCartsQuery();
-
-  // const currentUserCart =
-  //   data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
-  // const totalProducts = currentUserCart.reduce(
-  //   (acc, cart) => acc + cart.items.length,
-  //   0
-  // );
+  
 
   return (
     <header className="w-full font-Poppins">
@@ -78,29 +68,10 @@ const Navbar = () => {
           </Link>
         </div>
         {/* search input */}
-        <div className="border-[1px] border-gray-200 w-2/5 py-1 px-3 rounded-sm">
-          <input
-            type="text"
-            name=""
-            id=""
-            placeholder="Search products"
-            className="text-base outline-none placeholder:text-gray-500 focus:border-none"
-          />
-        </div>
+        <Search/>
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
-            {/* {totalProducts > 0 && (
-              <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
-                {user ? `${totalProducts}` : ""}
-              </span>
-            )}
-
-            <RiShoppingBagLine
-              size={"1.5rem"}
-              className="cursor-pointer"
-              onClick={() => setOpen(true)}
-            /> */}
             {cart.length > 0 && (
               <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
                 {cart.length}
