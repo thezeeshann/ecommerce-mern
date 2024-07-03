@@ -36,6 +36,7 @@ function App() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/shop/product/:slug" element={<SingleProduct />} />
           <Route path="/shop/brand/:slug" element={<Shop />} />
+          <Route path="/shop/category/:categorySlug" element={<Shop />} />
           <Route path="/category" element={<ProductsCategory />} />
           <Route path="*" element={<Error />} />
           <Route element={<PrivateRoute />}>

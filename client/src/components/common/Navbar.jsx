@@ -16,12 +16,13 @@ import {
   SheetHeader,
 } from "@/components/ui/sheet";
 import Search from "./Search";
+import { useGetCategoryQuery } from "@/redux/api/categoryApiSlice";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState(false);
   const { cart } = useSelector((state) => state.cart);
-  
+  const { data } = useGetCategoryQuery();
 
   return (
     <header className="w-full font-Poppins">
@@ -68,7 +69,7 @@ const Navbar = () => {
           </Link>
         </div>
         {/* search input */}
-        <Search/>
+        <Search />
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
@@ -106,11 +107,15 @@ const Navbar = () => {
               <div className="py-5">
                 <hr />
                 <p className="mt-8 text-xl font-medium">SHOP BY CATEGORY</p>
-                <div className="flex flex-col pt-5 ">
-                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Shoes</p>
-                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Bags</p>
-                  <p className="hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">Perfumes</p>
-                </div>
+                {data?.data?.map((category) => (
+                  <div key={category._id} className="flex flex-col pt-5 ">
+                    <Link to={`/shop/category/${category.slug}`} onClick={()=>setOpenCategory(false)}>
+                      <p className="capitalize hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">
+                        {category.name}
+                      </p>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </SheetDescription>
           </SheetHeader>

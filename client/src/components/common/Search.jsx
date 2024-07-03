@@ -1,10 +1,13 @@
+import { useDebounce } from "@/hooks/usedebounce";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Search = () => {
+
   const [results, setResults] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedValue = useDebounce(searchQuery,1000)
 
   const fetchData = async (value) => {
     try {
@@ -31,13 +34,22 @@ const Search = () => {
 
   const handleChange = (value) => {
     setSearchQuery(value);
-    fetchData(value);
   };
 
   const clearSearch = () => {
     setSearchQuery("");
     setResults([]);
+    
   };
+
+
+  useEffect(()=>{
+    if(debouncedValue){
+      fetchData(debouncedValue)
+    }else{
+      setResults([])
+    }
+  },[debouncedValue])
 
   return (
     <div className="relative flex flex-col w-2/5 ">

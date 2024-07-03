@@ -1,10 +1,8 @@
-import { PiStarThin } from "react-icons/pi";
 import { FaHeart } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ReactStars from "react-rating-stars-component";
 import {
   addToWishList,
   removeFromWishList,

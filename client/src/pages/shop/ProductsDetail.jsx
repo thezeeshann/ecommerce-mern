@@ -5,11 +5,18 @@ import {
 } from "../../redux/api/productApiSlice";
 import Spinner from "../../components/Spinner";
 import ProductCard from "./ProductCard";
+import { useLocation } from "react-router-dom";
+import Category from "./Category";
+import { useGetCategoryQuery } from "@/redux/api/categoryApiSlice";
 
 const ProductsDetail = ({ sortBy, brandSlug }) => {
   const { data, isLoading, error } = useGetProductsQuery();
+  const {data:categoryData} = useGetCategoryQuery()
+  console.log(categoryData);
   const { data: hignToLowPriceProducts } = useGetHighToLowPriceProductQuery();
   const { data: lowToHighPriceProducts } = useGetLowToHightPriceProductQuery();
+  const location = useLocation();
+  console.log(location)
 
   const getProductList = () => {
     switch (sortBy) {
@@ -41,13 +48,17 @@ const ProductsDetail = ({ sortBy, brandSlug }) => {
           ) : (
             <>
               <div className="relative flex flex-row flex-wrap w-full gap-x-3 gap-y-3">
-                {products
-                  ?.filter((product) =>
-                    brandSlug ? product.brand.slug === brandSlug : true
-                  )
-                  .map((product) => (
-                    <ProductCard key={product._id} product={product} />
-                  ))}
+                {location.pathname === `/shop/category/${categoryData.data?.map((c)=>c.slug)}` ? (
+                  <Category />
+                ) : (
+                  products
+                    ?.filter((product) =>
+                      brandSlug ? product.brand.slug === brandSlug : true
+                    )
+                    .map((product) => (
+                      <ProductCard key={product._id} product={product} />
+                    ))
+                )}
               </div>
             </>
           )}
