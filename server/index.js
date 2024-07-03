@@ -9,6 +9,7 @@ import BrandRouter from "./routes/brandRoute.js";
 import productRouter from "./routes/productRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import cartRouter from "./routes/cartRoutes.js";
+import CategoryRouter from "./routes/categoryRoute.js"
 import cloudinaryConnect from "./config/cloudinary.js";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
@@ -43,6 +44,7 @@ app.use("/api/v1/review", ReviewRouter);
 app.use("/api/v1/cart", cartRouter);
 app.use("/api/v1/order", orderRouter);
 app.use("/api/v1/brand", BrandRouter);
+app.use("/api/v1/category", CategoryRouter);
 
 app.get("/", (req, res) => {
   return res.json({
