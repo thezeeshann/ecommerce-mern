@@ -18,10 +18,10 @@ const CategorySchema = new mongoose.Schema({
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
+      default: null,
     },
   ],
 });
-
 
 CategorySchema.pre("save", function (next) {
   if (!this.isModified("name")) {
