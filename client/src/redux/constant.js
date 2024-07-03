@@ -34,3 +34,6 @@ export const GET_ORDER_ADMIN_API = "/order/admin"
 export const GET_SINGLE_ORDER_API = "/order"
 export const UPDATE_ORDER_API = "/order"
 export const DELETE_ORDER_API = "/order"
+
+// category
+export const GET_CATEGORY_API = "/category"
