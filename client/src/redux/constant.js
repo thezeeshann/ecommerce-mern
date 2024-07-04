@@ -1,5 +1,6 @@
 export const BASE_URL = import.meta.env.VITE_APP_BASE_URL
 
+// auth
 export const SIGNUP_API = "/auth/register"
 export const LOGIN_API = "/auth/login"
 export const CHANGE_PASSWORD_API = "/auth/changePassword"
@@ -37,3 +38,7 @@ export const DELETE_ORDER_API = "/order"
 
 // category
 export const GET_CATEGORY_API = "/category"
+
+
+// brands 
+export const GET_BRANDS_API = "/brand"
