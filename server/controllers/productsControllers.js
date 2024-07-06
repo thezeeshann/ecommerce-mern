@@ -77,12 +77,18 @@ export const createProducts = async (req, res) => {
 
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await ProductModel.find({}).sort({ created: -1 }).populate({
-      path:"brand",
-      select:"name slug isActive"
-    });
+    const products = await ProductModel.find({})
+      .sort({ created: -1 })
+      .populate({
+        path: "brand",
+        select: "name slug isActive",
+      });
+
+    const totalProducts = await ProductModel.countDocuments();
+
     return res.status(200).json({
       success: true,
+      total: totalProducts,
       products,
     });
   } catch (error) {
@@ -96,9 +102,11 @@ export const getAllProducts = async (req, res) => {
 export const getSingleProduct = async (req, res) => {
   try {
     const productSlug = req.params.slug;
-    const singleProduct = await ProductModel.findOne({ slug: productSlug }).populate({
-      path:"brand",
-      select:"name slug isActive"
+    const singleProduct = await ProductModel.findOne({
+      slug: productSlug,
+    }).populate({
+      path: "brand",
+      select: "name slug isActive",
     });
     return res.status(200).json({
       success: true,
