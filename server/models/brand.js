@@ -10,6 +10,11 @@ const BrandSchema = new mongoose.Schema({
     type: String,
     unique: true,
   },
+  description: {
+    type: String,
+    trim: true,
+    default: null,
+  },
   isActive: {
     type: Boolean,
     default: true,
