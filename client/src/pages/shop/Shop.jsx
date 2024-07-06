@@ -12,10 +12,18 @@ import {
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
 import { useParams } from "react-router-dom";
+import { useGetProductsQuery } from "@/redux/api/productApiSlice";
 
 const Shop = () => {
-  const [sortBy, setSortBy] = useState("new");
   const { slug } = useParams();
+  const { categorySlug } = useParams();
+  const [sortBy, setSortBy] = useState("new");
+  const [rating, setRating] = useState(0);
+  const { data } = useGetProductsQuery();
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+  };
 
   return (
     <section className=" bg-[#F6F7F8] py-6">
@@ -38,8 +46,8 @@ const Shop = () => {
             <div className="p-3 border-[1px] ">
               <ReactStars
                 count={5}
-                // onChange={handleRatingChange}
-                // value={rating}
+                onChange={handleRatingChange}
+                value={rating}
                 classNames=" mx-auto space-x-2"
                 size={24}
                 isHalf={true}
@@ -56,7 +64,7 @@ const Shop = () => {
           {/* short by price */}
           <div className="flex flex-row items-center justify-between w-full px-3 py-1.5 bg-white border-[1px]">
             <p className="w-[60%] text-base">
-              Showing: 1-10 products of 12 products
+              Showing: 1-{data?.total} products of {data?.total} products
             </p>
             <div className="w-[40%] flex flex-row gap-x-2 items-center justify-end ">
               <p>Short By</p>
@@ -82,7 +90,12 @@ const Shop = () => {
 
           {/* products list */}
           <div className="mt-5">
-            <ProductsDetail sortBy={sortBy} brandSlug={slug} />
+            <ProductsDetail
+              sortBy={sortBy}
+              brandSlug={slug}
+              rating={rating}
+              categorySlug={categorySlug}
+            />
           </div>
 
           <div className="mt-5">

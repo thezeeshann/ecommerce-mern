@@ -9,14 +9,16 @@ import { useLocation } from "react-router-dom";
 import Category from "./Category";
 import { useGetCategoryQuery } from "@/redux/api/categoryApiSlice";
 
-const ProductsDetail = ({ sortBy, brandSlug }) => {
+const ProductsDetail = ({ sortBy, brandSlug, rating, categorySlug }) => {
+  const location = useLocation();
   const { data, isLoading, error } = useGetProductsQuery();
-  const {data:categoryData} = useGetCategoryQuery()
-  console.log(categoryData);
+  const {
+    data: categoryData,
+    isLoading: categoryLoading,
+    error: categoryError,
+  } = useGetCategoryQuery();
   const { data: hignToLowPriceProducts } = useGetHighToLowPriceProductQuery();
   const { data: lowToHighPriceProducts } = useGetLowToHightPriceProductQuery();
-  const location = useLocation();
-  console.log(location)
 
   const getProductList = () => {
     switch (sortBy) {
@@ -31,33 +33,44 @@ const ProductsDetail = ({ sortBy, brandSlug }) => {
 
   const products = getProductList();
 
+  const filteredProducts = products?.filter((product) =>
+    brandSlug ? product.brand.slug === brandSlug : true
+  );
+
   return (
-    <section>
-      {isLoading === true ? (
+    <section className="">
+      {isLoading === true || categoryLoading === true ? (
         <div className="flex items-center justify-center">
           <Spinner />
         </div>
       ) : (
         <>
-          {error ? (
+          {error || categoryError ? (
             <div>
               <p className="text-center">
-                Something went wrong while fetching products data
+                Something went wrong while fetching the data
               </p>
             </div>
           ) : (
             <>
-              <div className="relative flex flex-row flex-wrap w-full gap-x-3 gap-y-3">
-                {location.pathname === `/shop/category/${categoryData.data?.map((c)=>c.slug)}` ? (
-                  <Category />
+              <div className="relative flex flex-row flex-wrap items-center justify-start gap-x-[10px] gap-y-3">
+                {location.pathname === `/shop/category/${categorySlug}` ? (
+                  <Category
+                    categoryData={categoryData}
+                    categorySlug={categorySlug}
+                  />
+                ) : filteredProducts && filteredProducts.length > 0 ? (
+                  filteredProducts.map((product) => (
+                    <ProductCard
+                      rating={rating}
+                      key={product._id}
+                      product={product}
+                    />
+                  ))
                 ) : (
-                  products
-                    ?.filter((product) =>
-                      brandSlug ? product.brand.slug === brandSlug : true
-                    )
-                    .map((product) => (
-                      <ProductCard key={product._id} product={product} />
-                    ))
+                  <div className="flex items-center justify-center mx-auto w-30">
+                    <p className="text-sm font-medium">products not found.</p>
+                  </div>
                 )}
               </div>
             </>

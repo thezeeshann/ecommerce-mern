@@ -108,9 +108,9 @@ const Navbar = () => {
                 <hr />
                 <p className="mt-8 text-xl font-medium">SHOP BY CATEGORY</p>
                 {data?.data?.map((category) => (
-                  <div key={category._id} className="flex flex-col pt-5 ">
+                  <div key={category._id} className="flex flex-col pt-3 ">
                     <Link to={`/shop/category/${category.slug}`} onClick={()=>setOpenCategory(false)}>
-                      <p className="capitalize hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 p-2 font-medium">
+                      <p className="capitalize hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 px-2 py-[6px] font-medium">
                         {category.name}
                       </p>
                     </Link>

@@ -9,29 +9,32 @@ import {
 } from "@/redux/features/wishlistSlice";
 import toast from "react-hot-toast";
 import { useGetSingleReviewQuery } from "@/redux/api/reviewApiSlice";
+import { avarageRating } from "@/utils/averageRating";
+import { useProductInTheWishlist } from "@/hooks/productInWishlist";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product,rating }) => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
   const { data } = useGetSingleReviewQuery(product._id);
-  const { wishList } = useSelector((state) => state.wishlist);
-  const isInWishList = wishList.some((item) => item._id === product._id);
+  const isInWishList = useProductInTheWishlist(product._id);
+  const averageRating = avarageRating(data);
 
-  const totalRatings = data?.data?.reduce(
-    (acc, review) => acc + review.rating,
-    0
-  );
-  const averageRating =
-    totalRatings > 0 && Math.round(totalRatings / data?.totalReviews);
+
+  if(averageRating === rating){
+    return(
+      <p>{rating}</p>
+    )
+  }
 
   return (
     <div
       key={product._id}
       className="bg-white shadow-sm max-w-[24%] cursor-pointer  p-2"
     >
-      <div className="absolute m-1">
+      <div className="absolute p-[2px]  m-1 bg-white rounded-full ">
         {isInWishList ? (
           <FaHeart
-            size={"1.5rem"}
+            size={22}
             className="text-red-500"
             onClick={() => {
               dispatch(removeFromWishList(product._id));
@@ -40,11 +43,15 @@ const ProductCard = ({ product }) => {
           />
         ) : (
           <CiHeart
-            size={"2rem"}
+            size={25}
             className="text-gray-500 "
             onClick={() => {
-              dispatch(addToWishList(product));
-              toast.success("Product added to your wishlist!");
+              if (user) {
+                dispatch(addToWishList(product));
+                toast.success("Product added to your wishlist!");
+              } else {
+                toast.error("Please login to wishlist a product");
+              }
             }}
           />
         )}
@@ -59,7 +66,7 @@ const ProductCard = ({ product }) => {
       </Link>
       <div className="flex flex-col p-2">
         <p className="font-medium text-blue-500">{product.productName}</p>
-        <p>
+        <p className="capitalize">
           <span className=" text-neutral-500">By </span>
           {product?.brand?.name}
         </p>
