@@ -18,11 +18,24 @@ const Shop = () => {
   const { slug } = useParams();
   const { categorySlug } = useParams();
   const [sortBy, setSortBy] = useState("new");
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(null);
   const { data } = useGetProductsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 4;
+  const totalNumberOfProducts = data?.total || 0;
+  const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
+
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
+  };
+
+  const handlePageChange = (direction) => {
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === "previous") {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
 
   return (
@@ -50,7 +63,7 @@ const Shop = () => {
                 value={rating}
                 classNames=" mx-auto space-x-2"
                 size={24}
-                isHalf={true}
+                isHalf={false}
                 emptyIcon={<i className="far fa-star"></i>}
                 halfIcon={<i className="fa fa-star-half-alt"></i>}
                 fullIcon={<i className="fa fa-star"></i>}
@@ -91,6 +104,7 @@ const Shop = () => {
           {/* products list */}
           <div className="mt-5">
             <ProductsDetail
+              currentPage={currentPage}
               sortBy={sortBy}
               brandSlug={slug}
               rating={rating}
@@ -99,7 +113,11 @@ const Shop = () => {
           </div>
 
           <div className="mt-5">
-            <ProductsPagination />
+            <ProductsPagination
+              currentPage={currentPage}
+              totalNumberOfPages={totalNumberOfPages}
+              handlePageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

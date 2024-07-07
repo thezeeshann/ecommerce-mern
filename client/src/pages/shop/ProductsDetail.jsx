@@ -9,7 +9,13 @@ import { useLocation } from "react-router-dom";
 import Category from "./Category";
 import { useGetCategoryQuery } from "@/redux/api/categoryApiSlice";
 
-const ProductsDetail = ({ sortBy, brandSlug, rating, categorySlug }) => {
+const ProductsDetail = ({
+  sortBy,
+  brandSlug,
+  rating,
+  categorySlug,
+  currentPage,
+}) => {
   const location = useLocation();
   const { data, isLoading, error } = useGetProductsQuery();
   const {
@@ -52,7 +58,7 @@ const ProductsDetail = ({ sortBy, brandSlug, rating, categorySlug }) => {
               </p>
             </div>
           ) : (
-            <>
+            <> 
               <div className="relative flex flex-row flex-wrap items-center justify-start gap-x-[10px] gap-y-3">
                 {location.pathname === `/shop/category/${categorySlug}` ? (
                   <Category
@@ -60,13 +66,15 @@ const ProductsDetail = ({ sortBy, brandSlug, rating, categorySlug }) => {
                     categorySlug={categorySlug}
                   />
                 ) : filteredProducts && filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
-                    <ProductCard
-                      rating={rating}
-                      key={product._id}
-                      product={product}
-                    />
-                  ))
+                  filteredProducts
+                    .slice(currentPage * 4 - 4, currentPage * 4)
+                    .map((product) => (
+                      <ProductCard
+                        rating={rating}
+                        key={product._id}
+                        product={product}
+                      />
+                    ))
                 ) : (
                   <div className="flex items-center justify-center mx-auto w-30">
                     <p className="text-sm font-medium">products not found.</p>

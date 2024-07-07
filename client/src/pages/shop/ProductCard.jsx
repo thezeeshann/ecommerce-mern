@@ -19,11 +19,9 @@ const ProductCard = ({ product,rating }) => {
   const isInWishList = useProductInTheWishlist(product._id);
   const averageRating = avarageRating(data);
 
-
-  if(averageRating === rating){
-    return(
-      <p>{rating}</p>
-    )
+  
+  if (rating !== null && averageRating !== rating) {
+    return null;
   }
 
   return (
