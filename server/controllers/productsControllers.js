@@ -81,7 +81,7 @@ export const getAllProducts = async (req, res) => {
       .sort({ created: -1 })
       .populate({
         path: "brand",
-        select: "name slug isActive",
+        select: "name description slug isActive",
       });
 
     const totalProducts = await ProductModel.countDocuments();

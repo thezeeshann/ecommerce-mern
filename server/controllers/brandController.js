@@ -85,20 +85,26 @@ export const updateBrand = async (req, res) => {
 
 export const deleteBrand = async (req, res) => {
   try {
-    const { brandId } = req.params;
+    const { brandId } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(brandId)) {
-      return res.status(400).json({ message: "Invalid brand ID" });
+    const brand = await BrandModel.findById(brandId);
+    if (!brand) {
+      return res.status(404).json({
+        success: false,
+        message: "Brand not found",
+      });
     }
 
-    const deletedBrand = await BrandModel.findByIdAndDelete(brandId);
+    await BrandModel.findByIdAndDelete(brand);
 
-    if (!deletedBrand) {
-      return res.status(404).json({ message: "Brand not found" });
-    }
-
-    res.status(200).json({ message: "Brand deleted successfully" });
+    return res.status(200).json({
+      success: true,
+      message: "Brand deleted successfully",
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
