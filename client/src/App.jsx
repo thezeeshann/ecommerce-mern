@@ -23,6 +23,7 @@ import ManageProducts from "./pages/dashboard/admin/ManageProducts";
 import ManageOrders from "./pages/dashboard/admin/ManageOrders";
 import ManageUser from "./pages/dashboard/admin/ManageUser";
 import ManageReviews from "./pages/dashboard/admin/ManageReviews";
+import ManageBrand from "./pages/dashboard/admin/ManageBrand";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="security" element={<ChangePassword />} />
               <Route path="products" element={<ManageProducts />} />
               <Route path="orders" element={<ManageOrders />} />
+              <Route path="brand" element={<ManageBrand />} />
               <Route path="users" element={<ManageUser />} />
               <Route path="reviews" element={<ManageReviews />} />
               <Route path="address" element={<Address />} />
