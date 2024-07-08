@@ -42,3 +42,5 @@ export const GET_CATEGORY_API = "/category"
 
 // brands 
 export const GET_BRANDS_API = "/brand"
+export const CREATE_BRANDS_API = "/brand/create"
+export const DELETE_BRANDS_API = "/brand/delete"
