@@ -19,12 +19,14 @@ const ShoppinhCard = ({ open, setOpen }) => {
     totalPrice += (product.price || 0) * (product.quantity || 0);
   });
 
+  const currentUserCart = cart.filter((product) => product.userId === user?._id);
+
   const orderProduct = async () => {
     try {
       const data = {
         user: user._id,
         total: totalPrice,
-        cart: cart,
+        cart: currentUserCart,
       };
       const response = await createOrder(data);
       if (response.error) {
@@ -41,9 +43,6 @@ const ShoppinhCard = ({ open, setOpen }) => {
     }
   };
 
-  // const currentUserCart =
-  //   data?.data?.filter((cart) => cart.user?._id === user?._id) || [];
-
   return (
     <>
       <Sheet open={open} onOpenChange={setOpen}>
@@ -52,7 +51,7 @@ const ShoppinhCard = ({ open, setOpen }) => {
 
           <div className="mt-5 ">
             <hr />
-            {cart.length === 0 ? (
+            {currentUserCart.length === 0? (
               <div className="flex flex-col items-center justify-center min-h-screen gap-y-2">
                 <div>
                   {" "}

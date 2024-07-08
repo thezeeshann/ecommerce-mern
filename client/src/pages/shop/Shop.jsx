@@ -10,9 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { Slider } from "@/components/ui/slider";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useGetProductsQuery } from "@/redux/api/productApiSlice";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { useGetCategoryQuery } from "@/redux/api/categoryApiSlice";
 
 const Shop = () => {
   const { slug } = useParams();
@@ -21,10 +28,10 @@ const Shop = () => {
   const [rating, setRating] = useState(null);
   const { data } = useGetProductsQuery();
   const [currentPage, setCurrentPage] = useState(1);
+  const { data: categoryData } = useGetCategoryQuery();
   const productsPerPage = 4;
   const totalNumberOfProducts = data?.total || 0;
   const totalNumberOfPages = Math.ceil(totalNumberOfProducts / productsPerPage);
-
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -43,12 +50,26 @@ const Shop = () => {
       <div className="flex flex-row w-[80%] mx-auto gap-x-6 ">
         {/* filter products */}
         <aside className="w-[20%] flex flex-col h-min gap-y-5">
-          <div className="flex flex-col bg-white ">
-            <div className="p-3 bg-[#F6F7F8] border-[1px]">
-              <p className="text-lg font-medium">Price</p>
-            </div>
-            <div className="p-3 py-6 border-[1px]">
-              <Slider defaultValue={[33]} max={100} step={1} />
+          <div className="flex flex-col bg-white">
+            <div className=" bg-[#F6F7F8] border-[1px] ">
+              <Accordion type="single" collapsible className="">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="px-2">
+                    <p className="text-lg font-medium ">Category</p>
+                  </AccordionTrigger>
+                  <AccordionContent className="py-2 bg-white">
+                    {categoryData?.data?.map((category) => (
+                      <div key={category._id} className="">
+                        <Link to={`/shop/category/${category.slug}`}>
+                          <p className="capitalize hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 px-2 py-[6px] font-medium">
+                            {category.name}
+                          </p>
+                        </Link>
+                      </div>
+                    ))}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </div>
 

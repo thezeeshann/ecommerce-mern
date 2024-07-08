@@ -23,6 +23,8 @@ const Navbar = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { data } = useGetCategoryQuery();
+  const {user} = useSelector((state)=>state.user)
+  const currentUserCart = cart.filter((product) => product.userId === user?._id);
 
   return (
     <header className="w-full font-Poppins">
@@ -73,9 +75,9 @@ const Navbar = () => {
         {/* nav */}
         <div className="flex flex-row items-center gap-x-5 ">
           <div className="relative">
-            {cart.length > 0 && (
+            {currentUserCart.length > 0 && (
               <span className="bg-blue-500 w-auto -top-1 -right-2 rounded-full px-2 py-[1px] absolute text-[10px] text-white">
-                {cart.length}
+                {currentUserCart.length}
               </span>
             )}
             <RiShoppingBagLine
@@ -109,7 +111,10 @@ const Navbar = () => {
                 <p className="mt-8 text-xl font-medium">SHOP BY CATEGORY</p>
                 {data?.data?.map((category) => (
                   <div key={category._id} className="flex flex-col pt-3 ">
-                    <Link to={`/shop/category/${category.slug}`} onClick={()=>setOpenCategory(false)}>
+                    <Link
+                      to={`/shop/category/${category.slug}`}
+                      onClick={() => setOpenCategory(false)}
+                    >
                       <p className="capitalize hover:bg-[#F6F7F8] cursor-pointer hover:text-blue-500 px-2 py-[6px] font-medium">
                         {category.name}
                       </p>

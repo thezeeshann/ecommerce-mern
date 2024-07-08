@@ -16,6 +16,7 @@ const SingleProduct = () => {
   const { slug } = useParams();
   const { data, isLoading } = useGetSingleProductQuery(slug);
   const { cart } = useSelector((state) => state.cart);
+  const {user} = useSelector((state)=>state.user)
 
   const handleQuantityChange = (e) => {
     setQuantity(parseInt(e.target.value));
@@ -99,6 +100,7 @@ const SingleProduct = () => {
                           addToCart({
                             product: data.singleProduct,
                             quantity: productQuantity,
+                            userId:user._id
                           })
                         )
                       }
