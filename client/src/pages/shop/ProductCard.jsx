@@ -9,7 +9,7 @@ import {
 } from "@/redux/features/wishlistSlice";
 import toast from "react-hot-toast";
 import { useGetSingleReviewQuery } from "@/redux/api/reviewApiSlice";
-import { avarageRating } from "@/utils/averageRating";
+import { avarageRating } from "@/lib/averageRating";
 import { useProductInTheWishlist } from "@/hooks/productInWishlist";
 
 const ProductCard = ({ product,rating }) => {

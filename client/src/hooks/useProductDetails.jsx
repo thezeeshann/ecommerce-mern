@@ -1,6 +1,6 @@
 import { useGetSingleReviewQuery } from "@/redux/api/reviewApiSlice";
 import { useProductInTheWishlist } from "@/hooks/productInWishlist";
-import { avarageRating } from "@/utils/averageRating";
+import { avarageRating } from "@/lib/averageRating";
 
 const useProductDetails = (productId) => {
   const { data: singleReview } = useGetSingleReviewQuery(productId);

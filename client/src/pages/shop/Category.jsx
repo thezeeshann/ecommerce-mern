@@ -7,7 +7,7 @@ import {
 } from "@/redux/features/wishlistSlice";
 import { CiHeart } from "react-icons/ci";
 import { Link } from "react-router-dom";
-import { avarageRating } from "@/utils/averageRating";
+import { avarageRating } from "@/lib/averageRating";
 import { useGetSingleReviewQuery } from "@/redux/api/reviewApiSlice";
 import { useProductInTheWishlist } from "@/hooks/productInWishlist";
 

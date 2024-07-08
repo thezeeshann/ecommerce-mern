@@ -40,7 +40,7 @@ import {
 } from "@/redux/api/orderApiSlice";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { CART_ITEM_STATUS } from "@/utils/constant";
+import { CART_ITEM_STATUS } from "@/lib/constant";
 import { AlertDialogDescription } from "@radix-ui/react-alert-dialog";
 
 const ManageOrders = () => {
