@@ -52,6 +52,18 @@ const Dashboard = () => {
                   </p>
                 </Link>
                 <hr />
+                <Link to="/dashboard/brand">
+                  <p
+                    className={`${
+                      location.pathname === "/dashboard/brand"
+                        ? "bg-white"
+                        : "bg-[#F8F9FA]"
+                    } cursor-pointer py-2`}
+                  >
+                    Manage Brand
+                  </p>
+                </Link>
+                <hr />
                 <Link to="/dashboard/orders">
                   <p
                     className={`${
