@@ -30,7 +30,6 @@
     "react-rating-stars-component": "^2.2.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.17.0",
-    "swiper": "^11.0.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   },
