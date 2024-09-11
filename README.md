@@ -1,13 +1,15 @@
 # Fullstack Ecommerce Application
 
-![screencapture-localhost-3000-2024-09-11-21_34_51](https://github.com/user-attachments/assets/5375b5e1-4747-4d9d-8c4a-2208d4a498f8)
-|1. Feed Page |2. Search Page |
+![screencapture-localhost-3000-2024-09-11-21_34_![screencapture-localhost-3000-register-2024-09-11-22_01_20](https://github.com/user-attachments/assets/8f36afcd-e252-4ddd-a7ba-69abf35bf3e2)
+51](https://github.com/user-attachments/assets/5375b5e1-4747-4d9d-8c4a-2208d4a498f8)
+
+|1. Products Page |2. Single Product Page |
 |:---:|:---:|
-| ![Products Page](https://github.com/user-attachments/assets/5383dcca-e4b0-4fee-bade-effdf5face1f) | ![Single Product Page](https://github.com/user-attachments/assets/da857674-00da-4539-8ca5-6234c6ed75be)|
-| 3. Reply Card | 4. Notifications Page | 
-| ![Reply Card](./public/screenshots/reply-card.png) | ![Notifications Page](./public/screenshots/notification-page.png)|
-| 5. Post Info Page | 6. Profile Page |
-| ![Post Info Page](./public/screenshots/post-info-page.png) | ![Profile Page](./public/screenshots/profile-page.png)|
+| ![Products Page](https://github.com/user-attachments/assets/5383dcca-e4b0-4fee-bade-effdf5face1f) | ![Single Product Page](https://github.com/user-attachments/assets/42037087-8d18-42eb-a4cf-ab4ef1001439)|
+| 3. User Account | 4. Admin Account | 
+| ![User Account](https://github.com/user-attachments/assets/83087893-10d5-4196-82bd-30b32a14700a) | ![Admin Account](https://github.com/user-attachments/assets/aca25e08-73a1-4153-a02d-e5bc40364a83)|
+| 5. Login Page | 6. Register Page |
+| ![Login Page](https://github.com/user-attachments/assets/9fefee49-e4ba-4cc4-941f-6048122c0034) | ![Register Page](https://github.com/user-attachments/assets/59c6b17c-6b8a-462b-b0fa-8c5049d64ade)|
 
 ## Tech Stack 💻
 - **Framework:** [React.js](https://react.dev/)
