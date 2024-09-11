@@ -1,17 +1,16 @@
 # Fullstack Ecommerce Application
 
-![screencapture-localhost-5173-2024-01-31-16_13_12](https://github.com/thezeeshann/ecommerce-mern/assets/88139550/599274f2-1aec-48ae-bdf9-a0161750b5ac)
+![screencapture-localhost-3000-2024-09-11-21_34_51](https://github.com/user-attachments/assets/5375b5e1-4747-4d9d-8c4a-2208d4a498f8)
 
-
-## Tech Stack
-
-- [React.js](https://react.dev/)
-- [Node.js](https://nodejs.org/en)
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Tailwind CSS](https://tailwindcss.com)
-- [shadcn/ui](https://ui.shadcn.com/)
-- [Cloudinary](https://cloudinary.com)
+## Tech Stack 💻
+- **Framework:** [React.js](https://react.dev/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com)
+- **Database:** [MongoDB](https://www.prisma.io/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com)
+- **File Uploads:** [Cloudinary](https://cloudinary.com)
+- **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/)
+- **Data Fetching:** [RTK Query](https://redux-toolkit.js.org/rtk-query/overview)
+- **Backend:** [Node.js](https://nodejs.org/en)
 
 ## Features
 
