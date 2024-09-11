@@ -23,8 +23,10 @@ const Navbar = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const { cart } = useSelector((state) => state.cart);
   const { data } = useGetCategoryQuery();
-  const {user} = useSelector((state)=>state.user)
-  const currentUserCart = cart.filter((product) => product.userId === user?._id);
+  const { user } = useSelector((state) => state.user);
+  const currentUserCart = cart.filter(
+    (product) => product.userId === user?._id
+  );
 
   return (
     <header className="w-full font-Poppins">
@@ -65,8 +67,8 @@ const Navbar = () => {
             className="-mt-1 cursor-pointer text-neutral-400"
           />
           <Link to={"/"}>
-            <p className="text-xl font-medium text-gray-600 cursor-pointer">
-              MERN Store
+            <p className="text-xl font-bold text-gray-600 cursor-pointer">
+              Store
             </p>
           </Link>
         </div>

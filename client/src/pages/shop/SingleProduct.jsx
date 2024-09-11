@@ -46,7 +46,7 @@ const SingleProduct = () => {
             </div>
             <div className="flex flex-col px-5 py-5 bg-white gap-y-5">
               <div>
-                <p className="text-lg font-semibold text-sky-500">
+                <p className="text-lg font-semibold capitalize text-sky-500">
                   {data?.singleProduct?.productName}
                 </p>
                 <p className="text-sm">{data?.singleProduct?.slug}</p>
