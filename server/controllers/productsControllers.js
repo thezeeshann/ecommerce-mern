@@ -1,185 +1,110 @@
-import ProductModel from "../models/product.js";
-import { uploadImageToCloudinary } from "../utils/uploadImage.js";
+import mongoose from "mongoose";
+import BrandModel from "../models/brand.js";
 
-export const priceLowTOHignProducts = async (req, res) => {
+export const getBrandById = async (req, res) => {
   try {
-    const products = await ProductModel.find({}).sort({ price: 1 });
-    return res.status(200).json({
-      success: true,
-      products,
-    });
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+    const { brandId } = req.params;
 
-export const priceHighToLowProducts = async (req, res) => {
-  try {
-    const products = await ProductModel.find({}).sort({ price: -1 });
-    return res.status(200).json({
-      success: true,
-      products,
-    });
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-export const createProducts = async (req, res) => {
-  try {
-    const { productName, price, description, quantity, brand } = req.body;
-    const image = req.files?.image;
-
-    if (!productName || !price || !description || !quantity || !brand) {
-      return res
-        .status(404)
-        .json({ success: false, message: "All fields are required" });
+    if (!mongoose.Types.ObjectId.isValid(brandId)) {
+      return res.status(400).json({ message: "Invalid brand ID" });
     }
 
-    if (!image) {
-      return res.status(404).json({
+    const brand = await BrandModel.findById(brandId);
+
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found" });
+    }
+
+    res.status(200).json(brand);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getAllBrands = async (req, res) => {
+  try {
+    const brands = await BrandModel.find();
+    res.status(200).json(brands);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const createBrand = async (req, res) => {
+  try {
+    const { name, description } = req.body;
+
+    if (!name) {
+      return res.status(400).json({
         success: false,
-        message: "Image fields are required",
+        message: "Name field is required",
       });
     }
-    const uploadImage = await uploadImageToCloudinary(
-      image,
-      process.env.FOLDER_NAME
+
+    const existingBrand = await BrandModel.findOne({ name });
+    if (existingBrand) {
+      return res.status(400).json({ message: "Brand already exists" });
+    }
+
+    const newBrand = new BrandModel({
+      name,
+      description,
+    });
+
+    const savedBrand = await newBrand.save();
+    res.status(201).json(savedBrand);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateBrand = async (req, res) => {
+  try {
+    const { brandId } = req.params;
+    const { name, isActive } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(brandId)) {
+      return res.status(400).json({ message: "Invalid brand ID" });
+    }
+
+    const updatedBrand = await BrandModel.findByIdAndUpdate(
+      brandId,
+      { name, isActive, updated: Date.now() },
+      { new: true, runValidators: true }
     );
 
-    const product = await ProductModel.create({
-      productName: productName,
-      price: price,
-      description: description,
-      quantity: quantity,
-      brand: brand,
-      image: uploadImage.secure_url,
-    });
+    if (!updatedBrand) {
+      return res.status(404).json({ message: "Brand not found" });
+    }
 
-    return res.status(201).json({
-      success: true,
-      message: "Product create successfully",
-      product,
-    });
+    res.status(200).json(updatedBrand);
   } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: "Product not created",
-    });
+    res.status(500).json({ message: error.message });
   }
 };
 
-export const getAllProducts = async (req, res) => {
+export const deleteBrand = async (req, res) => {
   try {
-    const products = await ProductModel.find({})
-      .sort({ created: -1 })
-      .populate({
-        path: "brand",
-        select: "name description slug isActive",
-      });
+    const { brandId } = req.body;
 
-    const totalProducts = await ProductModel.countDocuments();
-
-    return res.status(200).json({
-      success: true,
-      total: totalProducts,
-      products,
-    });
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: message.error,
-    });
-  }
-};
-
-export const getSingleProduct = async (req, res) => {
-  try {
-    const productSlug = req.params.slug;
-    const singleProduct = await ProductModel.findOne({
-      slug: productSlug,
-    }).populate({
-      path: "brand",
-      select: "name slug isActive",
-    });
-    return res.status(200).json({
-      success: true,
-      singleProduct,
-    });
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: "Unable to fetch single product",
-    });
-  }
-};
-
-export const updateProducts = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const update = req.body;
-
-    let product = await ProductModel.findById(productId);
-
-    if (!product) {
+    const brand = await BrandModel.findById(brandId);
+    if (!brand) {
       return res.status(404).json({
         success: false,
-        message: "Product not found",
+        message: "Brand not found",
       });
     }
 
-    if (req.files && req.files.image) {
-      const image = req.files.image;
-      const productImage = await uploadImageToCloudinary(
-        image,
-        process.env.FOLDER_NAME
-      );
-      update.image = productImage.secure_url;
-    }
-
-    product = await ProductModel.findByIdAndUpdate(productId, update, {
-      new: true,
-    });
+    await BrandModel.findByIdAndDelete(brand);
 
     return res.status(200).json({
       success: true,
-      message: "Product updated successfully",
-      data: product,
+      message: "Brand deleted successfully",
     });
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "Product not updated",
-      error: error.message,
-    });
-  }
-};
-
-export const deleteProducts = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    if (!productId) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    await ProductModel.findByIdAndDelete({ _id: productId });
-    return res.status(201).json({
-      success: true,
-      message: "Product deleted successfully",
-    });
-  } catch (error) {
-    return res.status(404).json({
-      success: false,
-      message: "Product not deleted",
+      message: "Internal server error",
     });
   }
 };

@@ -18,7 +18,7 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { refetch: refetchSingleUser } = useGetSingleUserQuery();
@@ -35,14 +35,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const toastId = toast.loading("Loading...");
-    dispath(setLoading(true));
+    dispatch(setLoading(true));
     try {
       const response = await login({ email, password });
       if (response.error) {
         toast.error(response.error.data.message);
       } else {
-        dispath(setToken(response.data.token));
-        dispath(setUser(response.data.existUser));
+        dispatch(setToken(response.data.token));
+        dispatch(setUser(response.data.existUser));
         localStorage.setItem("token", JSON.stringify(response.data.token));
         localStorage.setItem("user", JSON.stringify(response.data.existUser));
         toast.success("Login successful");
@@ -55,7 +55,7 @@ const Login = () => {
       console.log("LOGIN API ERROR...", error);
       toast.error(error.data.message);
     }
-    dispath(setLoading(false));
+    dispatch(setLoading(false));
     toast.dismiss(toastId);
   };
 
@@ -88,7 +88,7 @@ const Login = () => {
                 name="password"
                 value={password}
                 onChange={handleChange}
-                placeholder="Please Enter your email"
+                placeholder="Please Enter your password"
                 className="px-3 py-1.5 rounded-sm placeholder:text-xs border-[1px] border-gray-200  outline-none"
               />
               <span

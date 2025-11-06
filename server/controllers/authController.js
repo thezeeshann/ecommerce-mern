@@ -11,14 +11,14 @@ export const register = async (req, res) => {
     const { firstName, lastName, email, password, confirmPassword } =
       req.body;
     if (!firstName || !lastName || !email || !password) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
     const validateEmail = validator.isEmail(email);
     if (!validateEmail) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "Invalid email Address",
       });
@@ -33,9 +33,9 @@ export const register = async (req, res) => {
 
     const existUser = await UserModel.findOne({ email });
     if (existUser) {
-      return res.status(404).json({
+      return res.status(409).json({
         success: false,
-        message: "User alredy exist",
+        message: "User already exists",
       });
     }
 
@@ -61,7 +61,7 @@ export const register = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "User register succesfully",
+      message: "User registered successfully",
       user,
     });
   } catch (error) {
@@ -76,7 +76,7 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
@@ -110,18 +110,18 @@ export const login = async (req, res) => {
 
       return res.cookie("token", token, option).status(200).json({
         success: true,
-        message: "Login successfull",
+        message: "Login successful",
         existUser,
         token,
       });
     } else {
-      return res.status(404).json({
+      return res.status(401).json({
         success: false,
-        message: "Incrroct password ",
+        message: "Incorrect password",
       });
     }
   } catch (error) {
-    return res.status(404).json({
+    return res.status(500).json({
       success: false,
       message: "Login failed",
     });
@@ -134,17 +134,17 @@ export const changePassword = async (req, res) => {
     const userId = req.existUser.userId;
     const userDetails = await UserModel.findById(userId);
     if (!userDetails) {
-      return res.status.json({
+      return res.status(404).json({
         success: false,
-        message: "User does't exist",
+        message: "User doesn't exist",
       });
     }
 
-    const isPasswrordMatch = await bcrypt.compare(
+    const isPasswordMatch = await bcrypt.compare(
       oldPassword,
       userDetails.password
     );
-    if (!isPasswrordMatch) {
+    if (!isPasswordMatch) {
       return res
         .status(401)
         .json({ success: false, message: "The password is incorrect" });
@@ -159,7 +159,7 @@ export const changePassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "password updated successfully",
+      message: "Password updated successfully",
       data: updatedPassword,
     });
   } catch (error) {
