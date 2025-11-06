@@ -4,6 +4,7 @@ import slugify from "slugify";
 const ProductSchema = new mongoose.Schema({
   productName: {
     type: String,
+    required: true,
   },
   price: {
     type: Number,
